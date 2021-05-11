@@ -68,10 +68,10 @@ const UsuarioSchema = Schema({
         type: Boolean,
         default: true
     },
-    google: {
+/*     google: {
         type: Boolean,
         default: false
-    },
+    }, */
 });
 
 

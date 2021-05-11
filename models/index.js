@@ -9,6 +9,9 @@ const Noticia = require('./noticia');
 const Taller = require('./taller');
 const Convocatoria = require('./convocatoria');
 const Carrera = require('./carrera');
+const Escuela = require('./escuela');
+const Oferta = require('./oferta');
+const Inscripccion = require('./inscripcione');
 
 
 
@@ -22,5 +25,8 @@ module.exports = {
     Taller,
     Convocatoria,
     Carrera,
+    Escuela,
+    Oferta,
+    Inscripccion,
 }
 

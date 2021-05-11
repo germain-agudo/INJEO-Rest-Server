@@ -20,6 +20,11 @@ class Server {
             talleres: '/api/talleres',
             convocatorias: '/api/convocatorias',
             carreras: '/api/carreras',
+            escuelas: '/api/escuelas',
+
+
+            ofertas: '/api/ofertas',
+            inscripcines: '/api/inscripciones',
             // productos:  '/api/productos',
             usuarios:   '/api/usuarios',
 
@@ -69,6 +74,10 @@ class Server {
         this.app.use( this.paths.talleres, require('../routes/talleres'));
         this.app.use( this.paths.convocatorias, require('../routes/convocatorias'));
         this.app.use( this.paths.carreras, require('../routes/carreras'));
+        this.app.use( this.paths.escuelas, require('../routes/escuelas'));
+
+        this.app.use( this.paths.ofertas, require('../routes/ofertas'));
+        this.app.use( this.paths.inscripcines, require('../routes/inscripciones'))
         // this.app.use( this.paths.productos, require('../routes/productos'));
         this.app.use( this.paths.usuarios, require('../routes/usuarios'));
         // this.app.use( this.paths.uploads, require('../routes/uploads'));

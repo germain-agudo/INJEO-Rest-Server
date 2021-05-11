@@ -1,5 +1,5 @@
 const Role = require('../models/role');
-const{ Usuario,Noticia, Taller, Convocatoria, Carrera }= require('../models');
+const{ Usuario,Noticia, Taller, Convocatoria, Carrera, Escuela , Oferta, Inscripccion}= require('../models');
 
 const esRoleValido = async(rol = '') => {
 
@@ -64,6 +64,8 @@ const existeUsuarioPorId = async( id ) => {
         throw new Error(`El id no existe ${ id }`);
     }
 }
+
+
 /**
  * Carreras
  */
@@ -73,6 +75,39 @@ const existeUsuarioPorId = async( id ) => {
     const existeCarrera = await Carrera.findById(id);
     if ( !existeCarrera ) {
         throw new Error(`El id no existe ${ id }`);
+    }
+}
+/**
+ * Escuelas
+ */
+ const existeEscuelaPorId = async( id ) => {
+
+    // Verificar si la noticia existe
+    const existeEscuela = await Escuela.findById(id);
+    if ( !existeEscuela ) {
+        throw new Error(`El id no existe ${ id }`);
+    }
+}
+/**
+ * Oferta Educativa   
+ */
+ const existeOfertaPorId = async( id ) => {
+
+    // Verificar si la noticia existe
+    const existeOferta = await Oferta.findById(id);
+    if ( !existeOferta ) {
+        throw new Error(`El id no existe ${ id }`);
+    }
+}
+/**
+ * Inscripciónes a los talleres
+ */
+ const existeInscripcionPorId = async( id ) => {
+
+    // Verificar si la noticia existe
+    const existeInscripcion = await Inscripccion.findById(id);
+    if ( !existeInscripcion ) {
+        throw new Error(`El id  ${ id } no existe`);
     }
 }
 
@@ -127,6 +162,9 @@ module.exports = {
     existeConvocatoriaPorId,
     existeCarreraPorId,
     coleccionesPermitidas,
+    existeEscuelaPorId,
+    existeOfertaPorId, 
+    existeInscripcionPorId, 
     
 }
 
