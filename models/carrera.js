@@ -5,7 +5,7 @@ const CarreaSchema = Schema({
         type: String,
         required: [true, 'El nombre es obligatorio']
     },
-    imagen: {
+    img: {
         type: String,
         
     },
@@ -19,7 +19,14 @@ const CarreaSchema = Schema({
         type: Schema.Types.ObjectId,
         ref: 'Usuario',
         required: true
-    }
+    },
+
+    fecha_registro: {
+        type:  Date,
+            
+    },
+
+
 });
 
 CarreaSchema.methods.toJSON = function() {

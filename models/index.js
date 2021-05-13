@@ -13,6 +13,8 @@ const Escuela = require('./escuela');
 const Oferta = require('./oferta');
 const Inscripccion = require('./inscripcione');
 
+const Externo = require('./externo');
+
 
 
 module.exports = {
@@ -28,5 +30,8 @@ module.exports = {
     Escuela,
     Oferta,
     Inscripccion,
+
+
+    Externo,
 }
 

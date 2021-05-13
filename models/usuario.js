@@ -45,8 +45,9 @@ const UsuarioSchema = Schema({
     numero_telefonico: {
         type: String,
         required: [true, 'El numero telefonico es obligatorio']
-    },
+    }, 
 
+ 
     correo: {
         type: String,
         required: [true, 'El correo es obligatorio'],
@@ -68,6 +69,11 @@ const UsuarioSchema = Schema({
         type: Boolean,
         default: true
     },
+    fecha_registro: {
+        type:  Date,
+            
+    },
+    
 /*     google: {
         type: Boolean,
         default: false

@@ -36,6 +36,10 @@ const InscripcioneSchema = Schema({
         ref: 'Usuario',
         required: true
     },
+    fecha_registro: {
+        type:  Date,
+            
+    },
 
 
     

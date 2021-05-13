@@ -44,7 +44,12 @@ const obtenerInscripcion = async(req, res = response ) => {
 
 
 
+
+
+
 const crearInscripcion = async(req, res = response ) => {
+    const fecha_registro = Date.now();
+
   const {participante_id, taller_id} = req.body;    
   const [ inscripcionDB,participanteDB, tallerDB ] = await Promise.all([
         // Inscripccion.find({usuario:participante_id, taller:taller_id, estado:true}            
@@ -54,7 +59,7 @@ const crearInscripcion = async(req, res = response ) => {
         Taller.findById(taller_id)
     ]);        
     
-    const descripcion = `${participanteDB.nombre}-${tallerDB.titulo}`.toUpperCase();    
+    const descripcion = `${participanteDB.nombre} - ${tallerDB.titulo}`.toUpperCase();    
 
        
     // const resultados=( inscripcionDB) ? [ inscripcionDB] :[] 
@@ -64,12 +69,14 @@ const crearInscripcion = async(req, res = response ) => {
 
        if (!inscripcionDB[0].estado) {
 
-        await Inscripccion.findByIdAndUpdate( inscripcionDB[0]._id, { estado: true });
-        return res.status(400).json({
+        await Inscripccion.findByIdAndUpdate( inscripcionDB[0]._id, { estado: true , responsable_registro: req.usuario._id, fecha_registro, descripcion},{new:true});
+       console.log(fecha_registro);
+        return res.status(200).json({
             descripcion,
             usuario:participanteDB._id,
             taller:  tallerDB._id,
             responsable_registro: req.usuario._id, 
+            fecha_registro,
         }); 
        
 
@@ -90,7 +97,8 @@ const crearInscripcion = async(req, res = response ) => {
             descripcion,
             usuario:participanteDB._id,
             taller:  tallerDB._id,
-            responsable_registro: req.usuario._id,         
+            responsable_registro: req.usuario._id,    
+            fecha_registro     
        }   
 
     const inscripcion = new Inscripccion(data);
@@ -100,6 +108,8 @@ const crearInscripcion = async(req, res = response ) => {
 }
 
 const actualizarInscripcion = async( req, res = response ) => {
+    const fecha_registro = Date.now();
+
   
     const { id } = req.params;
     const {participante_id, taller_id} = req.body;    
@@ -125,34 +135,64 @@ const actualizarInscripcion = async( req, res = response ) => {
 
     
 
-    const [ participanteDB, tallerDB ] = await Promise.all([    
-          Usuario.findById(participante_id),
+    const [ inscripcionDB,participanteDB, tallerDB ] = await Promise.all([    
+            Inscripccion.find({ usuario: participante_id, taller:taller_id}),
+        Usuario.findById(participante_id),
           Taller.findById(taller_id)
       ]);        
 
 
 
-
-      const descripcion = `${participanteDB.nombre}-${tallerDB.titulo}`.toUpperCase();      
-
-     
-
+      const descripcion = `${participanteDB.nombre} - ${tallerDB.titulo}`.toUpperCase();        
       
-      const descripcionDB = await Inscripccion.findOne({descripcion});
-  
+/*       const descripcionDB = await Inscripccion.findOne({descripcion});
       if (descripcionDB&&descripcionDB.id!==id) {
           return res.status(400).json({
               msg:`La relación entre las entidades ${descripcion} ya existe`
           });
-      }
+      } */
     
     
+      if (inscripcionDB.length>0) {
+    
+        if (!inscripcionDB[0].estado) {
+            await Inscripccion.findByIdAndUpdate(inscripcionDB[0]._id,{estado:true, responsable_registro:req.usuario._id, fecha_registro, descripcion}, {new: true} );
+            return res.status(200).json({
+                descripcion,
+                usuario:participanteDB._id,
+                taller:  tallerDB._id,
+                responsable_registro: req.usuario._id,    
+                fecha_registro   
+                
+            })
+        } else {
+           
+            if (inscripcionDB[0]._id!=id) {
+                return res.status(400).json({
+                    
+            msg:`Actualmente ${participanteDB.nombre} es participante  en el taller ${tallerDB.titulo}`,
+                    
+                    
+                        
+                    }); 
+            }  
+
+             
+        }
+
+    }
+
+
+
+
+
 
 const data ={
     descripcion,
-    usuario:participanteDB._id,
+    usuario:participanteDB._id, 
     taller:  tallerDB._id,
-    responsable_registro: req.usuario._id,       
+    responsable_registro: req.usuario._id,   
+    fecha_registro    
 
 }
 

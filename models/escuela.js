@@ -5,7 +5,7 @@ const EscuelaSchema = Schema({
         type: String,
         required: [true, 'El nombre de la escuela es obligatorio']
     },
-    imagen: {
+    img: {
         type: String,
         
     },
@@ -19,7 +19,17 @@ const EscuelaSchema = Schema({
         type: Schema.Types.ObjectId,
         ref: 'Usuario',
         required: true
-    }
+    },
+    fecha_registro: {
+        type:  Date,
+            
+    },
+
+
+
+
+
+
 });
 EscuelaSchema.methods.toJSON = function() {
     const { __v, estado, ...data  } = this.toObject();

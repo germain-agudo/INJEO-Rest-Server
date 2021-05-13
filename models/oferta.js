@@ -31,7 +31,11 @@ const OfertaSchema = Schema({
         type: Schema.Types.ObjectId,
         ref: 'Carrera',
         required: true
-    }
+    },
+    fecha_registro: {
+        type:  Date,
+            
+    },
 
 
     

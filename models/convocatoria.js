@@ -11,15 +11,12 @@ const ConvocatoriaSchema = Schema({
         required: [true, 'El subtitulo es obligatorio'],
       
     },
-    imagenPrincipal: {
+    img: {
         type: String,
        
     },
 
-    imagenSecundaria: {
-        type: String,
-  
-    },
+
 
     descripcion:{
         type: String,
@@ -48,7 +45,11 @@ const ConvocatoriaSchema = Schema({
         type: Schema.Types.ObjectId,
         ref: 'Usuario',
         required: true
-    }
+    },
+    fecha_registro: {
+        type:  Date,
+            
+    },
 });
 
 

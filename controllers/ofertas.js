@@ -39,25 +39,54 @@ const obtenerOferta = async(req, res = response ) => {
 
 
 
+
+
+
 const crearOferta = async(req, res = response ) => {
+
+    const fecha_registro = Date.now();
+
 
   const {carrera_id, escuela_id} = req.body;
     
-  const [ carreraDB, escuelaDB ] = await Promise.all([
+  const [ ofertaDB,carreraDB, escuelaDB ] = await Promise.all([
+
+        Oferta.find({ carrera:carrera_id, escuela:escuela_id}),
         Carrera.findById(carrera_id),
         Escuela.findById(escuela_id)
     ]);        
     
     const descripcion = `${escuelaDB.nombre}-${carreraDB.nombre}`.toUpperCase();  
     
-    const descripcionDB = await Oferta.findOne({descripcion});
+/*     const descripcionDB = await Oferta.findOne({descripcion});
 
     if (descripcionDB) {
         return res.status(400).json({
             msg:`La relación entre las entidades ${descripcion} ya existe`
         });
-    }
+    } */
    
+    if (ofertaDB.length>0) {
+        
+        if (!ofertaDB[0].estado) {
+            await Oferta.findByIdAndUpdate(ofertaDB[0]._id,{estado:true, usuario: req.usuario._id,fecha_registro, descripcion,}, {new: true} );
+            return res.status(200).json({
+                descripcion,
+                escuela:escuelaDB._id,
+                carrera: carreraDB._id,
+                usuario: req.usuario._id,
+                fecha_registro
+            })
+        } else {
+            return res.status(400).json({
+            msg:`Actualmente la escuela: '${escuelaDB.nombre}' ya cuenta con la carrera de: '${carreraDB.nombre}'`.toUpperCase(),
+                
+            });  
+        }
+
+    }
+
+
 
 
    
@@ -66,7 +95,8 @@ const crearOferta = async(req, res = response ) => {
             descripcion,
             carrera:carreraDB._id,
             escuela:  escuelaDB._id,
-            usuario: req.usuario._id
+            usuario: req.usuario._id,
+            fecha_registro
        }   
    
 
@@ -77,7 +107,23 @@ const crearOferta = async(req, res = response ) => {
 
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 const actualizarOferta = async( req, res = response ) => {
+    const fecha_registro = Date.now();
+
     // res.json( req.params);
     const { id } = req.params;
     const {carrera_id,escuela_id} = req.body;
@@ -85,7 +131,9 @@ const actualizarOferta = async( req, res = response ) => {
     
 
 
-    const [ carreraDB, escuelaDB ] = await Promise.all([    
+    const [ofertaDB, carreraDB, escuelaDB ] = await Promise.all([   
+        Oferta.find({ carrera:carrera_id, escuela:escuela_id}),
+
           Carrera.findById(carrera_id),
           Escuela.findById(escuela_id)
       ]);        
@@ -98,13 +146,40 @@ const actualizarOferta = async( req, res = response ) => {
      
 
       
-      const descripcionDB = await Oferta.findOne({descripcion});
-  
+    //   const descripcionDB = await Oferta.findOne({descripcion});
+/*   
       if (descripcionDB&&descripcionDB.id!==id) {
           return res.status(400).json({
               msg:`La relación entre las entidades ${descripcion} ya existe`
           });
-      }
+      } */
+      
+
+    if (ofertaDB.length>0) {
+    
+        if (!ofertaDB[0].estado) {
+            await Oferta.findByIdAndUpdate(ofertaDB[0]._id,{estado:true, usuario:req.usuario._id, fecha_registro}, {new: true} );
+            return res.status(200).json({
+                descripcion,
+                escuela:escuelaDB._id,
+                carrera: carreraDB._id,
+                usuario: req.usuario._id
+            })
+        } else {
+           
+            if (ofertaDB[0]._id!=id) {
+                return res.status(400).json({
+                    msg:`Actualmente la escuela: '${escuelaDB.nombre}' ya cuenta con la carrera de: '${carreraDB.nombre}'`.toUpperCase(),
+                        
+                    }); 
+            }  
+
+             
+        }
+
+    }
+
+
     
     
 
@@ -112,7 +187,8 @@ const data ={
     descripcion,
     carrera:carrera_id,
     escuela:escuela_id,
-    usuario: req.usuario._id
+    usuario: req.usuario._id,
+    fecha_registro
 
 }
 

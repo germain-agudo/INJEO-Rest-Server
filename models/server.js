@@ -23,6 +23,9 @@ class Server {
             escuelas: '/api/escuelas',
 
 
+            externos: '/api/externos',
+
+
             ofertas: '/api/ofertas',
             inscripcines: '/api/inscripciones',
             // productos:  '/api/productos',
@@ -80,6 +83,10 @@ class Server {
         this.app.use( this.paths.inscripcines, require('../routes/inscripciones'))
         // this.app.use( this.paths.productos, require('../routes/productos'));
         this.app.use( this.paths.usuarios, require('../routes/usuarios'));
+
+        
+        this.app.use( this.paths.externos, require('../routes/externos'));
+        
         // this.app.use( this.paths.uploads, require('../routes/uploads'));
 
         this.app.use( this.paths.uploads, require('../routes/uploads')); 
