@@ -13,7 +13,7 @@ const obtenerOfertas = async(req, res = response ) => {
     const [ total, ofertas ] = await Promise.all([
         Oferta.countDocuments(query),
         Oferta.find(query)
-            .populate('usuario', 'nombre')
+            .populate('usuario', 'user_name')
             .populate('escuela', 'nombre')
             .populate('carrera', 'nombre')
             .skip( Number( desde ) )
@@ -29,7 +29,7 @@ const obtenerOfertas = async(req, res = response ) => {
 const obtenerOferta = async(req, res = response ) => {
     const { id } = req.params;
     const oferta = await Oferta.findById( id )
-                                 .populate('usuario', 'nombre')
+                                 .populate('usuario', 'user_name')
                                  .populate('escuela', 'nombre')
                                  .populate('carrera', 'nombre')
     res.json( oferta );

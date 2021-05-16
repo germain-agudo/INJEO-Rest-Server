@@ -10,7 +10,7 @@ const obtenerCarreras = async(req, res = response ) => {
     const [ total, carreras ] = await Promise.all([
         Carrera.countDocuments(query),
         Carrera.find(query)
-            .populate('usuario', 'nombre')
+            .populate('usuario', 'user_name')
             .skip( Number( desde ) )
             .limit(Number( limite ))
     ]);
@@ -28,7 +28,7 @@ const obtenerCarrera = async(req, res = response ) => {
 
     const { id } = req.params;
     const carrera = await Carrera.findById( id )
-                            .populate('usuario', 'nombre');
+                            .populate('usuario', 'user_name');
 
     res.json( carrera );
 

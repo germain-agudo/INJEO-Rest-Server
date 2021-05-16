@@ -10,7 +10,7 @@ const obtenerConvocatorias = async(req, res = response ) => {
     const [ total, convocatorias ] = await Promise.all([
         Convocatoria.countDocuments(query),
         Convocatoria.find(query)
-            .populate('usuario', 'nombre')
+            .populate('usuario', 'user_name')
             .skip( Number( desde ) )
             .limit(Number( limite ))
     ]);
@@ -25,7 +25,7 @@ const obtenerConvocatoria = async(req, res = response ) => {
 
     const { id } = req.params;
     const convocatoria = await Convocatoria.findById( id )
-                            .populate('usuario', 'nombre');
+                            .populate('usuario', 'user_name');
 
     res.json( convocatoria );
 

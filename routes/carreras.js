@@ -25,8 +25,10 @@ router.get('/:id',[
 ], obtenerCarrera );
 
 // Crear categoria - privado - cualquier persona con un token válido
-router.post('/', [ 
+router.post('/', [
+    
     validarJWT,
+    esAdminRole,
     check('nombre','El nombre es obligatorio').not().isEmpty(),   
     validarCampos
 ], crearCarrera );

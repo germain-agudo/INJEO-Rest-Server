@@ -16,6 +16,12 @@ const Inscripccion = require('./inscripcione');
 const Externo = require('./externo');
 const Persona = require('./persona');
 
+const Apoyo = require('./apoyo');
+const Beca = require('./beca');
+const BolsaTrabajo = require('./bolsa-trabajo');
+const Foro = require('./foro');
+
+
 
 
 module.exports = {
@@ -31,6 +37,11 @@ module.exports = {
     Escuela,
     Oferta,
     Inscripccion,
+
+    Apoyo,
+    Beca,
+    BolsaTrabajo,
+    Foro,
 
 
     Externo,

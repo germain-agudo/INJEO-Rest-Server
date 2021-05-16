@@ -21,6 +21,8 @@ router.get('/', obtenerOfertas );
 
 // Obtener una categoria por id - publico
 router.get('/:id',[
+    validarJWT,
+
     check('id', 'No es un id de Mongo válido').isMongoId(),
     check('id').custom( existeOfertaPorId ),
     validarCampos,

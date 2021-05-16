@@ -3,12 +3,12 @@ const { Schema, model } = require('mongoose');
 const TallerSchema = Schema({
     titulo: {
         type: String,
-        required: [true, 'El titulo es obligatorio'],
+        required: [true, 'El título es obligatorio'],
        
     },
     subtitulo: {
         type: String,
-        required: [true, 'El subtitulo es obligatorio'],
+        required: [true, 'El subtítulo es obligatorio'],
       
     },
     img: {

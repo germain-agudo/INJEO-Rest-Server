@@ -10,7 +10,7 @@ const obtenerNoticias = async(req, res = response ) => {
     const [ total, noticias ] = await Promise.all([
         Noticia.countDocuments(query),
         Noticia.find(query)
-            .populate('usuario', 'nombre')
+            .populate('usuario', 'user_name')
             .skip( Number( desde ) )
             .limit(Number( limite ))
     ]);
@@ -25,7 +25,7 @@ const obtenerNoticia = async(req, res = response ) => {
 
     const { id } = req.params;
     const noticia = await Noticia.findById( id )
-                            .populate('usuario', 'nombre');
+                            .populate('usuario', 'user_name');
 
     res.json( noticia );
 

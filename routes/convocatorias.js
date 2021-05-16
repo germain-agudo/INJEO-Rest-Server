@@ -26,6 +26,7 @@ router.get('/:id',[
 // Crear categoria - privado - cualquier persona con un token válido
 router.post('/', [ 
     validarJWT,
+    
     check('titulo','El Titulo es obligatorio').not().isEmpty(),
     check('subtitulo','El subTitulo es obligatorio').not().isEmpty(),
     check('descripcion','La descripción es obligatoria').not().isEmpty(),

@@ -10,7 +10,7 @@ const obtenerTalleres = async(req, res = response ) => {
     const [ total, talleres ] = await Promise.all([
         Taller.countDocuments(query),
         Taller.find(query)
-            .populate('usuario', 'nombre')
+            .populate('usuario', 'user_name')
             .skip( Number( desde ) )
             .limit(Number( limite ))
     ]);
@@ -25,7 +25,7 @@ const obtenerTaller = async(req, res = response ) => {
 
     const { id } = req.params;
     const taller = await Taller.findById( id )
-                            .populate('usuario', 'nombre');
+                            .populate('usuario', 'user_name');
 
     res.json( taller );
 

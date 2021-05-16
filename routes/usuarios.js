@@ -81,6 +81,7 @@ router.post('/',[
     // check('fecha_nacimiento', 'La fecha de nacimiento es obligatoria').not().isEmpty(),
     // check('municipio', 'El municipio es obligatorio').not().isEmpty(),
     // check('region', 'La region es obligatoria').not().isEmpty(),
+    
     check('numero_telefonico', 'El número telefonico es obligatorio').not().isEmpty(),
     check('password', 'El password debe de ser más de 6 letras').isLength({ min: 6 }),
     check('correo', 'El correo no es válido').isEmail(),

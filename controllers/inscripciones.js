@@ -13,9 +13,9 @@ const obtenerInscripciones = async(req, res = response ) => {
     const [ total, inscripciones ] = await Promise.all([
         Inscripccion.countDocuments(query),
         Inscripccion.find(query)
-            .populate('usuario', 'nombre')
+            .populate('usuario', 'user_name')
             .populate('taller', 'titulo')
-            .populate('responsable_registro', 'nombre')
+            .populate('responsable_registro', 'user_name')
 
           
 
@@ -33,9 +33,9 @@ const obtenerInscripciones = async(req, res = response ) => {
 const obtenerInscripcion = async(req, res = response ) => {
     const { id } = req.params;
     const inscripcion = await Inscripccion.findById( id )
-                                        .populate('usuario', 'nombre')
+                                        .populate('usuario', 'user_name')
                                         .populate('taller', 'titulo')
-                                        .populate('responsable_registro', 'nombre')
+                                        .populate('responsable_registro', 'user_name')
                             
     res.json( inscripcion );
 } 
@@ -59,7 +59,7 @@ const crearInscripcion = async(req, res = response ) => {
         Taller.findById(taller_id)
     ]);        
     
-    const descripcion = `${participanteDB.nombre} - ${tallerDB.titulo}`.toUpperCase();    
+    const descripcion = `${participanteDB.user_name} - ${tallerDB.titulo}`.toUpperCase();    
 
        
     // const resultados=( inscripcionDB) ? [ inscripcionDB] :[] 
@@ -82,7 +82,7 @@ const crearInscripcion = async(req, res = response ) => {
 
        } else{
         return res.status(400).json({
-            msg:`Actualmente ${participanteDB.nombre} es participante  en el taller ${tallerDB.titulo}`,
+            msg:`Actualmente ${participanteDB.user_name} es participante  en el taller ${tallerDB.titulo}`,
         });   
        } 
 
@@ -143,7 +143,7 @@ const actualizarInscripcion = async( req, res = response ) => {
 
 
 
-      const descripcion = `${participanteDB.nombre} - ${tallerDB.titulo}`.toUpperCase();        
+      const descripcion = `${participanteDB.user_name} - ${tallerDB.titulo}`.toUpperCase();        
       
 /*       const descripcionDB = await Inscripccion.findOne({descripcion});
       if (descripcionDB&&descripcionDB.id!==id) {
@@ -170,7 +170,7 @@ const actualizarInscripcion = async( req, res = response ) => {
             if (inscripcionDB[0]._id!=id) {
                 return res.status(400).json({
                     
-            msg:`Actualmente ${participanteDB.nombre} es participante  en el taller ${tallerDB.titulo}`,
+            msg:`Actualmente ${participanteDB.user_name} es participante  en el taller ${tallerDB.titulo}`,
                     
                     
                         
