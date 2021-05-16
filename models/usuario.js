@@ -2,11 +2,11 @@
 const { Schema, model } = require('mongoose');
 
 const UsuarioSchema = Schema({
-    nombre: {
+/*     nombre: {
         type: String,
         required: [true, 'El nombre es obligatorio']
-    },
-    apellido_paterno: {
+    }, */
+    /* apellido_paterno: {
         type: String,
         required: [true, 'El apellido paterno es obligatorio']
     },
@@ -41,6 +41,13 @@ const UsuarioSchema = Schema({
         type: String,
         required: [true, 'El region es obligatoria']
     },
+ */
+
+
+    user_name: {
+        type: String,
+        // required: [true, 'El nombre es obligatorio']
+    },
 
     numero_telefonico: {
         type: String,
@@ -51,7 +58,7 @@ const UsuarioSchema = Schema({
     correo: {
         type: String,
         required: [true, 'El correo es obligatorio'],
-        unique: true
+        // unique: false
     },
     password: {
         type: String,
@@ -73,6 +80,14 @@ const UsuarioSchema = Schema({
         type:  Date,
             
     },
+    fecha_eliminacion: {
+        type:  Date,
+            
+    },
+    datos_completos:{
+        type: Boolean,
+        default:false,
+    }
     
 /*     google: {
         type: Boolean,

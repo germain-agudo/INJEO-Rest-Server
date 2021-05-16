@@ -16,15 +16,19 @@ const ExternoSchema= Schema({
         type: String,
         required: [true, 'La direccion es obligatoria']
     },
+/* 
      numero_telefonico: {
         type: String,
         required: [true, 'El numero telefonico es obligatorio']
     }, 
+
+
     correo: {
         type: String,
         required: [true, 'El correo es obligatorio'],
-        unique: true
+        
     },
+
     password: {
         type: String,
         required: [true, 'La contraseña es obligatoria'],
@@ -41,19 +45,33 @@ const ExternoSchema= Schema({
         type: Boolean,
         default: true
     },
-
+*/
+estado: {
+    type: Boolean,
+    default: true
+},
     fecha_registro: {
         type:  Date,
             
     },
+
     fecha_eliminacion: {
         type:  Date,
             
+    }, 
+
+
+    usuario_id: {
+        type: Schema.Types.ObjectId,
+        ref: 'Usuario',
+        required:true,
+        
     },
+
 });
 
 ExternoSchema.methods.toJSON = function() {
-    const { __v, password,...externo  } = this.toObject();
+    const { __v, ...externo  } = this.toObject();
     return externo;
 }
 module.exports = model('Externo', ExternoSchema);

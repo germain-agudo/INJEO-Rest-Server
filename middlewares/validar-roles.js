@@ -40,10 +40,20 @@ const tieneRole = ( ...roles  ) => {
         next();
     }
 }
+/**
+ *  Validar relacion usuario role
+ */
+ 
+
+
+
+/** */
 
 
 
 module.exports = {
+    // manipulacionValida,
     esAdminRole,
-    tieneRole
+    tieneRole,
+ 
 }

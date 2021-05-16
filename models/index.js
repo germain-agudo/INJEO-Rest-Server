@@ -14,6 +14,7 @@ const Oferta = require('./oferta');
 const Inscripccion = require('./inscripcione');
 
 const Externo = require('./externo');
+const Persona = require('./persona');
 
 
 
@@ -33,5 +34,6 @@ module.exports = {
 
 
     Externo,
+    Persona
 }
 

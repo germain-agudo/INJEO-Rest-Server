@@ -7,8 +7,10 @@ const {
     validarCampos,
     validarJWT,
     esAdminRole,
-    tieneRole
+    tieneRole,
+     manipulacionValida
 } = require('../middlewares');
+
 const { esRoleValido, emailExiste, existeUsuarioPorId } = require('../helpers/db-validators');
 
 const { usuariosGet,
@@ -41,22 +43,44 @@ router.get('/:id',[
 
 
 router.put('/:id',[
+    validarJWT,
+    // esAdminRole,
+
+ 
+
+
     check('id', 'No es un ID válido').isMongoId(),
     check('id').custom( existeUsuarioPorId ),
-    check('rol').custom( esRoleValido ), 
+    
+    check('numero_telefonico', 'El número telefonico es obligatorio').not().isEmpty(),
+    check('password', 'El password debe de ser más de 6 letras').isLength({ min: 6 }),
+    check('correo', 'El correo no es válido').isEmail(),
+    // check('correo').custom( emailExiste ),
+
+    
+    
+    check('rol').custom( esRoleValido ),
+    manipulacionValida,
+    
+    
+    // manipulacionValida,
+
     validarCampos
 ],usuariosPut );
 
+
+
+
 router.post('/',[
-    check('nombre', 'El nombre es obligatorio').not().isEmpty(),
-    check('apellido_paterno', 'El apellido paterno es obligatorio').not().isEmpty(),
-    check('apellido_materno', 'El apellido materno es obligatorio').not().isEmpty(),
-    check('edad', 'la edad es obligatoria').not().isEmpty(),
-    check('sexo', 'El sexo es obligatorio').not().isEmpty(),
-    check('curp', 'La CURP  es obligatoria').not().isEmpty(),
-    check('fecha_nacimiento', 'La fecha de nacimiento es obligatoria').not().isEmpty(),
-    check('municipio', 'El municipio es obligatorio').not().isEmpty(),
-    check('region', 'La region es obligatoria').not().isEmpty(),
+    // check('nombre', 'El nombre es obligatorio').not().isEmpty(),
+    // check('apellido_paterno', 'El apellido paterno es obligatorio').not().isEmpty(),
+    // check('apellido_materno', 'El apellido materno es obligatorio').not().isEmpty(),
+    // check('edad', 'la edad es obligatoria').not().isEmpty(),
+    // check('sexo', 'El sexo es obligatorio').not().isEmpty(),
+    // check('curp', 'La CURP  es obligatoria').not().isEmpty(),
+    // check('fecha_nacimiento', 'La fecha de nacimiento es obligatoria').not().isEmpty(),
+    // check('municipio', 'El municipio es obligatorio').not().isEmpty(),
+    // check('region', 'La region es obligatoria').not().isEmpty(),
     check('numero_telefonico', 'El número telefonico es obligatorio').not().isEmpty(),
     check('password', 'El password debe de ser más de 6 letras').isLength({ min: 6 }),
     check('correo', 'El correo no es válido').isEmail(),
@@ -69,9 +93,10 @@ router.post('/',[
 router.delete('/:id',[
     validarJWT,
     // esAdminRole,
-    tieneRole('ADMIN_ROLE'),
+    // tieneRole('ADMIN_ROLE'),
     check('id', 'No es un ID válido').isMongoId(),
     check('id').custom( existeUsuarioPorId ),
+    manipulacionValida,
     validarCampos
 ],usuariosDelete );
 

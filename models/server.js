@@ -24,6 +24,7 @@ class Server {
 
 
             externos: '/api/externos',
+            personas: '/api/personas',
 
 
             ofertas: '/api/ofertas',
@@ -86,6 +87,7 @@ class Server {
 
         
         this.app.use( this.paths.externos, require('../routes/externos'));
+        this.app.use( this.paths.personas, require('../routes/personas'));
         
         // this.app.use( this.paths.uploads, require('../routes/uploads'));
 

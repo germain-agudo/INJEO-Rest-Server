@@ -5,16 +5,23 @@ const { check } = require('express-validator');
 
 const {
     validarCampos,
-    // validarJWT,
+    validarJWT,
     // esAdminRole,
     // tieneRole
 } = require('../middlewares');
 
 
 const { 
-    crearExterno
+    crearExterno, borrarExterno, actualizarExterno,  obtenerExterno,obtenerExternos
     } = require('../controllers/externos');
-const {emailExiste } = require('../helpers/index');
+const {
+    existeUsuarioPorId, 
+    existeExternoPorId, 
+    existeRelacion , 
+    existeUsuarioActivoPorId, 
+    existeRelacionConUsuario,
+    rfcExiste,
+} = require('../helpers/index');
 
 const router = Router();
 
@@ -22,55 +29,81 @@ const router = Router();
 
 
 
-/* 
 
-router.get('/', usuariosGet );
+
+router.get('/', obtenerExternos );
 
 router.get('/:id',[
     check('id', 'No es un ID válido').isMongoId(),
-    check('id').custom( existeUsuarioPorId ),   
+    check('id').custom( existeExternoPorId ),   
     validarCampos
-],obtenerUsuario );
+],obtenerExterno );
 
 
- */
 
 
-/* 
+
+
 router.put('/:id',[
+    validarJWT,
+
     check('id', 'No es un ID válido').isMongoId(),
-    check('id').custom( existeUsuarioPorId ),
-    check('rol').custom( esRoleValido ), 
+    check('id').custom( existeExternoPorId ),
+
+    check('nombre', 'El nombre es obligatorio').not().isEmpty(),
+    check('direccion', 'La dirección es obligatoria').not().isEmpty(),
+    check('numero_telefonico', 'El número telefonico es obligatorio').not().isEmpty(),
+    check('rfc', 'El RFC  es obligatorio').not().isEmpty(),
+
+    
+    // check('id').custom( existeUsuarioPorId ),
+    // check('rol').custom( esRoleValido ), 
     validarCampos
-],usuariosPut );
+],actualizarExterno );
  
- */
+
 
 
 
 router.post('/',[
     check('nombre', 'El nombre es obligatorio').not().isEmpty(),
-    check('rfc', 'El RFC  es obligatorio').not().isEmpty(),
-     check('direccion', 'La dirección es obligatoria').not().isEmpty(),
+    check('direccion', 'La dirección es obligatoria').not().isEmpty(),
     check('numero_telefonico', 'El número telefonico es obligatorio').not().isEmpty(),
-    check('correo', 'El correo no es válido').isEmail(),
-    check('password', 'El password debe de ser más de 6 letras').isLength({ min: 6 }),
-    check('rol', 'El rol es obligatorio').not().isEmpty(),
-    check('correo').custom( emailExiste ),
+    check('rfc', 'El RFC  es obligatorio').not().isEmpty(),
+    check('rfc').custom( rfcExiste),
+    // check('correo', 'El correo no es válido').isEmail(),
+    // check('password', 'El password debe de ser más de 6 letras').isLength({ min: 6 }),
+    // check('rol', 'El rol es obligatorio').not().isEmpty(),
+// 
+    // check('correo').custom( existeEmailExterno),
+    // check('correo').custom( emailExiste),
 
+    check('usuario_id', 'El usuario_id es obligatorio').not().isEmpty(),
+    
+    check('usuario_id', 'No es un ID válido').isMongoId(),
+    check('usuario_id').custom( existeUsuarioPorId ),    
+    check('usuario_id').custom( existeUsuarioActivoPorId ),
 
+    check('usuario_id').custom( existeRelacionConUsuario ),    
+    check('usuario_id').custom(relacion=>existeRelacion ( relacion, ['EXTERNO_ROLE'] ) ),
     validarCampos
+
 ], crearExterno);
 
-/* router.delete('/:id',[
+
+
+
+ router.delete('/:id',[
     validarJWT,
     // esAdminRole,
-    tieneRole('ADMIN_ROLE'),
+    // tieneRole('ADMIN_ROLE'),
     check('id', 'No es un ID válido').isMongoId(),
-    check('id').custom( existeUsuarioPorId ),
+    check('id').custom( existeExternoPorId ),
     validarCampos
-],usuariosDelete );
- */
+],borrarExterno );
+ 
+
+
 // router.patch('/', usuariosPatch );
 
 

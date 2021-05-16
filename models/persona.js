@@ -1,6 +1,10 @@
 const { Schema, model }= require('mongoose');
 
 const PersonaSchema= Schema({
+    nombre: {
+        type: String,
+        required: [true, 'nombre es obligatorio']
+    },
     apellido_paterno: {
         type: String,
         required: [true, 'El apellido paterno es obligatorio']
@@ -44,7 +48,17 @@ const PersonaSchema= Schema({
   /*   numero_telefonico: {
         type: String,
         required: [true, 'El numero telefonico es obligatorio']
-    },  */   
+    },  */
+    
+    fecha_registro: {
+        type:  Date,
+            
+    },
+
+    fecha_eliminacion: {
+        type:  Date,
+            
+    }, 
     usuario_id: {
         type: Schema.Types.ObjectId,
         ref: 'Usuario',

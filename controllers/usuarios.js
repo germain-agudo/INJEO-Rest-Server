@@ -2,7 +2,7 @@ const { response, request } = require('express');
 const bcryptjs = require('bcryptjs');
 
 
-const Usuario = require('../models/usuario');
+const {Usuario, Externo, Persona  }= require('../models/index');
 
 const obtenerUsuario = async(req, res = response ) => {
 
@@ -13,7 +13,7 @@ const obtenerUsuario = async(req, res = response ) => {
     res.json( usuario );
 
 }
-
+ 
 
 const usuariosGet = async(req = request, res = response) => {
 
@@ -25,6 +25,7 @@ const usuariosGet = async(req = request, res = response) => {
         Usuario.find(query)
             .skip( Number( desde ) )
             .limit(Number( limite ))
+            .sort({fecha_registro:1})
     ]);
 
     res.json({
@@ -33,18 +34,24 @@ const usuariosGet = async(req = request, res = response) => {
     });
 }
 
+
+
+
 const usuariosPost = async(req, res = response) => {
     // console.log(req.body );
-    const { nombre, apellido_paterno,apellido_materno, 
-        edad, sexo, curp, fecha_nacimiento, municipio,
-        region, numero_telefonico,  
-         correo, password, rol, 
-    
+ const fecha_registro = Date.now();
+    const { 
+        numero_telefonico,  
+         correo, password, rol,     
     } = req.body;
-    const usuario = new Usuario({ nombre, apellido_paterno,apellido_materno, 
-        edad, sexo, curp, fecha_nacimiento, municipio,
-        region, numero_telefonico,  
-         correo, password, rol, });
+
+ 
+
+
+
+
+    const usuario = new Usuario({    
+         correo, password, rol,numero_telefonico, fecha_registro, });
 
     // // Encriptar la contraseña
     const salt = bcryptjs.genSaltSync();
@@ -59,18 +66,68 @@ const usuariosPost = async(req, res = response) => {
     });
 }
 
+
 const usuariosPut = async(req, res = response) => {
 
+    
+
+
+
+    const fecha_registro = Date.now();
+
     const { id } = req.params;
-    const { _id, password, google, correo, ...resto } = req.body;
+    
+    const { numero_telefonico,  
+        correo, password, rol,    
+   } = req.body;
+
+   const correoDB= await Usuario.findOne({correo, estado:true})
+
+ if (correoDB) {
+     if (correoDB._id!=id) {
+        return res.status(400).json({
+            msg:`El correo: '${correoDB.correo}', ya está registrado `.toUpperCase(),
+                
+            }); 
+     }
+ }
+
+
+
+
+/*     // const { _id, password,  correo,  ...resto } = req.body;
+
 
     if ( password ) {
         // Encriptar la contraseña
         const salt = bcryptjs.genSaltSync();
         resto.password = bcryptjs.hashSync( password, salt );
-    }
+    } */
 
-    const usuario = await Usuario.findByIdAndUpdate( id, resto );
+    let usuarioDB;
+if (req.usuario.rol==='ADMIN_ROLE') {
+    // console.log('es igual');    
+    usuarioDB = {    
+        correo, password, rol,numero_telefonico, fecha_registro, };
+    // console.log(req.usuario.rol);
+}else{
+    // console.log('no es igual');
+     usuarioDB = {    
+        correo, password,numero_telefonico, fecha_registro, };  
+}
+
+
+
+   // // Encriptar la contraseña
+   const salt = bcryptjs.genSaltSync();
+   usuarioDB.password = bcryptjs.hashSync( password, salt );
+
+
+
+
+    // const usuario = await Usuario.findByIdAndUpdate( id, resto );
+
+    const usuario = await Usuario.findByIdAndUpdate( id, usuarioDB,{new:true});
 
     res.json(usuario);
 }
@@ -88,10 +145,30 @@ const usuariosDelete = async(req, res = response) => {
     // Fisicamente lo borramos
     // const usuario = await Usuario.findByIdAndDelete( id );
 
-    const usuario = await Usuario.findByIdAndUpdate( id, { estado: false } );
 
 
-    res.json(usuario);
+
+    const [personaRegistrada , externoRegistrado] = await Promise.all([
+        Persona.findOne({usuario_id:id , estado:true}),
+        Externo.findOne({usuario_id:id , estado:true})        
+    ]);
+
+const usuario = await Usuario.findByIdAndUpdate( id, { estado: false },{new:true} );
+
+let dependencia;    
+if (personaRegistrada) {
+    console.log('existe en persona');
+    dependencia= await Persona.findByIdAndUpdate(personaRegistrada._id,{estado:false},{new:true})
+}
+if (externoRegistrado) {
+    dependencia = await Externo.findByIdAndUpdate(externoRegistrado._id,{estado:false},{new:true})    
+    console.log('existe en externo');
+}
+
+
+
+
+    res.json({usuario, dependencia});
 }
 
 

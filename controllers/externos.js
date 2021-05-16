@@ -1,60 +1,62 @@
 const { response } = require('express');
-const {  Externo } = require('../models');
+const {  Externo, Usuario } = require('../models');
 
-/* 
-const obtenerNoticias = async(req, res = response ) => {
+
+const obtenerExternos = async(req, res = response ) => {
 
     const { limite = 5, desde = 0 } = req.query;
     const query = { estado: true };
 
-    const [ total, noticias ] = await Promise.all([
-        Noticia.countDocuments(query),
-        Noticia.find(query)
-            .populate('usuario', 'nombre')
+    const [ total, externos ] = await Promise.all([
+        Externo.countDocuments(query),
+        Externo.find(query)
+            .populate('usuario_id', 'user_name')
             .skip( Number( desde ) )
             .limit(Number( limite ))
     ]);
 
     res.json({
         total,
-        noticias
+        externos
     });
 }
 
-const obtenerNoticia = async(req, res = response ) => {
+const obtenerExterno = async(req, res = response ) => {
 
     const { id } = req.params;
-    const noticia = await Noticia.findById( id )
-                            .populate('usuario', 'nombre');
+    const externo = await Externo.findById( id )
+                            .populate('usuario_id', 'user_name');
 
-    res.json( noticia );
+    res.json( externo );
 
-} */
+}
 
 const crearExterno = async(req, res = response ) => {
  // console.log(req.body );
  const fecha_registro = Date.now();
  
  const {  nombre,numero_telefonico, 
-    rfc, direccion, correo, password, img,
-    rol
+    rfc, direccion, usuario_id,
      
 
 } = req.body;
     
 
-    const externoDB= await Externo.findOne({rfc, estado:true});
+ /*    const externoDB= await Externo.findOne({rfc, estado:true});
 
     if (externoDB) {
         return res.status(400).json({
             msg: `¡Lo sentimos! el RFC '${ externoDB.rfc }', ya existe`
         });
-    }
+    } */
+
+const user_name = `${nombre}`.toUpperCase();
+const usuario = await Usuario.findByIdAndUpdate(usuario_id,{user_name, datos_completos:true},{new:true})
+
 
 const externo = new Externo({ 
     nombre,numero_telefonico, 
-    rfc, direccion, correo, password, img,
-    rol, fecha_registro
+    rfc, direccion,  fecha_registro, usuario_id
    });
 
 // // Encriptar la contraseña
@@ -65,39 +67,95 @@ usuario.password = bcryptjs.hashSync( password, salt ); */
 await externo.save();
     
 res.json({
-    externo
-   
+    externo,
+
 });
 
 }
 
-/* const actualizarNoticia = async( req, res = response ) => {
+const actualizarExterno = async( req, res = response ) => {
 
     const { id } = req.params;
-    const { estado, usuario, ...data } = req.body;
+    const { 
+         nombre
+        ,rfc
+        ,direccion
+    } = req.body;
 
-    data.titulo  = data.titulo.toUpperCase();
-    data.usuario = req.usuario._id;
+    const [externoRegistrado , rfcDB] = await Promise.all([
+        Externo.findById(id),
+        Externo.findOne({rfc, estado:true})
+    ]);
 
-    const noticia = await Noticia.findByIdAndUpdate(id, data, { new: true });
+    // console.log(externoRegistrado);
 
-    res.json( noticia);
+    let permiso = true;
+    (externoRegistrado.usuario_id.equals(req.usuario._id) || req.usuario.rol==='ADMIN_ROLE' ) ? permiso = true :permiso=false; 
+    
+    if (!permiso ) {    
+        return res.status(401).json({
+            msg: `EL id ${req.usuario.id} No cuenta con los permisos necesarios - No puede hacer esto`
+        }); 
+    }
+  
+    if (rfcDB) {
+        if (rfcDB._id!=id) {
+           return res.status(400).json({
+               msg:`El RFC : '${curpDB.rfc}', ya está registrada `.toUpperCase(),
+                   
+               }); 
+        }
+    }    
+
+    const externoDB = {    
+        nombre
+        ,rfc
+        ,direccion
+    };   
+
+    const externo = await Externo.findByIdAndUpdate( id, externoDB,{new:true});
+    res.json(externo);
+
+
+
+
 
 }
 
-const borrarNoticia = async(req, res =response ) => {
+
+const borrarExterno = async(req, res =response ) => {
+    const fecha_eliminacion = Date.now();
 
     const { id } = req.params;
-    const noticiaBorrada = await Noticia.findByIdAndUpdate( id, { estado: false }, {new: true });
 
-    res.json( noticiaBorrada );
+    const externoRegistrado = await Externo.findById(id);
+    let permiso = true;
+    (externoRegistrado.usuario_id.equals(req.usuario._id) || req.usuario.rol==='ADMIN_ROLE' ) ? permiso = true :permiso=false; 
+    
+    if (!permiso ) {    
+        return res.status(401).json({
+            msg: `EL id ${req.usuario.id} No cuenta con los permisos necesarios - No puede hacer esto`
+        }); 
+    }
+
+
+
+
+    const externoBorrado = await Externo.findByIdAndUpdate( id, { estado: false, fecha_eliminacion }, {new: true });
+
+    res.json( externoBorrado );
 }
- */
+
 
 
 
 module.exports = {
     crearExterno,
+    
+    borrarExterno,
+    actualizarExterno,
+    obtenerExterno,
+    obtenerExternos
     // obtenerNoticias,
     // obtenerNoticia,
     // actualizarNoticia,

@@ -1,7 +1,8 @@
 const { response, request } = require('express');
 const jwt = require('jsonwebtoken');
 
-const Usuario = require('../models/usuario');
+// const Usuario = require('../models/usuario');
+const {Usuario, Persona, Externo} = require('../models/index');
 
 
 const validarJWT = async( req = request, res = response, next ) => {
@@ -33,6 +34,10 @@ const validarJWT = async( req = request, res = response, next ) => {
                 msg: 'Token no válido - usuario con estado: false'
             })
         }
+
+        
+
+
         
         
         req.usuario = usuario;

@@ -1,5 +1,5 @@
 const Role = require('../models/role');
-const{ Usuario,Noticia, Taller, Convocatoria, Carrera, Escuela , Oferta, Inscripccion}= require('../models');
+const{ Usuario,Noticia, Taller, Convocatoria, Carrera, Escuela , Oferta, Inscripccion, Externo, Persona}= require('../models');
 
 const esRoleValido = async(rol = '') => {
 
@@ -12,7 +12,7 @@ const esRoleValido = async(rol = '') => {
 const emailExiste = async( correo = '' ) => {
 
     // Verificar si el correo existe
-    const existeEmail = await Usuario.findOne({ correo });
+    const existeEmail = await Usuario.findOne({ correo, estado:true });
     if ( existeEmail ) {
         throw new Error(`El correo: ${ correo }, ya está registrado`);
     }
@@ -26,6 +26,126 @@ const existeUsuarioPorId = async( id ) => {
         throw new Error(`El id no existe ${ id }`);
     }
 }
+/**
+ * Usuario activo
+ */
+const existeUsuarioActivoPorId = async( id ) => {
+
+    // Verificar si el correo existe
+    const existeUsuario = await Usuario.findById(id);
+    if ( !existeUsuario.estado ) {
+        throw new Error(`El id no existe ${ id }`);
+    }
+}
+
+
+const existePersonaPorId = async( id ) => {
+
+    // Verificar si el correo existe
+    const existePersona = await Persona.findById(id);
+    if ( !existePersona ) {
+        throw new Error(`El id no existe ${ id }`);
+    }
+}
+
+
+
+
+
+
+
+
+/**
+ * PERSONA
+ */
+
+ const curpExiste = async( curp = '' ) => {
+
+    // Verificar si el correo existe
+    const existeCurp = await Persona.findOne({ curp, estado:true });
+    if ( existeCurp ) {
+        throw new Error(`la CURP: '${ curp }', ya está registrada`);
+    }
+}
+/**
+ * 
+ *  Externo RFC
+ */
+const rfcExiste = async( rfc = '' ) => {
+
+    // Verificar si el correo existe
+    const existeRfc = await Externo.findOne({ rfc, estado:true });
+    if ( existeRfc ) {
+        throw new Error(`El RFC: '${ rfc }', ya está registrado`);
+    }
+}
+
+
+
+
+
+
+
+
+
+/**
+ * RELACIÓN EXISTENTE
+ */
+
+const existeRelacion = async ( usuario_id= '', roles=[])=>{
+
+/*     const existeUsuario = await Usuario.findById(usuario_id)
+    
+    if (existeUsuario.rol==='EXTERNO_ROLE') {
+        throw new Error(` el usuario: '${usuario_id}' tiene que rol de: '${ existeUsuario.rol }'`);
+        
+    }  */
+    const existeUsuario = await Usuario.findById(usuario_id)
+    
+    const relacion = roles.includes( existeUsuario.rol );
+    if ( !relacion ) {
+        // throw new Error(`La colección ${ coleccion } no es permitida, ${ colecciones }`);
+    
+        throw new Error(` el usuario: '${usuario_id}', tiene el rol de: '${ existeUsuario.rol }', y se require: '${roles}'`);
+    
+    }
+  
+}
+
+
+const existeRelacionConUsuario= async(usuario_id='')=>{
+
+    // Verificar si el correo existe
+  
+    const [existeUsuarioEnPersona, existeUsuarioEnExterno]= await Promise.all([
+        Persona.find({usuario_id:usuario_id, estado:true}),
+         Externo.find({usuario_id:usuario_id, estado:true}),
+    ]);
+
+    // console.log( existeUsuarioEnPersona.length);
+    if ( existeUsuarioEnPersona.length>0 ) {
+        throw new Error(`El usuario_id: '${usuario_id}, ya está registrado en la seccion de: 'Personas'`);
+    }
+    
+    // console.log(existeUsuarioEnExterno.length);
+    if ( existeUsuarioEnExterno.length>0 ) {
+        throw new Error(`El usuario_id: '${usuario_id}, ya está registrado en la seccion de: 'Externos'`);
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+/**************************** */
+
 
 
 
@@ -111,8 +231,17 @@ const existeUsuarioPorId = async( id ) => {
     }
 }
 
+/**
+ * Externos
+ */
+const existeExternoPorId = async( id ) => {
 
-
+    // Verificar si el correo existe
+    const existeExterno = await Externo.findById(id);
+    if ( !existeExterno ) {
+        throw new Error(`El id no existe ${ id }`);
+    }
+}
 
 
 
@@ -132,6 +261,10 @@ const existeProductoPorId = async( id ) => {
     }
 }
 
+
+
+
+
 /**
  * Validar colecciones permitidas
  */
@@ -145,6 +278,12 @@ const coleccionesPermitidas = ( coleccion = '', colecciones = []) => {
 }
 
  
+
+
+/**
+ * 
+ */
+
 
 
 
@@ -165,6 +304,19 @@ module.exports = {
     existeEscuelaPorId,
     existeOfertaPorId, 
     existeInscripcionPorId, 
+    existeExternoPorId,
+
+  curpExiste,  
+  rfcExiste,
+
+
+  existeRelacion,
+  existePersonaPorId,
+
+  existeUsuarioActivoPorId,
+  existeRelacionConUsuario,
+  
+
     
 }
 
