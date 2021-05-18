@@ -1,50 +1,110 @@
 const {response, request} = require('express');
 
 const {Foro}= require('../models/index');
-
+ 
 /**
  *  Obtener Todas Los Foros
  */
  const obtenerForos = async(req, res= response)=>{
+
+    const {limite=5, desde=0, estado=true} = req.query;
+    const query={estado};
+
+    const [total, foros] = await Promise.all([
+        Foro.countDocuments(query),
+        Foro.find(query)
+                        .populate('usuario_id',['user_name'])
+                        .skip(Number( desde ) )
+                        .limit(Number( limite) )
+    ]);
     res.json({
-        msg:'Obtener Foros'
-    });    
-    }
+        total,
+        foros
+    });
+
+}
 
 /**
  *  Obtener Un Foro
  */
 const obtenerForo = async(req, res= response)=>{
-res.json({
-    msg:'Obtener Foro'
-});    
+
+    const {id}= req.params;
+    const foro = await Foro.findById(id)
+                                        .populate('usuario_id',['user_name']);
+    res.json(foro);    
+    
 }
 
 /**
  *  Crear Un Foro
  */
 const crearForo = async(req, res= response)=>{
-res.json({
-    msg:'Crear Foro'
-});    
+
+    const fecha_registro = Date.now();  
+    const {titulo, descripcion }= req.body;   
+
+    const data = {
+        titulo,
+        descripcion,
+        usuario_id: req.usuario._id,
+        fecha_registro
+    }    
+    const foro = new Foro(data);
+    await foro.save();      
+    res.status(201).json(foro);
+    
+
 }
 
 /**
  *  Actualizar Un Foro
  */
 const actualizarForo = async(req, res= response)=>{
-res.json({
-    msg:'Actualizar Foro'
-});    
+
+    const {id }= req.params;   
+    const {titulo, descripcion, }= req.body;
+
+    const foroDB = await  Foro.findById(id);
+
+    let permiso = true;
+    (foroDB.usuario_id.equals(req.usuario._id) || req.usuario.rol==='ADMIN_ROLE' ) ? permiso = true :permiso=false; 
+
+    if (!permiso ) {    
+        return res.status(401).json({
+            msg: `EL id ${req.usuario.id} No cuenta con los permisos necesarios - No puede hacer esto`
+        }); 
+    }
+
+    const data = {
+        titulo,
+        descripcion,
+    }
+
+    const foro = await Foro.findByIdAndUpdate(id,data, {new:true});
+    res.json(foro);    
+        
 }
 
 /**
  *  Eliminar Un Foro
  */
 const eliminarForo = async(req, res= response)=>{
-res.json({
-    msg:'Eliminar Foro'
-});    
+
+    const fecha_eliminacion = Date.now();
+    const {id} = req.params;
+    const foroDB = await  Foro.findById(id);
+    let permiso = true;
+    (foroDB.usuario_id.equals(req.usuario._id) || req.usuario.rol==='ADMIN_ROLE' ) ? permiso = true :permiso=false; 
+    
+    if (!permiso ) {    
+        return res.status(401).json({
+            msg: `EL id ${req.usuario.id} No cuenta con los permisos necesarios - No puede hacer esto`
+        }); 
+    }
+    const foro = await Foro.findByIdAndUpdate(id,{estado:false, fecha_eliminacion},{new:true});
+    res.json(foro);    
+
 }
 
 

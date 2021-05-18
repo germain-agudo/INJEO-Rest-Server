@@ -6,12 +6,31 @@ const ForoSchema = Schema({
         required: [true, 'El título es obligatorio'],
        
     },
+    descripcion: {
+        type: String,
+   
+       
+    },
 
 
     usuario_id: {
         type: Schema.Types.ObjectId,
         ref: 'Usuario',
         required:true,        
+    },
+    estado: {
+        type: Boolean,
+        required: true,
+        default:true,
+       
+    },
+    fecha_registro: {
+        type:  Date,
+            
+    },
+    fecha_eliminacion: {
+        type:  Date,
+            
     },
 
 });

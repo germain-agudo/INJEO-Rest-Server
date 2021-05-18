@@ -1,7 +1,7 @@
 const { Router } = require('express');
 const { check } = require('express-validator');
 
-const { validarJWT, validarCampos, esAdminRole } = require('../middlewares');
+const { validarJWT, validarCampos, esAdminRole, datosCompletos, tieneRole} = require('../middlewares');
 
 const {   crearInscripcion,
         actualizarInscripcion, 
@@ -18,10 +18,14 @@ const router = Router();
 
 
 //  Obtener todas las categorias - publico
-router.get('/', obtenerInscripciones );
+router.get('/',[validarJWT, tieneRole('ADMIN_ROLE','USER_ROLE'), datosCompletos, validarCampos], obtenerInscripciones );
 
 // Obtener una categoria por id - publico
 router.get('/:id',[
+    validarJWT,
+    // esAdminRole,
+    tieneRole('ADMIN_ROLE','USER_ROLE'),
+    datosCompletos,
     check('id', 'No es un id de Mongo válido').isMongoId(),
     check('id').custom( existeInscripcionPorId ),
     validarCampos,
@@ -31,6 +35,9 @@ router.get('/:id',[
 
 router.post('/', [ 
     validarJWT,
+    // esAdminRole,
+    tieneRole('ADMIN_ROLE','USER_ROLE'),
+    datosCompletos,
     check('participante_id', 'El campo participante_id es obligatorio').not().isEmpty(),     
     check('taller_id', 'El campo taller_id es obligatorio').not().isEmpty(),   
  
@@ -46,7 +53,10 @@ router.post('/', [
 // Actualizar - privado - cualquiera con token válido
 router.put('/:id',[
     validarJWT,
+
     // esAdminRole,
+    tieneRole('ADMIN_ROLE','USER_ROLE'),
+    datosCompletos,
     // check('nombre','El nombre es obligatorio').not().isEmpty(), 
     check('id', 'No es un id de Mongo válido').isMongoId(),   
     check('id').custom( existeInscripcionPorId ), 
@@ -70,6 +80,8 @@ router.put('/:id',[
 router.delete('/:id',[
     validarJWT,
     // esAdminRole,
+    tieneRole('ADMIN_ROLE','USER_ROLE'),
+    datosCompletos,
     check('id', 'No es un id de Mongo válido').isMongoId(),
     check('id').custom( existeInscripcionPorId ), 
 

@@ -32,6 +32,7 @@ const obtenerNoticia = async(req, res = response ) => {
 }
 
 const crearNoticia = async(req, res = response ) => {
+    const fecha_registro = Date.now();
 
    const { titulo,subtitulo, descripcion}=req.body;
     // titulo = titulo.toUpperCase();
@@ -43,13 +44,14 @@ const crearNoticia = async(req, res = response ) => {
             msg: `La categoria ${ categoriaDB.nombre }, ya existe`
         });
     } */
-
+ 
     // Generar la data a guardar
     const data = {
         "titulo":titulo.toUpperCase(),
         subtitulo,
         descripcion,
-        usuario: req.usuario._id
+        usuario: req.usuario._id,
+        fecha_registro
     }
    
 
@@ -77,9 +79,10 @@ const actualizarNoticia = async( req, res = response ) => {
 }
 
 const borrarNoticia = async(req, res =response ) => {
+    const fecha_eliminacion = Date.now();
 
     const { id } = req.params;
-    const noticiaBorrada = await Noticia.findByIdAndUpdate( id, { estado: false }, {new: true });
+    const noticiaBorrada = await Noticia.findByIdAndUpdate( id, { estado: false , fecha_eliminacion}, {new: true });
 
     res.json( noticiaBorrada );
 }

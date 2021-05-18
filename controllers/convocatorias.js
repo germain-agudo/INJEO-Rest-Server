@@ -71,6 +71,18 @@ const actualizarConvocatoria = async( req, res = response ) => {
     data.titulo  = data.titulo.toUpperCase();
     data.usuario = req.usuario._id;
 
+const convocatoriaDB = await  Convocatoria.findById(id);
+let permiso = true;
+(convocatoriaDB.usuario.equals(req.usuario._id) || req.usuario.rol==='ADMIN_ROLE' ) ? permiso = true :permiso=false; 
+
+if (!permiso ) {    
+    return res.status(401).json({
+        msg: `EL id ${req.usuario.id} No cuenta con los permisos necesarios - No puede hacer esto`
+    }); 
+}
+
+
+
     const convocatoria = await Convocatoria.findByIdAndUpdate(id, data, { new: true });
 
     res.json( convocatoria);
@@ -79,7 +91,23 @@ const actualizarConvocatoria = async( req, res = response ) => {
 
 const borrarConvocatoria = async(req, res =response ) => {
 
+
+
     const { id } = req.params;
+
+
+    const convocatoriDB = await  Convocatoria.findById(id);
+let permiso = true;
+(convocatoriDB.usuario.equals(req.usuario._id) || req.usuario.rol==='ADMIN_ROLE' ) ? permiso = true :permiso=false; 
+
+if (!permiso ) {    
+    return res.status(401).json({
+        msg: `EL id ${req.usuario.id} No cuenta con los permisos necesarios - No puede hacer esto`
+    }); 
+}
+
+
+
     const convocatoriaBorrada = await Convocatoria.findByIdAndUpdate( id, { estado: false }, {new: true });
 
     res.json( convocatoriaBorrada );

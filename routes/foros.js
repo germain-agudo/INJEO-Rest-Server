@@ -5,24 +5,31 @@ const { check } = require('express-validator');
 /**
  *  Los Middlewares
  */
-const { validarCampos, validarJWT}= require('../middlewares/index')
+const { 
+        validarCampos,
+        tieneRole,
+        esAdminRole, 
+        validarJWT,
+        datosCompletos
+}= require('../middlewares/index')
 
 /**
  *  Los Validadores
  */
-
-const  {existeUsuarioPorId, }= require('../helpers/db-validators');
+const  {
+        existeForoPorId,
+        existeForoActivoPorId,
+}= require('../helpers/db-validators');
 
 /**
- *  Controladores
+ *  Controladores 
  */
-
 const {
-obtenerForo,
-obtenerForos,
-crearForo,
-actualizarForo,
-eliminarForo    
+        obtenerForo,
+        obtenerForos,
+        crearForo,
+        actualizarForo,
+        eliminarForo    
 } = require('../controllers/foros');
 
 
@@ -37,7 +44,9 @@ router.get('/',obtenerForos);
  * Obtener Un Registro
  */
 router.get('/:id',[
-    check('id','No es un ID válido').isMongoId(),
+        check('id','No es un ID válido').isMongoId(),
+        check('id').custom(existeForoPorId),
+        validarCampos,    
 ], obtenerForo);
 
 
@@ -45,23 +54,41 @@ router.get('/:id',[
  *  Crear Y Guardar Un Registro
  */
  router.post('/',[
-    check('tiutulo','El tìtulo es obligatorio').not().isEmpty(),
+        validarJWT,
+        tieneRole('ADMIN_ROLE','EXTERNO_ROLE','USER_ROLE'),
+        datosCompletos,
+        check('titulo','El título es obligatorio').not().isEmpty(),
+        check('descripcion','La descripciòn es obligatoria').not().isEmpty(),
+        validarCampos,
 ], crearForo);
 
 
 /**
  * Actualizar Un Registro
  */
- router.put('/:id',[
-    check('id','No es un ID válido').isMongoId(),
-    check('tiutulo','El tìtulo es obligatorio').not().isEmpty(),
+ router.put('/:id',[    
+        validarJWT,
+        tieneRole('ADMIN_ROLE','EXTERNO_ROLE'),
+        datosCompletos,    
+        check('id','No es un ID válido').isMongoId(),
+        check('id').custom(existeForoPorId),
+        check('id').custom(existeForoActivoPorId),
+        check('titulo','El título es obligatorio').not().isEmpty(),
+        check('descripcion','La descripciòn es obligatoria').not().isEmpty(),
+        validarCampos,
 ], actualizarForo);
 
 /**
  * Eliminar Un Registro
  */
 router.delete('/:id',[
-    check('id','No es un ID válido').isMongoId(),
+        validarJWT,
+        tieneRole('ADMIN_ROLE','EXTERNO_ROLE'),
+        datosCompletos,    
+        check('id','No es un ID válido').isMongoId(),
+        check('id').custom(existeForoPorId),
+        check('id').custom(existeForoActivoPorId),
+        validarCampos,
 ], eliminarForo);
 
 

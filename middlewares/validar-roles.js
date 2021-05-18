@@ -9,11 +9,11 @@ const esAdminRole = ( req, res = response, next ) => {
         });
     }
 
-    const { rol, nombre } = req.usuario;
+    const { rol, user_name,_id } = req.usuario;
     
     if ( rol !== 'ADMIN_ROLE' ) {
         return res.status(401).json({
-            msg: `${ nombre } no es administrador - No puede hacer esto`
+            msg: `El usuario: '${ _id }' no es administrador - No puede hacer esto`
         });
     }
 

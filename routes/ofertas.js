@@ -1,7 +1,7 @@
 const { Router } = require('express');
 const { check } = require('express-validator');
 
-const { validarJWT, validarCampos, esAdminRole } = require('../middlewares');
+const { validarJWT, validarCampos, esAdminRole,datosCompletos } = require('../middlewares');
 
 const { crearOferta,
     actualizarOferta, 
@@ -32,7 +32,8 @@ router.get('/:id',[
 
 router.post('/', [ 
     validarJWT,
- 
+    esAdminRole,
+    datosCompletos,
     check('carrera_id', 'No es un id de Mongo válido').isMongoId(),
     check('escuela_id', 'No es un id de Mongo válido').isMongoId(),
     check('escuela_id').custom( existeEscuelaPorId ),
@@ -44,6 +45,7 @@ router.post('/', [
 router.put('/:id',[
     validarJWT,
     esAdminRole,
+    datosCompletos,
     // check('nombre','El nombre es obligatorio').not().isEmpty(), 
     check('id', 'No es un id de Mongo válido').isMongoId(),     
     check('id').custom( existeOfertaPorId),
@@ -65,6 +67,7 @@ router.put('/:id',[
 router.delete('/:id',[
     validarJWT,
     esAdminRole,
+    datosCompletos,
     check('id', 'No es un id de Mongo válido').isMongoId(),
     check('id').custom( existeOfertaPorId ),
     validarCampos,

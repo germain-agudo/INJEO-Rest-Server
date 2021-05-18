@@ -94,6 +94,8 @@ router.put('/:id',[
 
 
 router.post('/',[
+    validarJWT,
+    
     check('nombre', 'El nombre es obligatorio').not().isEmpty(),
     check('apellido_paterno', 'El apellido paterno es obligatorio').not().isEmpty(),
     check('apellido_materno', 'El apellido materno es obligatorio').not().isEmpty(),
@@ -107,7 +109,7 @@ router.post('/',[
     check('usuario_id', 'El id_usuario es obligatoria').not().isEmpty(),
     
     check('usuario_id', 'No es un ID válido').isMongoId(),
-    check('usuario_id').custom( existeUsuarioPorId ),    
+    check('usuario_id').custom( existeUsuarioPorId ),       
     check('usuario_id').custom( existeUsuarioActivoPorId ),    
     check('usuario_id').custom( existeRelacionConUsuario ),    
 

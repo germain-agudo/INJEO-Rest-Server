@@ -32,6 +32,7 @@ const obtenerTaller = async(req, res = response ) => {
 }
 
 const crearTaller = async(req, res = response ) => {
+    const fecha_registro = Date.now();
 
    const { titulo,subtitulo, descripcion, enlace}=req.body;
     // titulo = titulo.toUpperCase();
@@ -50,7 +51,8 @@ const crearTaller = async(req, res = response ) => {
         subtitulo,
         descripcion,
         enlace,
-        usuario: req.usuario._id
+        usuario: req.usuario._id,
+        fecha_registro,
     }
    
 
@@ -71,6 +73,20 @@ const actualizarTaller = async( req, res = response ) => {
     data.titulo  = data.titulo.toUpperCase();
     data.usuario = req.usuario._id;
 
+    
+const tallerDB = await  Taller.findById(id);
+let permiso = true;
+(tallerDB.usuario.equals(req.usuario._id) || req.usuario.rol==='ADMIN_ROLE' ) ? permiso = true :permiso=false; 
+
+if (!permiso ) {    
+    return res.status(401).json({
+        msg: `EL id ${req.usuario.id} No cuenta con los permisos necesarios - No puede hacer esto`
+    }); 
+}
+
+
+
+
     const taller = await Taller.findByIdAndUpdate(id, data, { new: true });
 
     res.json( taller);
@@ -78,9 +94,25 @@ const actualizarTaller = async( req, res = response ) => {
 }
 
 const borrarTaller = async(req, res =response ) => {
+    const fecha_eliminacion  = Date.now();
 
     const { id } = req.params;
-    const tallerBorrado = await Taller.findByIdAndUpdate( id, { estado: false }, {new: true });
+
+    
+    const tallerDB = await  Taller.findById(id);
+    let permiso = true;
+    (tallerDB.usuario.equals(req.usuario._id) || req.usuario.rol==='ADMIN_ROLE' ) ? permiso = true :permiso=false; 
+    
+    if (!permiso ) {    
+        return res.status(401).json({
+            msg: `EL id ${req.usuario.id} No cuenta con los permisos necesarios - No puede hacer esto`
+        }); 
+    }
+    
+
+
+
+    const tallerBorrado = await Taller.findByIdAndUpdate( id, { estado: false, fecha_eliminacion }, {new: true });
 
     res.json( tallerBorrado );
 }

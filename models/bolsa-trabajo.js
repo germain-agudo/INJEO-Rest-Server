@@ -11,9 +11,9 @@ const BolsaTrabajoSchema = Schema({
         required: [true, 'La descripción'],
        
     },
-    requerimientos: {
+    requisitos: {
         type: String,
-        required: [true, 'Los requerimientos son obligatorios'],
+        required: [true, 'Los requisitos son obligatorios'],
                
     },
     enlace: {
@@ -30,7 +30,20 @@ const BolsaTrabajoSchema = Schema({
         ref: 'Usuario',
         required:true,        
     },
-
+    estado: {
+        type: Boolean,
+        required: true,
+        default:true,
+       
+    },
+    fecha_registro: {
+        type:  Date,
+            
+    },
+    fecha_eliminacion: {
+        type:  Date,
+            
+    },
 });  
 
 BolsaTrabajoSchema.methods.toJSON =function () {

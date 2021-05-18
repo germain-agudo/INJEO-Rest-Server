@@ -17,20 +17,30 @@ class Server {
             auth:       '/api/auth',
             // buscar:     '/api/buscar',
             noticias: '/api/noticias',
-            talleres: '/api/talleres',
             convocatorias: '/api/convocatorias',
+            talleres: '/api/talleres',
+            inscripcines: '/api/inscripciones',
+            
             carreras: '/api/carreras',
             escuelas: '/api/escuelas',
+            ofertas:  '/api/ofertas',
+
+            becas:    '/api/becas',
+            apoyos:   '/api/apoyos',
 
 
+            bolsas:   '/api/bolsas',
+            foros:   '/api/foros',
+            
+
+            usuarios:   '/api/usuarios',
             externos: '/api/externos',
             personas: '/api/personas',
 
 
-            ofertas: '/api/ofertas',
-            inscripcines: '/api/inscripciones',
+
+
             // productos:  '/api/productos',
-            usuarios:   '/api/usuarios',
 
             uploads:    '/api/uploads',
         }
@@ -88,6 +98,12 @@ class Server {
         
         this.app.use( this.paths.externos, require('../routes/externos'));
         this.app.use( this.paths.personas, require('../routes/personas'));
+        
+        this.app.use( this.paths.foros, require('../routes/foros'));
+
+        this.app.use( this.paths.becas, require('../routes/becas'));
+        this.app.use( this.paths.apoyos, require('../routes/apoyos'));
+        this.app.use( this.paths.bolsas, require('../routes/bolsas-trabajos'));
         
         // this.app.use( this.paths.uploads, require('../routes/uploads'));
 

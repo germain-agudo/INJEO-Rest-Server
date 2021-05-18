@@ -1,50 +1,116 @@
 const {response, request} = require('express');
 
 const {Apoyo}= require('../models/index');
+const { findById } = require('../models/role');
 
 /**
  *  Obtener Todas Los Apoyos
  */
- const obtenerApoyos = async(req, res= response)=>{
-    res.json({
-        msg:'Obtener Apoyos'
-    });    
+ const obtenerApoyos = async(req=request, res= response)=>{
+  const {limite = 5, desde = 0, estado= true, }= req.query;
+  const query = {estado};
+
+  const [total, apoyos ]= await Promise.all([
+      Apoyo.countDocuments(query),
+      Apoyo.find(query)
+                        .populate('usuario_id',['user_name'])
+                        .skip( Number( desde ))
+                        .limit( Number( limite ) )
+  ]);
+  res.json({
+      total,
+      apoyos
+  })
+    
+    
     }
 
 /**
  *  Obtener Un Apoyo
  */
-const obtenerApoyo = async(req, res= response)=>{
-res.json({
-    msg:'Obtener Apoyo'
-});    
+const obtenerApoyo = async(req=request, res= response)=>{
+    const {id} = req.params;
+    const apoyo = await Apoyo.findById(id)
+                                    .populate('usuario_id',['user_name']);
+
+    res.json(apoyo)
+
+     
 }
 
 /**
  *  Crear Un Apoyo
  */
-const crearApoyo = async(req, res= response)=>{
-res.json({
-    msg:'Crear Apoyo'
-});    
+const crearApoyo = async(req=request, res= response)=>{
+
+    const fecha_registro = Date.now();
+    const {titulo, descripcion, requisitos, enlace }= req.body;
+
+    const data = {
+        titulo:titulo.toUpperCase(),
+        descripcion,
+        requisitos,
+        enlace,
+        usuario_id:req.usuario._id,
+        fecha_registro
+    }
+    const apoyo = new Apoyo(data);
+    await apoyo.save()
+    res.status(200).json(apoyo);
+
+
 }
 
 /**
  *  Actualizar Un Apoyo
  */
-const actualizarApoyo = async(req, res= response)=>{
-res.json({
-    msg:'Actualizar Apoyo'
-});    
+const actualizarApoyo = async(req=request, res= response)=>{
+
+    const {id }= req.params;   
+const {titulo, descripcion, requisitos, enlace }= req.body;
+
+const apoyoDB = await  Apoyo.findById(id);
+
+let permiso = true;
+(apoyoDB.usuario_id.equals(req.usuario._id) || req.usuario.rol==='ADMIN_ROLE' ) ? permiso = true :permiso=false; 
+
+if (!permiso ) {    
+    return res.status(401).json({
+        msg: `EL id ${req.usuario.id} No cuenta con los permisos necesarios - No puede hacer esto`
+    }); 
+}
+
+const data = {
+    titulo:titulo.toUpperCase(),
+    descripcion,
+    requisitos,
+    enlace, 
+}
+
+const apoyo = await Apoyo.findByIdAndUpdate(id,data, {new:true});
+res.json(apoyo);   
 }
 
 /**
  *  Eliminar Un Apoyo
  */
-const eliminarApoyo = async(req, res= response)=>{
-res.json({
-    msg:'Eliminar Apoyo'
-});    
+const eliminarApoyo = async(req=request, res= response)=>{
+
+    const fecha_eliminacion = Date.now();
+
+const {id} = req.params;
+const apoyoDB = await  Apoyo.findById(id);
+let permiso = true;
+(apoyoDB.usuario_id.equals(req.usuario._id) || req.usuario.rol==='ADMIN_ROLE' ) ? permiso = true :permiso=false; 
+
+if (!permiso ) {    
+    return res.status(401).json({
+        msg: `EL id ${req.usuario.id} No cuenta con los permisos necesarios - No puede hacer esto`
+    }); 
+}
+const apoyo = await Apoyo.findByIdAndUpdate(id,{estado:false, fecha_eliminacion},{new:true});
+res.json(apoyo); 
+      
 }
 
 

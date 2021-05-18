@@ -1,5 +1,6 @@
 const { response } = require('express');
 const { Taller, Usuario, Inscripccion, Oferta} = require('../models');
+const inscripcione = require('../models/inscripcione');
 
 
 
@@ -152,6 +153,16 @@ const actualizarInscripcion = async( req, res = response ) => {
           });
       } */
     
+      const inscripcion_id = await  inscripcione.findById(id);
+      let permiso = true;
+      (inscripcion_id.usuario.equals(req.usuario._id) || req.usuario.rol==='ADMIN_ROLE' ) ? permiso = true :permiso=false; 
+      
+      if (!permiso ) {    
+          return res.status(401).json({
+              msg: `EL id ${req.usuario.id} No cuenta con los permisos necesarios - No puede hacer esto`
+          }); 
+      }
+
     
       if (inscripcionDB.length>0) {
     
@@ -208,6 +219,17 @@ const data ={
 }
  
 const borrarInscripcion = async(req, res =response ) => {
+
+
+    const inscripcion_id = await  inscripcione.findById(id);
+    let permiso = true;
+    (inscripcion_id.usuario.equals(req.usuario._id) || req.usuario.rol==='ADMIN_ROLE' ) ? permiso = true :permiso=false; 
+    
+    if (!permiso ) {    
+        return res.status(401).json({
+            msg: `EL id ${req.usuario.id} No cuenta con los permisos necesarios - No puede hacer esto`
+        }); 
+    }
 
 
     const { id } = req.params;

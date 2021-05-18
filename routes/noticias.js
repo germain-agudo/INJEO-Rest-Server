@@ -1,7 +1,7 @@
 const { Router } = require('express');
 const { check } = require('express-validator');
 
-const { validarJWT, validarCampos, esAdminRole } = require('../middlewares');
+const { validarJWT, validarCampos, esAdminRole , datosCompletos} = require('../middlewares');
 
 const { crearNoticia,
         obtenerNoticia,
@@ -30,6 +30,7 @@ router.get('/:id',[
 router.post('/', [ 
     validarJWT,
     esAdminRole,
+    datosCompletos,
 
     check('titulo','El Titulo es obligatorio').not().isEmpty(),
     check('subtitulo','El subTitulo es obligatorio').not().isEmpty(),
@@ -40,6 +41,8 @@ router.post('/', [
 // Actualizar - privado - cualquiera con token válido
 router.put('/:id',[
     validarJWT,
+    esAdminRole,
+    datosCompletos,
     check('titulo','El titulo es obligatorio').not().isEmpty(),
     check('id').custom( existeNoticiaPorId ),
     validarCampos
@@ -49,6 +52,7 @@ router.put('/:id',[
 router.delete('/:id',[
     validarJWT,
     esAdminRole,
+    datosCompletos,
     check('id', 'No es un id de Mongo válido').isMongoId(),
     check('id').custom( existeNoticiaPorId ),
     validarCampos,

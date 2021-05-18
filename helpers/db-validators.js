@@ -1,5 +1,18 @@
 const Role = require('../models/role');
-const{ Usuario,Noticia, Taller, Convocatoria, Carrera, Escuela , Oferta, Inscripccion, Externo, Persona}= require('../models');
+const{ 
+        Beca,
+        Usuario,Noticia, 
+        Taller, 
+        Convocatoria,
+        Carrera,
+        Escuela , 
+        Oferta,
+        Inscripccion, 
+        Externo, 
+        Persona,
+        Apoyo,
+        BolsaTrabajo,
+        Foro}= require('../models/index');
 
 const esRoleValido = async(rol = '') => {
 
@@ -172,6 +185,15 @@ const existeRelacionConUsuario= async(usuario_id='')=>{
     }
 }
 
+ const existeTallerActivoPorId = async( id ) => {
+
+    // Verificar si la noticia existe
+    const existeTaller = await Taller.findById(id);
+    if ( !existeTaller.estado ) {
+        throw new Error(`El id no existe ${ id }`);
+    }
+}
+
 
 /**
  * Talleres
@@ -181,6 +203,15 @@ const existeRelacionConUsuario= async(usuario_id='')=>{
     // Verificar si la noticia existe
     const existeConvocatoria = await Convocatoria.findById(id);
     if ( !existeConvocatoria ) {
+        throw new Error(`El id no existe ${ id }`);
+    }
+}
+
+ const existeConvocatoriaActivaPorId = async( id ) => {
+
+    // Verificar si la noticia existe
+    const existeConvocatoria = await Convocatoria.findById(id);
+    if ( !existeConvocatoria.estado ) {
         throw new Error(`El id no existe ${ id }`);
     }
 }
@@ -287,6 +318,97 @@ const coleccionesPermitidas = ( coleccion = '', colecciones = []) => {
 
 
 
+/**
+ * EXISTE UN ID DE BECA
+ */
+
+ const existeBecaPorId = async( id='' ) => {
+
+    const existeId = await Beca.findById(id);
+    if ( !existeId ) {
+        throw new Error(`El id:'${ id }', no existe`);
+    }
+
+}
+// Compobar que se encuentra activo
+ const existeBecaActivaPorId = async( id='' ) => {
+
+    const existeId = await Beca.findById(id);
+    if ( !existeId.estado ) {
+        throw new Error(`El id:'${ id }', no existe`);
+    }
+
+}
+
+
+
+
+
+/**
+ * EXISTE UN ID DE APOYO
+ */
+
+ const existeApoyoPorId = async( id='' ) => {
+    // Verificar si el correo existe
+    const existeId = await Apoyo.findById(id);
+    if ( !existeId ) {
+        throw new Error(`El id:'${ id }', no existe`);
+    }
+}
+// Compobar que se encuentra activo
+const existeApoyoActivoPorId = async( id='' ) => {
+    // Verificar si el correo existe
+    const existeId = await Apoyo.findById(id);
+    if ( !existeId.estado ) {
+        throw new Error(`El id:'${ id }', no existe`);
+    }
+}
+
+
+
+
+
+/**
+ * EXISTE UN ID DE BOLSA
+ */
+
+ const existeBolsaPorId = async( id='' ) => {
+    // Verificar si el correo existe
+    const existeId = await BolsaTrabajo.findById(id);
+    if ( !existeId ) {
+        throw new Error(`El id:'${ id }', no existe`);
+    }
+}
+// Compobar que se encuentra activo
+const existeBolsaActivaPorId = async( id='' ) => {
+    // Verificar si el correo existe
+    const existeId = await BolsaTrabajo.findById(id);
+    if ( !existeId.estado ) {
+        throw new Error(`El id:'${ id }', no existe`);
+    }
+}
+
+/**
+ * EXISTE UN ID DE FORO
+ */
+
+ const existeForoPorId = async( id='' ) => {
+    // Verificar si el correo existe
+    const existeId = await Foro.findById(id);
+    if ( !existeId ) {
+        throw new Error(`El id:'${ id }', no existe`);
+    }
+}
+// Compobar que se encuentra activo
+const existeForoActivoPorId = async( id='' ) => {
+    // Verificar si el correo existe
+    const existeId = await Foro.findById(id);
+    if ( !existeId.estado ) {
+        throw new Error(`El id:'${ id }', no existe`);
+    }
+}
+
+
 
 
 
@@ -298,7 +420,11 @@ module.exports = {
     existeUsuarioPorId,
     existeNoticiaPorId,
     existeTallerPorId,
+    existeTallerActivoPorId,
+
     existeConvocatoriaPorId,
+    existeConvocatoriaActivaPorId,
+
     existeCarreraPorId,
     coleccionesPermitidas,
     existeEscuelaPorId,
@@ -315,8 +441,20 @@ module.exports = {
 
   existeUsuarioActivoPorId,
   existeRelacionConUsuario,
-  
 
-    
+  existeBecaPorId,
+  existeBecaActivaPorId,
+  existeBolsaPorId,
+  existeBolsaActivaPorId,
+  existeApoyoPorId,
+  existeApoyoActivoPorId,
+  existeForoPorId,
+  existeForoActivoPorId,
+  
+  
+ 
+
+  
+  
 }
 
