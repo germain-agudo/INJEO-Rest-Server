@@ -45,41 +45,33 @@ const usuariosPost = async(req, res = response) => {
          correo, password, rol,     
     } = req.body;
 
+ 
+
+
+
+
     const usuario = new Usuario({    
-        correo, password, rol,numero_telefonico, fecha_registro, });
+         correo, password, rol,numero_telefonico, fecha_registro, });
 
-   // // Encriptar la contraseña
-   const salt = bcryptjs.genSaltSync();
-   usuario.password = bcryptjs.hashSync( password, salt );
+    // // Encriptar la contraseña
+    const salt = bcryptjs.genSaltSync();
+    usuario.password = bcryptjs.hashSync( password, salt );
 
-
-
-    if (req.usuario) {        
-
-        switch (req.usuario.rol) {
-            case'ADMIN_ROLE':
-            
-                break;
-
-            case'EXTERNO_ROLE':
-            usuario.rol='EXTERNO_ROLE'    
-                break;
-
-            default:
-                 usuario.rol='USER_ROLE' 
-                break;
-        }
-    }
     // // Guardar en BD
     await usuario.save();
         
     res.json({
-        usuario       
+        usuario
+       
     });
 }
 
 
 const usuariosPut = async(req, res = response) => {
+
+    
+
+
 
     const fecha_registro = Date.now();
 
@@ -112,32 +104,7 @@ const usuariosPut = async(req, res = response) => {
         resto.password = bcryptjs.hashSync( password, salt );
     } */
 
-
-   const  usuarioDB = {    
-        correo, password, rol,numero_telefonico, fecha_registro, };
-
-    if (req.usuario) {        
-
-        switch (req.usuario.rol) {
-            case'ADMIN_ROLE':
-            
-                break;
-
-            case'EXTERNO_ROLE':
-            usuario.rol='EXTERNO_ROLE'    
-                break;
-
-            default:
-                 usuario.rol='USER_ROLE' 
-                break;
-        }
-    }
-
-
-
-
-
-/*     let usuarioDB;
+    let usuarioDB;
 if (req.usuario.rol==='ADMIN_ROLE') {
     // console.log('es igual');    
     usuarioDB = {    
@@ -147,7 +114,7 @@ if (req.usuario.rol==='ADMIN_ROLE') {
     // console.log('no es igual');
      usuarioDB = {    
         correo, password,numero_telefonico, fecha_registro, };  
-} */
+}
 
 
 
