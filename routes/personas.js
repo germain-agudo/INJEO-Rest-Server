@@ -96,6 +96,8 @@ router.put('/:id',[
 
 router.post('/',[
     validarJWT,
+    tieneRole('ADMIN_ROLE','USER_ROLE'), 
+
     
     check('nombre', 'El nombre es obligatorio').not().isEmpty(),
     check('apellido_paterno', 'El apellido paterno es obligatorio').not().isEmpty(),
