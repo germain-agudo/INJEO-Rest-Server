@@ -6,6 +6,7 @@ const { check } = require('express-validator');
 const {
     validarCampos,
     validarJWT,
+    tieneRole,
     // esAdminRole,
     // tieneRole
 } = require('../middlewares');
@@ -66,6 +67,8 @@ router.put('/:id',[
 
 
 router.post('/',[
+    validarJWT,
+    tieneRole('EXTERNO_ROLE','ADMIN_ROLE'),
     check('nombre', 'El nombre es obligatorio').not().isEmpty(),
     check('direccion', 'La dirección es obligatoria').not().isEmpty(),
     check('numero_telefonico', 'El número telefonico es obligatorio').not().isEmpty(),

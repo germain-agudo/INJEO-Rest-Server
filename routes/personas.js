@@ -64,9 +64,10 @@ router.get('/:id',[
 router.put('/:id',[
     validarJWT,
     // esAdminRole,
-
+    tieneRole('ADMIN_ROLE','USER_ROLE'), 
     check('id', 'No es un ID válido').isMongoId(),
     check('id').custom( existePersonaPorId ),
+
     
     check('nombre', 'El nombre es obligatorio').not().isEmpty(),
     check('apellido_paterno', 'El apellido paterno es obligatorio').not().isEmpty(),

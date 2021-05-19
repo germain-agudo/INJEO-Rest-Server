@@ -15,7 +15,10 @@ class Server {
     
         this.paths = {
             auth:       '/api/auth',
-            // buscar:     '/api/buscar',
+            buscar:     '/api/buscar',
+
+
+
             noticias: '/api/noticias',
             convocatorias: '/api/convocatorias',
             talleres: '/api/talleres',
@@ -83,7 +86,10 @@ class Server {
     routes() {
         
         this.app.use( this.paths.auth, require('../routes/auth'));
-        // this.app.use( this.paths.buscar, require('../routes/buscar'));
+        this.app.use( this.paths.buscar, require('../routes/buscar'));
+
+
+
         this.app.use( this.paths.noticias, require('../routes/noticias'));
         this.app.use( this.paths.talleres, require('../routes/talleres'));
         this.app.use( this.paths.convocatorias, require('../routes/convocatorias'));
