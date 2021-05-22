@@ -135,7 +135,7 @@ await modelo.save();
 
       case 'usuarios':      
        modelo = await Usuario.findById(id);
-       if (!modelo) {
+       if (!modelo||!modelo.estado) {
           return res.status(400).json({
             msg:`No existe un usuario con el id ${ id}`
           })
@@ -145,7 +145,7 @@ await modelo.save();
   
        case 'noticias':       
        modelo = await Noticia.findById(id);
-       if (!modelo) {
+       if (!modelo||!modelo.estado) {
           return res.status(400).json({
             msg:`No existe una noticia con el id ${ id}`
           })
@@ -154,7 +154,7 @@ await modelo.save();
     
        case 'apoyos':       
        modelo = await Apoyo.findById(id);
-       if (!modelo) {
+       if (!modelo || !modelo.estado) {
           return res.status(400).json({
             msg:`No existe un apoyo con el id ${ id}`
           })
@@ -164,7 +164,7 @@ await modelo.save();
     
        case 'becas':       
        modelo = await Beca.findById(id);
-       if (!modelo) {
+       if (!modelo || !modelo.estado) {
           return res.status(400).json({
             msg:`No existe una beca con el id ${ id}`
           })
@@ -174,7 +174,7 @@ await modelo.save();
     
        case 'bolsasTrabajo':       
        modelo = await BolsaTrabajo.findById(id);
-       if (!modelo) {
+       if (!modelo || !modelo.estado) {
           return res.status(400).json({
             msg:`No existe una bolsa de trabajo con el id ${ id}`
           })
@@ -184,7 +184,7 @@ await modelo.save();
     
        case 'carreras':       
        modelo = await Carrera.findById(id);
-       if (!modelo) {
+       if (!modelo || !modelo.estado) {
           return res.status(400).json({
             msg:`No existe una carrera con el id ${ id}`
           })
@@ -194,7 +194,7 @@ await modelo.save();
     
        case 'convocatorias':       
        modelo = await Convocatoria.findById(id);
-       if (!modelo) {
+       if (!modelo || !modelo.estado ) {
           return res.status(400).json({
             msg:`No existe una convocatoria con el id ${ id}`
           })
@@ -204,7 +204,7 @@ await modelo.save();
     
        case 'escuelas':       
        modelo = await Escuela.findById(id);
-       if (!modelo) {
+       if (!modelo || !modelo.estado) {
           return res.status(400).json({
             msg:`No existe una escuela con el id ${ id}`
           })
@@ -214,7 +214,7 @@ await modelo.save();
     
        case 'talleres':       
        modelo = await Taller.findById(id);
-       if (!modelo) {
+       if (!modelo || !modelo.estado ) {
           return res.status(400).json({
             msg:`No existe un taller con el id ${ id}`
           })
