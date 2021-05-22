@@ -12,7 +12,7 @@ const validarArchivoSubir = (req, res = response, next ) => {
     next();
 
 } 
-
+ 
 
 module.exports = {
     validarArchivoSubir

@@ -8,7 +8,7 @@ const BolsaTrabajoSchema = Schema({
     },
     descripcion: {
         type: String,
-        required: [true, 'La descripción'],
+        required: [true, 'La descripción es obligatoria'],
        
     },
     requisitos: {

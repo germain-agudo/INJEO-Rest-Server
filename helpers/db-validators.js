@@ -14,7 +14,7 @@ const{
         BolsaTrabajo,
         Foro}= require('../models/index');
 
-const esRoleValido = async(rol = '') => {
+const esRoleValido = async(rol = '') => { 
 
     const existeRol = await Role.findOne({ rol });
     if ( !existeRol ) {

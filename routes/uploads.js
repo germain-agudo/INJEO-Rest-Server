@@ -17,7 +17,17 @@ router.post('/' ,validarArchivoSubir, cargarArchivo);
 router.put('/:coleccion/:id',[ //los checks no se ejecutan hasta que se manda  a referenciar validar campos
     validarArchivoSubir,
     check('id','El id debe de ser de mongo ').isMongoId(),
-    check('coleccion').custom(c=> coleccionesPermitidas( c, ['usuarios','noticias'] ) ),
+    check('coleccion').custom(c=> coleccionesPermitidas( c, [ 
+        'Usuario', 
+        'Noticia', 
+        'Taller', 
+        'Apoyo',
+        'Beca',
+        'BolsaTrabajo',
+        'Carrera',
+        'Convocatoria',
+        'Escuela',
+    ] ) ),
     validarCampos,
 ],actualizarImagenCloudinary);
 // ],actualizarImagen);
