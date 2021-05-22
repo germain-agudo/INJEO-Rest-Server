@@ -46,7 +46,7 @@ const buscarUsuarios= async(termino = '', res = response)=>{
     if (esMongoID) {
             const usuario = await Usuario.findById(termino);
            return res.json({
-                results: ( usuario.estado ) ? [ usuario] :[]
+                results: ( usuario && usuario.estado ) ? [ usuario] :[]
             });
     }
     // solo por user_name
@@ -72,7 +72,7 @@ const buscarPersona= async(termino = '', res = response)=>{
     if (esMongoID) {
         const persona = await Persona.findById(termino).populate('usuario_id',['user_name']);
         return res.json({
-            results: ( persona.estado ) ? [ persona] :[]
+            results: ( persona && persona.estado ) ? [ persona] :[]
         });
     }
 
@@ -98,7 +98,7 @@ const buscarExterno= async(termino = '', res = response)=>{
     if (esMongoID) {
         const externo = await Externo.findById(termino).populate('usuario_id',['user_name']);
         return res.json({
-            results: ( externo .estado) ? [ externo] :[]
+            results: ( externo && externo.estado) ? [ externo] :[]
         });
     }
     const regex = new RegExp(termino,'i');
@@ -123,7 +123,7 @@ const buscarApoyo= async(termino = '', res = response)=>{
     if (esMongoID) {
         const apoyo = await Apoyo.findById(termino).populate('usuario_id',['user_name']);
         return res.json({
-            results: ( apoyo.estado ) ? [ apoyo] :[]
+            results: ( apoyo && apoyo.estado ) ? [ apoyo] :[]
         });
     }
     const regex = new RegExp(termino,'i');
@@ -148,7 +148,7 @@ const buscarBecas= async(termino = '', res = response)=>{
     if (esMongoID) {
         const beca = await Beca.findById(termino).populate('usuario_id',['user_name']);
         return res.json({
-            results: ( beca.estado ) ? [ beca] :[]
+            results: ( beca && beca.estado ) ? [ beca] :[]
         });
     }
     const regex = new RegExp(termino,'i');
@@ -173,7 +173,7 @@ const buscarbolsas= async(termino = '', res = response)=>{
     if (esMongoID) {
         const bolsa = await BolsaTrabajo.findById(termino).populate('usuario_id',['user_name']);;
         return res.json({
-            results: ( bolsa.estado ) ? [ bolsa] :[]
+            results: ( bolsa && bolsa.estado ) ? [ bolsa] :[]
         });
     }
     const regex = new RegExp(termino,'i');
@@ -198,7 +198,7 @@ const buscarCarrera= async(termino = '', res = response)=>{
     if (esMongoID) {
         const carrera = await Carrera.findById(termino).populate('usuario',['user_name']);
         return res.json({
-            results: ( carrera.estado ) ? [ carrera] :[]
+            results: ( carrera && carrera.estado ) ? [ carrera] :[]
         });
     }
     const regex = new RegExp(termino,'i');
@@ -223,7 +223,7 @@ const buscarConvocatoria= async(termino = '', res = response)=>{
     if (esMongoID) {
         const convocatoria = await Convocatoria.findById(termino).populate('usuario',['user_name']);
         return res.json({
-            results: ( convocatoria.estado ) ? [ convocatoria] :[]
+            results: ( convocatoria && convocatoria.estado ) ? [ convocatoria] :[]
         });
     }
     const regex = new RegExp(termino,'i');
@@ -248,7 +248,7 @@ const buscarEscuela= async(termino = '', res = response)=>{
     if (esMongoID) {
         const escuela = await Escuela.findById(termino).populate('usuario',['user_name']);
         return res.json({
-            results: ( escuela.estado ) ? [ escuela] :[]
+            results: ( escuela&&escuela.estado ) ? [ escuela] :[]
         });
     }
     const regex = new RegExp(termino,'i');
@@ -268,12 +268,12 @@ const buscarEscuela= async(termino = '', res = response)=>{
  */
 const buscarForo= async(termino = '', res = response)=>{
     
-    const esMongoID = ObjectId.isValid( termino ).populate('usuario_id',['user_name']);
+    const esMongoID = ObjectId.isValid( termino );
     
     if (esMongoID) {
-        const foro = await Foro.findById(termino);
+        const foro = await Foro.findById(termino).populate('usuario_id',['user_name']);
         return res.json({
-            results: ( foro.estado ) ? [ foro] :[]
+            results: ( foro&&foro.estado ) ? [ foro] :[]
         });
     }
     const regex = new RegExp(termino,'i');
@@ -296,16 +296,24 @@ const buscarInscripcion= async(termino = '', res = response)=>{
     const esMongoID = ObjectId.isValid( termino );
     
     if (esMongoID) {
-        const inscripcion = await Inscripccion.findById(termino).populate('usuario',['user_name']);
+        const inscripcion = await Inscripccion.findById(termino)
+                                                .populate('usuario',['user_name'])
+                                                .populate('taller',['titulo'])
+                                                .populate('responsable_registro',['user_name']);
         return res.json({
-            results: ( inscripcion.estado ) ? [ inscripcion] :[]
+            results: ( inscripcion && inscripcion.estado ) ? [ inscripcion] :[]
         });
     }
     const regex = new RegExp(termino,'i');
     const inscripciones = await Inscripccion.find({
-        $or: [  {nombre:regex},    ],
+        $or: [  {descripcion:regex},    ],
         $and: [ {estado:true}] 
-    }).populate('usuario',['user_name']);
+    })
+                .populate('usuario',['user_name'])
+                .populate('taller',['titulo'])
+                .populate('responsable_registro',['user_name'])
+                
+                ;
 
     res.json({
         results:inscripciones
@@ -323,7 +331,7 @@ const buscarNoticia= async(termino = '', res = response)=>{
     if (esMongoID) {
         const noticia = await Noticia.findById(termino).populate('usuario',['user_name']);
         return res.json({
-            results: ( noticia.estado ) ? [ noticia] :[]
+            results: ( noticia&&noticia.estado ) ? [ noticia] :[]
         });
     }
     const regex = new RegExp(termino,'i');
@@ -346,16 +354,23 @@ const buscarOferta= async(termino = '', res = response)=>{
     const esMongoID = ObjectId.isValid( termino );
     
     if (esMongoID) {
-        const oferta = await Oferta.findById(termino).populate('usuario',['user_name']);
+        const oferta = await Oferta.findById(termino)
+                                .populate('usuario',['user_name'])
+                                .populate('carrera',['nombre'])
+                                .populate('escuela',['nombre'])
+                                
+                                ;
         return res.json({
-            results: ( oferta.estado ) ? [ oferta] :[]
+            results: ( oferta && oferta.estado ) ? [ oferta] :[]
         });
     }
     const regex = new RegExp(termino,'i');
     const ofertas = await Oferta.find({
-        $or: [  {nombre:regex},    ],
+        $or: [  {descripcion:regex},    ],
         $and: [ {estado:true}] 
-    }).populate('usuario',['user_name']);
+    })  .populate('usuario',['user_name'])
+        .populate('carrera',['nombre'])
+        .populate('escuela',['nombre']);
 
     res.json({
         results:ofertas
@@ -373,12 +388,12 @@ const buscarTaller= async(termino = '', res = response)=>{
     if (esMongoID) {
         const taller = await Taller.findById(termino).populate('usuario',['user_name']);
         return res.json({
-            results: ( taller.estado ) ? [ taller] :[]
+            results: ( taller && taller.estado ) ? [ taller] :[]
         });
     }
     const regex = new RegExp(termino,'i');
     const talleres = await Taller.find({
-        $or: [  {nombre:regex},    ],
+        $or: [  {titulo:regex},    ],
         $and: [ {estado:true}] 
     }).populate('usuario',['user_name']);
 
@@ -433,7 +448,7 @@ switch (coleccion) {
             buscarEscuela(termino, res);
         break;
     case 'foros':
-            buscarForos(termino, res);
+            buscarForo(termino, res);
         break;
     case 'inscripciones':
             buscarInscripcion(termino, res);

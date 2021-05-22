@@ -12,6 +12,7 @@ const router = Router();
 //crear algo nuevo
 router.post('/' ,validarArchivoSubir, cargarArchivo);
 
+
 // Actualizar una imagen
 router.put('/:coleccion/:id',[ //los checks no se ejecutan hasta que se manda  a referenciar validar campos
     validarArchivoSubir,
@@ -21,7 +22,7 @@ router.put('/:coleccion/:id',[ //los checks no se ejecutan hasta que se manda  a
 ],actualizarImagenCloudinary);
 // ],actualizarImagen);
 
-
+ 
 
 
 

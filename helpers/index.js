@@ -8,6 +8,7 @@ const subirArchivo = require('./subir-archivo');
 
 
 module.exports = {
+    ///de esta manera puedo tener todo el contenido 
     ...dbValidators,
     ...generarJWT,
     // ...googleVerify,

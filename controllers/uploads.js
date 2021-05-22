@@ -1,16 +1,30 @@
 const path = require('path');  ///esto es importación  propiade node
 const fs = require('fs');
 
+//back end  autirizado por cloudinary
 const cloudinary = require('cloudinary').v2
 cloudinary.config(process.env.CLOUDINARY_URL);
+
+
 
 const { response } = require("express");
 const { subirArchivo } = require("../helpers");
 
-const { Usuario, Producto} = require('../models/index');
+const { 
+      Usuario, 
+      Noticia, 
+      Taller, 
+      Apoyo,
+      Beca,
+      BolsaTrabajo,
+      Carrera,
+      Convocatoria,
+      Escuela,
+
+} = require('../models/index');
 
 
-
+ 
 const cargarArchivo =async(req, res= response)=>{
   /*   let sampleFile;
   let uploadPath; */
@@ -19,7 +33,7 @@ const cargarArchivo =async(req, res= response)=>{
      res.status(400).json(  {  msg:'No hay arcchivos que subir '  }  );
     return;
   } */
-
+ 
 
   try {
       // Imagenes o cuallquier tipo de archivo
@@ -72,18 +86,18 @@ const actualizarImagen = async (req, res = response)=>{
      break;
 
 
-     case 'productos':
+     case 'noticias':
      ///tenemos que verificar que exista
-     modelo = await Producto.findById(id);
+     modelo = await Persona.findById(id);
      if (!modelo) {
         return res.status(400).json({
-          msg:`No existe un producto con el id ${ id}`
+          msg:`No existe una persona con el id ${ id}`
         })
      }
      break;
  
    default:
-     return res.status(500).json({ msg: 'Se me olvidó validar esto'});
+     return res.status(500).json({ msg: 'Esta colección se encuentra en desarollo o no existe'});
      
  }
 
@@ -107,6 +121,7 @@ await modelo.save();
 
 
 }
+
 /**
  * 
  */
@@ -116,8 +131,9 @@ await modelo.save();
    let modelo;
   
    switch (coleccion) {
-     case 'usuarios':
-      
+
+
+      case 'usuarios':      
        modelo = await Usuario.findById(id);
        if (!modelo) {
           return res.status(400).json({
@@ -127,26 +143,98 @@ await modelo.save();
        break;
   
   
-       case 'productos':       
-       modelo = await Producto.findById(id);
+       case 'noticias':       
+       modelo = await Noticia.findById(id);
        if (!modelo) {
           return res.status(400).json({
-            msg:`No existe un producto con el id ${ id}`
+            msg:`No existe una noticia con el id ${ id}`
+          })
+       }
+       break;
+    
+       case 'apoyos':       
+       modelo = await Apoyo.findById(id);
+       if (!modelo) {
+          return res.status(400).json({
+            msg:`No existe un apoyo con el id ${ id}`
           })
        }
        break;
    
+    
+       case 'becas':       
+       modelo = await Beca.findById(id);
+       if (!modelo) {
+          return res.status(400).json({
+            msg:`No existe una beca con el id ${ id}`
+          })
+       }
+       break;
+   
+    
+       case 'bolsasTrabajo':       
+       modelo = await BolsaTrabajo.findById(id);
+       if (!modelo) {
+          return res.status(400).json({
+            msg:`No existe una bolsa de trabajo con el id ${ id}`
+          })
+       }
+       break;
+   
+    
+       case 'carreras':       
+       modelo = await Carrera.findById(id);
+       if (!modelo) {
+          return res.status(400).json({
+            msg:`No existe una carrera con el id ${ id}`
+          })
+       }
+       break;
+   
+    
+       case 'convocatorias':       
+       modelo = await Convocatoria.findById(id);
+       if (!modelo) {
+          return res.status(400).json({
+            msg:`No existe una convocatoria con el id ${ id}`
+          })
+       }
+       break;
+   
+    
+       case 'escuelas':       
+       modelo = await Escuela.findById(id);
+       if (!modelo) {
+          return res.status(400).json({
+            msg:`No existe una escuela con el id ${ id}`
+          })
+       }
+       break;
+   
+    
+       case 'talleres':       
+       modelo = await Taller.findById(id);
+       if (!modelo) {
+          return res.status(400).json({
+            msg:`No existe un taller con el id ${ id}`
+          })
+       }
+       break;
+   
+    
+
+   
      default:
-       return res.status(500).json({ msg: 'Se me olvidó validar esto'});
+       return res.status(500).json({ msg: 'Coloección en desarollo'});
        
    }
   
   ///Limpiar imagenes previas
   if (modelo.img) {
-    const nombreArr = modelo.img.split('/');
-    const nombre = nombreArr[ nombreArr.length -1 ];
-    const [ public_id ]= nombre.split('.');
-    cloudinary.uploader.destroy(public_id);
+    const nombreArr = modelo.img.split('/');///El arreglo del nombre del archivo
+    const nombre = nombreArr[ nombreArr.length -1 ];//para obtener el ultimo, es decir el puro noombre
+    const [ public_id ]= nombre.split('.');//Desestructurar el nombre, y obtener el puro nombre 
+    cloudinary.uploader.destroy(public_id);//Este es para remplazar la imagen
   
   }
   
@@ -196,13 +284,18 @@ const mostrarImagen =async(req, res = response)=>{
       break;
   
     default:
-      return res.status(500).json({ msg: 'Se me olvidó validar esto'});
+      return res.status(500).json({ msg: 'Colección en desarrollo'});
       
   }
  
  ///Limpiar imagenes previas
  if (modelo.img) {
+  //  console.log(modelo.img);
    // Hay que borrar la imagen del servidor 
+
+  
+
+
    const pathImagen = path.join(__dirname, '../uploads', coleccion, modelo.img);
    if (fs.existsSync( pathImagen)) {   
     return  res.sendFile(pathImagen)
