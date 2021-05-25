@@ -19,7 +19,7 @@ const obtenerOfertas = async(req, res = response ) => {
             .skip( Number( desde ) )
             .limit(Number( limite ))
     ]);
-
+ 
     res.json({
         total,
         ofertas
@@ -211,6 +211,83 @@ const borrarOferta = async(req, res =response ) => {
 }
 
 
+const buscarRelacion = async(req, res =response ) => {
+
+const {id, coleccion}= req.params;
+
+let modelo;
+
+
+switch (coleccion) {
+    case 'escuelas':
+            buscarCarrerasEnEscuela(id, res);
+        break;
+
+    case 'carreras':
+            buscarEscuelasPorCarrera(id,res);
+        break;
+
+    default:
+       return res.status(500).json({ msg: 'Coloección en desarollo'});
+
+        break;
+}
+
+// console.log(req.params);
+}
+
+const buscarCarrerasEnEscuela=async(id= '', res= response)=>{
+
+const query={estado:true, escuela:id};
+    const [escuela,total,carreras]= await Promise.all( [
+            Escuela.findById(id),
+            Oferta.countDocuments(query),
+            // Oferta.find({estado:true, escuela:id}, {carrera:1, _id:0})
+            Oferta.find({estado:true, escuela:id}, {carrera:1,})     
+                                .populate('carrera',['nombre'])                                
+        ]);
+
+        if (!escuela || !escuela.estado) {
+            res.status(401).json({
+            msg: `La escuela ${id}, no existe`
+            });        
+        }
+
+    return res.json({
+        'Escuela': escuela.nombre,
+        total,
+        // results:(carreras) ? [carreras] :[],
+        results:carreras,
+    });    
+}
+
+const buscarEscuelasPorCarrera=async(id= '', res= response)=>{
+
+const query={estado:true, carrera:id};
+
+    const [carrera,total,escuelas]= await Promise.all( [
+            Carrera.findById(id),
+            Oferta.countDocuments(query),
+            // Oferta.find({estado:true, escuela:id}, {carrera:1, _id:0})
+            Oferta.find({estado:true, carrera:id}, {escuelas:1,})     
+                                .populate('escuela',['nombre'])                                
+        ]);
+
+        if (!carrera || !carrera.estado) {
+            res.status(401).json({
+            msg: `La carrera ${id}, no existe`
+            });        
+        }
+
+    return res.json({
+        'Carrera': carrera.nombre,
+        total,
+        // results:(escuelas) ? [escuelas] :[],
+        results:escuelas,
+    });    
+}
+
+
 
 
 module.exports = {
@@ -219,4 +296,5 @@ module.exports = {
     obtenerOferta,
     actualizarOferta,
     borrarOferta,
+    buscarRelacion,
 }

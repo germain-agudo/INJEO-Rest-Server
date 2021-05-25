@@ -12,7 +12,22 @@ const{
         Persona,
         Apoyo,
         BolsaTrabajo,
-        Foro}= require('../models/index');
+        Foro,
+        Image,
+
+        ConvocatoriaImg,
+        NoticiaImg,
+        TallerImg,
+        Participante,
+        Instructor,
+        InstructorTaller,
+        ParticipanteNoticia,
+        RedSocial,
+        RedInstructor,
+        RedParticipante,
+    
+    
+    }= require('../models/index');
 
 const esRoleValido = async(rol = '') => { 
 
@@ -303,7 +318,7 @@ const coleccionesPermitidas = ( coleccion = '', colecciones = []) => {
 
     const incluida = colecciones.includes( coleccion );
     if ( !incluida ) {
-        throw new Error(`La colección ${ coleccion } no es permitida, ${ colecciones }`);
+        throw new Error(`La colección: '${ coleccion }' no es permitida, intente: '${ colecciones }' `);
     }
     return true;
 }
@@ -408,6 +423,46 @@ const existeForoActivoPorId = async( id='' ) => {
     }
 }
 
+/**
+ * EXISTE UN ID DE CONVOCATORIA-TALLER
+ */
+
+ const existeConvocatoriaImgPorId = async( id='' ) => {
+    // Verificar si el correo existe
+    const existeId = await Image.findById(id);
+    if ( !existeId ) {
+        throw new Error(`El id:'${ id }', no existe`);
+    }
+}
+// Compobar que se encuentra activo
+const existeConvocatoriaImgActivaPorId = async( id='' ) => {
+    // Verificar si el correo existe
+    const existeId = await Image.findById(id);
+    if ( !existeId.estado ) {
+        throw new Error(`El id:'${ id }', no existe`);
+    }
+}
+
+/**
+ * EXISTE UN ID DE IMAGEN
+ */
+
+ const existeImagePorId = async( id='' ) => {
+    // Verificar si el correo existe
+    const existeId = await ConvocatoriaImg.findById(id);
+    if ( !existeId ) {
+        throw new Error(`El id:'${ id }', no existe`);
+    }
+}
+// Compobar que se encuentra activo
+const existeImageActivaPorId = async( id='' ) => {
+    // Verificar si el correo existe
+    const existeId = await ConvocatoriaImg.findById(id);
+    if ( !existeId.estado ) {
+        throw new Error(`El id:'${ id }', no existe`);
+    }
+}
+
 
 
 
@@ -452,7 +507,18 @@ module.exports = {
   existeForoActivoPorId,
   
   
- 
+ existeImagePorId,
+ existeImageActivaPorId,
+
+ existeConvocatoriaImgPorId,
+ existeConvocatoriaImgActivaPorId,
+
+
+
+
+
+
+
 
   
   

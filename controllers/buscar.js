@@ -417,7 +417,7 @@ if (!coleccionesPermitidas.includes(coleccion)) {
         msg:`Las colecciones permitidas son: '${ coleccionesPermitidas }'`,
     });
 }
-
+ 
 switch (coleccion) {
     
     case 'usuarios':

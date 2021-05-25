@@ -46,6 +46,10 @@ class Server {
             // productos:  '/api/productos',
 
             uploads:    '/api/uploads',
+
+            images:    '/api/images',
+
+            convocatoriaIMG:    '/api/convocatorias-imgs',
         }
 
         // Conectar a base de datos
@@ -116,6 +120,14 @@ class Server {
         // this.app.use( this.paths.uploads, require('../routes/uploads'));
 
         this.app.use( this.paths.uploads, require('../routes/uploads')); 
+
+        this.app.use( this.paths.images, require('../routes/images')); 
+        
+        
+        this.app.use( this.paths.convocatoriaIMG, require('../routes/convocatorias-imgs')); 
+
+
+
     }
 
     listen() {

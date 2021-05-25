@@ -22,11 +22,21 @@ const BolsaTrabajo = require('./bolsa-trabajo');
 const Foro = require('./foro');
 
 
+const Image = require('./image');
+const ConvocatoriaImg= require('./convocatoriaImage');
+const NoticiaImg= require('./noticiaImage');
+const TallerImg = require('./tallerImage');
+const Participante = require('./participante');
+const Instructor = require('./inscripcione');
+const InstructorTaller = require('./instructorTaller');
+const ParticipanteNoticia = require('./participanteNoticia');
+const RedSocial = require('./redSocial');
+const RedInstructor = require('./redInstructor');
+const RedParticipante = require('./redParticipante');
 
+const UsuarioForo = require('./usuarioForo');
 
 module.exports = {
-    // Categoria,
-    // Producto,
     Role,
     Server,
     Usuario,
@@ -37,14 +47,24 @@ module.exports = {
     Escuela,
     Oferta,
     Inscripccion,
-
     Apoyo,
     Beca,
     BolsaTrabajo,
     Foro,
-
-
     Externo,
-    Persona
+    Persona,
+    Image,
+    ConvocatoriaImg,
+    NoticiaImg,
+    TallerImg,
+    Participante,
+    Instructor,
+    InstructorTaller,
+    ParticipanteNoticia,
+    RedSocial,
+    RedInstructor,
+    RedParticipante,
+
+    UsuarioForo,
 }
 

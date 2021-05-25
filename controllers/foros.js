@@ -3,7 +3,7 @@ const {response, request} = require('express');
 const {Foro}= require('../models/index');
  
 /**
- *  Obtener Todas Los Foros
+ *  Obtener Todos Los Foros
  */
  const obtenerForos = async(req, res= response)=>{
 

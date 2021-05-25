@@ -1,15 +1,28 @@
 const { Router } = require('express');
 const { check } = require('express-validator');
 
-const { validarJWT, validarCampos, esAdminRole,datosCompletos } = require('../middlewares');
+const { 
+    validarJWT, 
+    validarCampos,
+     esAdminRole,
+     datosCompletos,
+    
+    } = require('../middlewares');
 
 const { crearOferta,
     actualizarOferta, 
         obtenerOfertas,
         borrarOferta,
         obtenerOferta,
+        buscarRelacion,
    } = require('../controllers/ofertas');
-const { existeEscuelaPorId, existeCarreraPorId , existeOfertaPorId} = require('../helpers');
+
+const {
+     existeEscuelaPorId,
+      existeCarreraPorId ,
+       existeOfertaPorId,
+       coleccionesPermitidas
+    } = require('../helpers');
 
 // const { existeEscuelaPorId } = require('../helpers/db-validators');
 
@@ -18,6 +31,7 @@ const router = Router();
 
 //  Obtener todas las categorias - publico
 router.get('/', obtenerOfertas );
+
 
 // Obtener una categoria por id - publico
 router.get('/:id',[
@@ -71,7 +85,27 @@ router.delete('/:id',[
     check('id', 'No es un id de Mongo válido').isMongoId(),
     check('id').custom( existeOfertaPorId ),
     validarCampos,
-],borrarOferta); 
+],borrarOferta);  
+
+
+// Obtener una categoria por id - publico
+router.get('/:coleccion/:id',[
+    // validarJWT,
+    // check('id','El id debe de ser de mongo ').isMongoId(),
+
+    // check('id').custom( existeOfertaPorId ),
+    check('id', 'No es un id de Mongo válido').isMongoId(),
+    check('coleccion').custom(c=> coleccionesPermitidas( c, [    
+        'escuelas',
+        'carreras',    
+] ) ),
+     validarCampos,
+], buscarRelacion); 
+
+
+
+
+
 
 
 module.exports = router;

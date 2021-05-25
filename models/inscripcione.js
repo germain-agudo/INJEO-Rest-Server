@@ -58,3 +58,4 @@ InscripcioneSchema.methods.toJSON = function() {
 
 
 module.exports = model( 'Inscripcione', InscripcioneSchema );
+ 
