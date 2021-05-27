@@ -1,9 +1,9 @@
 const { Schema, model} = require('mongoose');
 
 
-const InstructorTallereSchema= Schema({
+const InstructoresTallereSchema= Schema({
    
-    Taller_id: {
+    taller_id: {
         type: Schema.Types.ObjectId,
         ref: 'Taller',
         required:true,
@@ -11,7 +11,7 @@ const InstructorTallereSchema= Schema({
 
     instructor_id: {
         type: Schema.Types.ObjectId,
-        ref: 'Instructor',
+        ref: 'Instructore',
         required:true,
     },
   
@@ -37,12 +37,12 @@ const InstructorTallereSchema= Schema({
 
 });
 
-InstructorTallereSchema.methods.toJSON= function () {
+InstructoresTallereSchema.methods.toJSON= function () {
     const {__v,... data}= this.toObject();
     return data;
 }
 
-module.exports = model('InstructorTallere',InstructorTallereSchema);
+module.exports = model('InstructoresTallere',InstructoresTallereSchema);
 
 
 

@@ -50,6 +50,15 @@ class Server {
             images:    '/api/images',
 
             convocatoriaIMG:    '/api/convocatorias-imgs',
+            noticiaIMG:    '/api/noticias-imgs',
+            tallerIMG:    '/api/talleres-imgs',
+
+            instructores:    '/api/instructores',
+            participantes:    '/api/participantes',
+
+            instructorTaller: '/api/instructores-talleres',
+            participantesNoticias: '/api/participantes-noticias'
+                         
         }
 
         // Conectar a base de datos
@@ -125,6 +134,14 @@ class Server {
         
         
         this.app.use( this.paths.convocatoriaIMG, require('../routes/convocatorias-imgs')); 
+        this.app.use( this.paths.noticiaIMG, require('../routes/noticias-imgs')); 
+        this.app.use( this.paths.tallerIMG, require('../routes/talleres-imgs')); 
+        
+        this.app.use( this.paths.participantes, require('../routes/participantes')); 
+        this.app.use( this.paths.instructores, require('../routes/instructores'));
+
+        this.app.use( this.paths.instructorTaller, require('../routes/instructores-talleres')); 
+        this.app.use( this.paths.participantesNoticias, require('../routes/participantes-noticias')); 
 
 
 

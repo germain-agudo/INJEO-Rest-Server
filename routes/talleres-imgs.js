@@ -18,15 +18,16 @@ const {
  */
 
 const  {
-  // CONVOCATORIA
-  existeConvocatoriaPorId,
-  existeConvocatoriaActivaPorId,
+  // Taller
+    existeTallerPorId,
+    existeTallerActivoPorId,
   // IMGS
   existeImagePorId,
   existeImageActivaPorId,
-  // CONVOCATORIA-IMG  
-  existeConvocatoriaImgPorId, 
-  existeConvocatoriaImgActivaPorId,
+  // TALLER-IMG  
+  existeTallerImgPorId, 
+  existeTallerImgActivaPorId,
+  //COLECCIÓNES PERMITIDAS
   coleccionesPermitidas,
   
  }= require('../helpers/db-validators');
@@ -36,15 +37,15 @@ const  {
  */
 
 const {
-   obtenerConvocatoriasImagenes,
-   obtenerConvocatoriaImagen,
-     crearConvocatoriaImg,
-actualizarConvocatoriaImg,
-  eliminarConvocatoriaImg,
+   obtenerTalleresImagenes,
+   obtenerTallerImagen,
+     crearTallerImg,
+actualizarTallerImg,
+  eliminarTallerImg,
   buscarRelacion
   
   
-} = require('../controllers/convocatorias-imgs');
+} = require('../controllers/talleres-imgs');
 
 
 const router = new Router();
@@ -52,7 +53,7 @@ const router = new Router();
 /**
  *  Obtener Todos Los Registros 
  */
-router.get('/',obtenerConvocatoriasImagenes);
+router.get('/',obtenerTalleresImagenes);
 
 /**
  * Obtener Un Registro
@@ -62,9 +63,9 @@ router.get('/:id',[
     check('id','No es un ID válido').isMongoId(),
 
     // check('id').custom(existeBecaPorId),
-    check('id').custom(existeConvocatoriaImgPorId),
+    check('id').custom(existeTallerImgPorId),
         validarCampos,
-], obtenerConvocatoriaImagen);
+], obtenerTallerImagen);
 
 
 /**
@@ -76,14 +77,14 @@ router.get('/:id',[
    datosCompletos,
   //  esAdminRole,
 
-  check('convocatoria_id','No es un ID válido').isMongoId(),
+  check('taller_id','No es un ID válido').isMongoId(),
   check('imagen_id','No es un ID válido').isMongoId(),
 
-  check('convocatoria_id','El campo: convocatoria_id es obligatorio').not().isEmpty(),
+  check('taller_id','El campo: taller_id es obligatorio').not().isEmpty(),
   check('imagen_id','El campo: imagen_id es obligatorio').not().isEmpty(),
 
-  check('convocatoria_id').custom(existeConvocatoriaPorId),
-  check('convocatoria_id').custom(existeConvocatoriaActivaPorId),
+  check('taller_id').custom(existeTallerPorId),
+  check('taller_id').custom(existeTallerActivoPorId),
   
         check('imagen_id').custom(existeImagePorId),
         check('imagen_id').custom(existeImageActivaPorId),
@@ -91,7 +92,7 @@ router.get('/:id',[
 
     // check('usuario_id').custom(relacion=>rolesConPrivilegios ( relacion, ['ADMIN_ROLE','USER_ROLE'] ) ),
     validarCampos,
-], crearConvocatoriaImg);
+], crearTallerImg);
 
 
 /**
@@ -104,23 +105,23 @@ router.get('/:id',[
 
   check('id','El id es obligatorio').not().isEmpty(),
   check('id','No es un ID válido').isMongoId(),
-  check('id').custom(existeConvocatoriaImgPorId),
-  check('id').custom(existeConvocatoriaImgActivaPorId),
+  check('id').custom(existeTallerImgPorId),
+  check('id').custom(existeTallerImgActivaPorId),
 
-    check('convocatoria_id','No es un ID válido').isMongoId(),
+    check('taller_id','No es un ID válido').isMongoId(),
     check('imagen_id','No es un ID válido').isMongoId(),
   
-    check('convocatoria_id','El campo: convocatoria_id es obligatorio').not().isEmpty(),
+    check('taller_id','El campo: taller_id es obligatorio').not().isEmpty(),
     check('imagen_id','El campo: imagen_id es obligatorio').not().isEmpty(),
   
-    check('convocatoria_id').custom(existeConvocatoriaPorId),
-    check('convocatoria_id').custom(existeConvocatoriaActivaPorId),
+    check('taller_id').custom(existeTallerPorId),
+    check('taller_id').custom(existeTallerActivoPorId),
           check('imagen_id').custom(existeImagePorId),
           check('imagen_id').custom(existeImageActivaPorId),
     // check('id').custom(id=>existeModeloPorId(id,'Beca')),
 
     validarCampos,
-], actualizarConvocatoriaImg);
+], actualizarTallerImg);
 
 /**
  * Eliminar Un Registro
@@ -132,11 +133,11 @@ router.delete('/:id',[
 
   check('id','El id es obligatorio').not().isEmpty(),
   check('id','No es un ID válido').isMongoId(),
-  check('id').custom(existeConvocatoriaImgPorId),
-  check('id').custom(existeConvocatoriaImgActivaPorId),
+  check('id').custom(existeTallerImgPorId),
+  check('id').custom(existeTallerImgActivaPorId),
 
     validarCampos,
-], eliminarConvocatoriaImg);
+], eliminarTallerImg);
 
 
 
@@ -147,7 +148,7 @@ router.get('/:coleccion/:id',[
   // check('id').custom( existeOfertaPorId ),
   check('id', 'No es un id de Mongo válido').isMongoId(),
   check('coleccion').custom(c=> coleccionesPermitidas( c, [    
-      'convocatorias',
+      'talleres',
       'imagenes',    
 ] ) ),
    validarCampos,

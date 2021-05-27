@@ -18,15 +18,15 @@ const {
  */
 
 const  {
-  // CONVOCATORIA
-   existeNoticiaPorId,
-   existeNoticiaActivaPorId,
-  // IMGS
-  existeImagePorId,
-  existeImageActivaPorId,
-  // CONVOCATORIA-IMG  
- existeNoticiaImgPorId, 
- existeNoticiaImgActivaPorId,
+  // Taller
+    existeTallerPorId,
+    existeTallerActivoPorId,
+  // Instructor
+   existeInstructorPorId,
+   existeInstructorActivoPorId,
+  // TALLER-IMG  
+   existeInstructorTallerPorId, 
+   existeInstructorTallerActivoPorId,
   //COLECCIÓNES PERMITIDAS
   coleccionesPermitidas,
   
@@ -37,15 +37,16 @@ const  {
  */
 
 const {
-   obtenerNoticiasImagenes,
-   obtenerNoticiaImagen,
-     crearNoticiaImg,
-actualizarNoticiaImg,
-  eliminarNoticiaImg,
-  buscarRelacion
+    obtenerInstructoresTalleres,
+    obtenerInstructorTaller,
+    crearInstructorTaller,
+    actualizarInstructorTaller,
+    eliminarInstructorTaller,
+  
+    buscarRelacion
   
   
-} = require('../controllers/noticias-imgs');
+} = require('../controllers/instructores-talleres');
 
 
 const router = new Router();
@@ -53,7 +54,7 @@ const router = new Router();
 /**
  *  Obtener Todos Los Registros 
  */
-router.get('/',obtenerNoticiasImagenes);
+router.get('/',obtenerInstructoresTalleres);
 
 /**
  * Obtener Un Registro
@@ -63,9 +64,9 @@ router.get('/:id',[
     check('id','No es un ID válido').isMongoId(),
 
     // check('id').custom(existeBecaPorId),
-    check('id').custom(existeNoticiaImgPorId),
+    check('id').custom(existeInstructorTallerPorId),
         validarCampos,
-], obtenerNoticiaImagen);
+], obtenerInstructorTaller);
 
 
 /**
@@ -77,22 +78,22 @@ router.get('/:id',[
    datosCompletos,
   //  esAdminRole,
 
-  check('noticia_id','No es un ID válido').isMongoId(),
-  check('imagen_id','No es un ID válido').isMongoId(),
+  check('taller_id','No es un ID válido').isMongoId(),
+  check('instructor_id','No es un ID válido').isMongoId(),
 
-  check('noticia_id','El campo: noticia_id es obligatorio').not().isEmpty(),
-  check('imagen_id','El campo: imagen_id es obligatorio').not().isEmpty(),
+  check('taller_id','El campo: taller_id es obligatorio').not().isEmpty(),
+  check('instructor_id','El campo: instructor_id es obligatorio').not().isEmpty(),
 
-  check('noticia_id').custom(existeNoticiaPorId),
-  check('noticia_id').custom(existeNoticiaActivaPorId),
+  check('taller_id').custom(existeTallerPorId),
+  check('taller_id').custom(existeTallerActivoPorId),
   
-        check('imagen_id').custom(existeImagePorId),
-        check('imagen_id').custom(existeImageActivaPorId),
+        check('instructor_id').custom(existeInstructorPorId),
+        check('instructor_id').custom(existeInstructorActivoPorId),
 
 
     // check('usuario_id').custom(relacion=>rolesConPrivilegios ( relacion, ['ADMIN_ROLE','USER_ROLE'] ) ),
     validarCampos,
-], crearNoticiaImg);
+], crearInstructorTaller);
 
 
 /**
@@ -105,23 +106,23 @@ router.get('/:id',[
 
   check('id','El id es obligatorio').not().isEmpty(),
   check('id','No es un ID válido').isMongoId(),
-  check('id').custom(existeNoticiaImgPorId),
-  check('id').custom(existeNoticiaImgActivaPorId),
+  check('id').custom(existeInstructorTallerPorId),
+  check('id').custom(existeInstructorTallerActivoPorId),
 
-    check('noticia_id','No es un ID válido').isMongoId(),
-    check('imagen_id','No es un ID válido').isMongoId(),
+    check('taller_id','No es un ID válido').isMongoId(),
+    check('instructor_id','No es un ID válido').isMongoId(),
   
-    check('noticia_id','El campo: noticia_id es obligatorio').not().isEmpty(),
-    check('imagen_id','El campo: imagen_id es obligatorio').not().isEmpty(),
+    check('taller_id','El campo: taller_id es obligatorio').not().isEmpty(),
+    check('instructor_id','El campo: instructor_id es obligatorio').not().isEmpty(),
   
-    check('noticia_id').custom(existeNoticiaPorId),
-    check('noticia_id').custom(existeNoticiaActivaPorId),
-          check('imagen_id').custom(existeImagePorId),
-          check('imagen_id').custom(existeImageActivaPorId),
+    check('taller_id').custom(existeTallerPorId),
+    check('taller_id').custom(existeTallerActivoPorId),
+          check('instructor_id').custom(existeInstructorPorId),
+          check('instructor_id').custom(existeInstructorActivoPorId),
     // check('id').custom(id=>existeModeloPorId(id,'Beca')),
 
     validarCampos,
-], actualizarNoticiaImg);
+], actualizarInstructorTaller);
 
 /**
  * Eliminar Un Registro
@@ -133,11 +134,11 @@ router.delete('/:id',[
 
   check('id','El id es obligatorio').not().isEmpty(),
   check('id','No es un ID válido').isMongoId(),
-  check('id').custom(existeNoticiaImgPorId),
-  check('id').custom(existeNoticiaImgActivaPorId),
+  check('id').custom(existeInstructorTallerPorId),
+  check('id').custom(existeInstructorTallerActivoPorId),
 
     validarCampos,
-], eliminarNoticiaImg);
+], eliminarInstructorTaller);
 
 
 
@@ -148,8 +149,8 @@ router.get('/:coleccion/:id',[
   // check('id').custom( existeOfertaPorId ),
   check('id', 'No es un id de Mongo válido').isMongoId(),
   check('coleccion').custom(c=> coleccionesPermitidas( c, [    
-      'noticias',
-      'imagenes',    
+      'talleres',
+      'instructores',    
 ] ) ),
    validarCampos,
 ], buscarRelacion); 

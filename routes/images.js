@@ -68,7 +68,7 @@ router.get('/:id',[
 
         // check('titulo','El título es obligatorio').not().isEmpty(),
         // check('descripcion','La descripciòn es obligatoria').not().isEmpty(),
-        // validarCampos,
+        validarCampos,
 ], crearImage);
 
 

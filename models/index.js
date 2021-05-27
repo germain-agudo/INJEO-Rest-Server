@@ -26,8 +26,11 @@ const Image = require('./image');
 const ConvocatoriaImg= require('./convocatoriaImage');
 const NoticiaImg= require('./noticiaImage');
 const TallerImg = require('./tallerImage');
+
 const Participante = require('./participante');
-const Instructor = require('./inscripcione');
+const Instructor = require('./instructor');
+
+
 const InstructorTaller = require('./instructorTaller');
 const ParticipanteNoticia = require('./participanteNoticia');
 const RedSocial = require('./redSocial');

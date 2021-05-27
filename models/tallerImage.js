@@ -9,7 +9,7 @@ const TallerImageSchema= Schema({
         required:true,
     },
 
-    image_id: {
+    imagen_id: {
         type: Schema.Types.ObjectId,
         ref: 'Image',
         required:true,

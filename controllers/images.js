@@ -4,7 +4,7 @@ const {response, request} = require('express');
 const cloudinary = require('cloudinary').v2
 cloudinary.config(process.env.CLOUDINARY_URL);
 
-const {Image}= require('../models/index');
+const {Image, ConvocatoriaImg, TallerImg, NoticiaImg}= require('../models/index');
  
 /**
  *  Obtener Todas las imagenes
@@ -148,8 +148,39 @@ const eliminarImage = async(req, res= response)=>{
         }); 
     }
     
-    const image = await Image.findByIdAndUpdate(id,{estado:false, fecha_eliminacion},{new:true});
+    const [convocatoriaImg, noticiaImg, tallerImg,image] = await Promise.all([
+            // Eliminar Todos los registros de convocatoriaImg que tienen el id de la img
+            ConvocatoriaImg.find({imagen_id:id, estado:true}).then( (ci)=>{    // console.log(ci);  // console.log(ci.length);                                                
+                    if (ci.length>0) {
+                        ci.forEach( async(i)=>{   //console.log(i._id);                         
+                            await ConvocatoriaImg.findByIdAndUpdate(i._id,{estado:false, fecha_eliminacion},{new:true});    
+                        })  
+                    }
+            }),
+                        // Eliminar Todos los registros de convocatoriaImg que tienen el id de la img
+            NoticiaImg.find({imagen_id:id, estado:true}).then( (ci)=>{    // console.log(ci);  // console.log(ci.length);                                                
+                            if (ci.length>0) {
+                                ci.forEach( async(i)=>{   //console.log(i._id);                         
+                                    await NoticiaImg.findByIdAndUpdate(i._id,{estado:false, fecha_eliminacion},{new:true});    
+                                })  
+                            }
+                    }),
+                                // Eliminar Todos los registros de convocatoriaImg que tienen el id de la img
+            TallerImg.find({imagen_id:id, estado:true}).then( (ci)=>{    // console.log(ci);  // console.log(ci.length);                                                
+                if (ci.length>0) {
+                    ci.forEach( async(i)=>{   //console.log(i._id);                         
+                        await TallerImg.findByIdAndUpdate(i._id,{estado:false, fecha_eliminacion},{new:true});    
+                    })  
+                }
+        }),
+
+         Image.findByIdAndUpdate(id,{estado:false, fecha_eliminacion},{new:true}),
+
+    ]);
+
+    // const image = await Image.findByIdAndUpdate(id,{estado:false, fecha_eliminacion},{new:true});
     res.json(image);    
+
 
 }
 

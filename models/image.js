@@ -5,13 +5,11 @@ const ImageSchema = Schema({
     img: {
         type: String,      
     },
-
+/* 
     titulo: {
         type: String,
-      
-       
     },  
-
+ */
     estado: {
         type: Boolean,
         required: true,

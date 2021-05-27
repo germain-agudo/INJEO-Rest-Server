@@ -189,6 +189,18 @@ const existeRelacionConUsuario= async(usuario_id='')=>{
     }
 }
 /**
+ * Noticias
+ */
+ const existeNoticiaActivaPorId = async( id ) => {
+
+    // Verificar si la noticia existe
+    const existeNoticia = await Noticia.findById(id);
+    if ( !existeNoticia.estado ) {
+        throw new Error(`El id no existe ${ id }`);
+    }
+}
+
+/**
  * Talleres
  */
  const existeTallerPorId = async( id ) => {
@@ -217,6 +229,7 @@ const existeRelacionConUsuario= async(usuario_id='')=>{
 
     // Verificar si la noticia existe
     const existeConvocatoria = await Convocatoria.findById(id);
+   
     if ( !existeConvocatoria ) {
         throw new Error(`El id no existe ${ id }`);
     }
@@ -414,7 +427,7 @@ const existeBolsaActivaPorId = async( id='' ) => {
         throw new Error(`El id:'${ id }', no existe`);
     }
 }
-// Compobar que se encuentra activo
+// Comprobar que se encuentra activo
 const existeForoActivoPorId = async( id='' ) => {
     // Verificar si el correo existe
     const existeId = await Foro.findById(id);
@@ -429,13 +442,84 @@ const existeForoActivoPorId = async( id='' ) => {
 
  const existeConvocatoriaImgPorId = async( id='' ) => {
     // Verificar si el correo existe
+    const existeId = await ConvocatoriaImg.findById(id);
+    if ( !existeId ) {
+        throw new Error(`El id:'${ id }', no existe`);
+    }
+}
+// Comprobar que se encuentra activo
+const existeConvocatoriaImgActivaPorId = async( id='' ) => {
+    // Verificar si el correo existe
+    const existeId = await ConvocatoriaImg.findById(id);
+    if ( !existeId.estado ) {
+        throw new Error(`El id:'${ id }', no existe`);
+    }
+}
+
+
+/**
+ * EXISTE UN ID DE Noticia- Taller
+ */
+
+ const existeNoticiaImgPorId = async( id='' ) => {
+    // Verificar si el correo existe
+    const existeId = await NoticiaImg.findById(id);
+    if ( !existeId ) {
+        throw new Error(`El id:'${ id }', no existe`);
+    }
+}
+// Comprobar que se encuentra activo
+const existeNoticiaImgActivaPorId = async( id='' ) => {
+    // Verificar si el correo existe
+    const existeId = await NoticiaImg.findById(id);
+    if ( !existeId.estado ) {
+        throw new Error(`El id:'${ id }', no existe`);
+    }
+}
+
+/**
+ * EXISTE UN ID DE Taller- Taller
+ */
+
+ const existeTallerImgPorId = async( id='' ) => {
+    // Verificar si el correo existe
+    const existeId = await TallerImg.findById(id);
+    if ( !existeId ) {
+        throw new Error(`El id:'${ id }', no existe`);
+    }
+}
+// Comprobar que se encuentra activo
+const existeTallerImgActivaPorId = async( id='' ) => {
+    // Verificar si el correo existe
+    const existeId = await TallerImg.findById(id);
+    if ( !existeId.estado ) {
+        throw new Error(`El id:'${ id }', no existe`);
+    }
+}
+
+
+
+
+
+
+
+
+
+
+/**
+ * EXISTE UN ID DE IMAGEN
+ */
+
+ const existeImagePorId = async( id='' ) => {
+    // Verificar si el correo existe
+
     const existeId = await Image.findById(id);
     if ( !existeId ) {
         throw new Error(`El id:'${ id }', no existe`);
     }
 }
-// Compobar que se encuentra activo
-const existeConvocatoriaImgActivaPorId = async( id='' ) => {
+// Comprobar que se encuentra activo
+const existeImageActivaPorId = async( id='' ) => {
     // Verificar si el correo existe
     const existeId = await Image.findById(id);
     if ( !existeId.estado ) {
@@ -444,20 +528,41 @@ const existeConvocatoriaImgActivaPorId = async( id='' ) => {
 }
 
 /**
- * EXISTE UN ID DE IMAGEN
+ * EXISTE UN ID DE PARTICIPANTE
  */
-
- const existeImagePorId = async( id='' ) => {
+ const existeParticipantePorId = async( id='' ) => {
     // Verificar si el correo existe
-    const existeId = await ConvocatoriaImg.findById(id);
+
+    const existeId = await Participante.findById(id);
     if ( !existeId ) {
         throw new Error(`El id:'${ id }', no existe`);
     }
 }
-// Compobar que se encuentra activo
-const existeImageActivaPorId = async( id='' ) => {
+// Comprobar que se encuentra activo
+const existeParticipanteActivoPorId = async( id='' ) => {
     // Verificar si el correo existe
-    const existeId = await ConvocatoriaImg.findById(id);
+    const existeId = await Participante.findById(id);
+    if ( !existeId.estado ) {
+        throw new Error(`El id:'${ id }', no existe`);
+    }
+}
+
+
+/**
+ * EXISTE UN ID DE INSTRUCTOR
+ */
+ const existeInstructorPorId = async( id='' ) => {
+    // Verificar si el correo existe
+
+    const existeId = await Instructor.findById(id);
+    if ( !existeId ) {
+        throw new Error(`El id:'${ id }', no existe`);
+    }
+}
+// Comprobar que se encuentra activo
+const existeInstructorActivoPorId = async( id='' ) => {
+    // Verificar si el correo existe
+    const existeId = await Instructor.findById(id);
     if ( !existeId.estado ) {
         throw new Error(`El id:'${ id }', no existe`);
     }
@@ -465,7 +570,45 @@ const existeImageActivaPorId = async( id='' ) => {
 
 
 
+/**
+ * EXISTE UN ID DE Instructor - Taller
+ */
 
+ const existeInstructorTallerPorId = async( id='' ) => {
+    // Verificar si el correo existe
+    const existeId = await InstructorTaller.findById(id);
+    if ( !existeId ) {
+        throw new Error(`El id:'${ id }', no existe`);
+    }
+}
+// Comprobar que se encuentra activo
+const existeInstructorTallerActivoPorId = async( id='' ) => {
+    // Verificar si el correo existe
+    const existeId = await InstructorTaller.findById(id);
+    if ( !existeId.estado ) {
+        throw new Error(`El id:'${ id }', no existe`);
+    }
+}
+
+/**
+ * EXISTE UN ID DE Participante - Noticia
+ */
+
+ const existeParticipanteNoticiaPorId = async( id='' ) => {
+    // Verificar si el correo existe
+    const existeId = await ParticipanteNoticia.findById(id);
+    if ( !existeId ) {
+        throw new Error(`El id:'${ id }', no existe`);
+    }
+}
+// Comprobar que se encuentra activo
+const existeParticipanteNoticiaActivaPorId = async( id='' ) => {
+    // Verificar si el correo existe
+    const existeId = await ParticipanteNoticia.findById(id);
+    if ( !existeId.estado ) {
+        throw new Error(`El id:'${ id }', no existe`);
+    }
+}
 
 
 
@@ -473,7 +616,10 @@ module.exports = {
     esRoleValido,
     emailExiste,
     existeUsuarioPorId,
+
     existeNoticiaPorId,
+    existeNoticiaActivaPorId,
+
     existeTallerPorId,
     existeTallerActivoPorId,
 
@@ -515,8 +661,26 @@ module.exports = {
 
 
 
+ existeNoticiaImgPorId,
+ existeNoticiaImgActivaPorId,
+
+ existeTallerImgPorId,
+ existeTallerImgActivaPorId,
+
+ existeParticipantePorId,
+ existeParticipanteActivoPorId,
+
+ existeInstructorPorId,
+ existeInstructorActivoPorId,
 
 
+ existeInstructorTallerActivoPorId,
+ existeInstructorTallerPorId,
+
+
+
+ existeParticipanteNoticiaPorId,
+ existeParticipanteNoticiaActivaPorId,
 
 
 

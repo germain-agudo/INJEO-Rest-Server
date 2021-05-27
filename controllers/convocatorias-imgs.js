@@ -1,6 +1,7 @@
 const {response, request} = require('express');
 
-const {ConvocatoriaImg}= require('../models/index');
+
+const {ConvocatoriaImg, Convocatoria, Image}= require('../models/index');
 
 /**
  *  Obtener Todas Las Convocatorias Imagenes
@@ -47,6 +48,15 @@ const crearConvocatoriaImg = async(req, res= response)=>{
     const fecha_registro = Date.now();  
     const {convocatoria_id , imagen_id, }= req.body;   
 
+const convocatoriaImageDB = await ConvocatoriaImg.findOne({convocatoria_id, imagen_id, estado:true});
+if (convocatoriaImageDB) {
+    return res.status(401).json({
+        msg: `La imagen ${imagen_id} ya se encuentra registrada en la convocatoria ${convocatoria_id}- No puede hacer esto`
+    }); 
+}
+
+
+
     const data = {
         convocatoria_id,
         imagen_id,
@@ -67,7 +77,12 @@ const actualizarConvocatoriaImg = async(req= request, res= response)=>{
 const {id }= req.params;   
 const { convocatoria_id,   imagen_id, }= req.body;
 
-const convocatoriaImgDB = await  ConvocatoriaImg.findById(id);
+// const convocatoriaImgDB = await  ConvocatoriaImg.findById(id);
+
+const [convocatoriaImgDB, convocatoriaDuplicadaImageDB]= await Promise.all([
+    ConvocatoriaImg.findById(id),
+    ConvocatoriaImg.findOne({convocatoria_id, imagen_id, estado:true})
+]);
 
 let permiso = true;
 (convocatoriaImgDB.usuario_id.equals(req.usuario._id) || req.usuario.rol==='ADMIN_ROLE' ) ? permiso = true :permiso=false; 
@@ -77,6 +92,17 @@ if (!permiso ) {
         msg: `EL id ${req.usuario.id} No cuenta con los permisos necesarios - No puede hacer esto`
     }); 
 }
+
+// const convocatoriaDuplicadaImageDB = await ConvocatoriaImg.findOne({convocatoria_id, imagen_id, estado:true});
+  if (convocatoriaDuplicadaImageDB && convocatoriaDuplicadaImageDB._id!=id) {
+    return res.status(401).json({
+        msg: `La imagen ${imagen_id} ya se encuentra registrada en la convocatoria ${convocatoria_id}- No puede hacer esto`
+    }); 
+}
+
+
+
+
 
 const data = {
     convocatoria_id, 
@@ -111,12 +137,96 @@ res.json(convocatoriaImage);
 
 
 
+
+const buscarRelacion = async(req, res =response ) => {
+
+    const {id, coleccion}= req.params;
+    
+
+    switch (coleccion) {
+        case 'convocatorias':
+               buscarImagenesPorConvocatoria(id, res);
+            break;
+    
+        case 'imagenes':
+               buscarConvocatoriasPorImagen(id,res);
+            break;
+    
+        default:
+           return res.status(500).json({ msg: 'Coloección en desarollo'});
+    
+            
+    } 
+    
+    // console.log(req.params);
+    }
+    
+    const buscarImagenesPorConvocatoria=async(id= '', res= response)=>{
+    
+    const query={estado:true, convocatoria_id:id};
+        const [convocatoria,total,imagenes]= await Promise.all( [
+                Convocatoria.findById(id),
+                ConvocatoriaImg.countDocuments(query),
+                // Oferta.find({estado:true, escuela:id}, {carrera:1, _id:0})
+                ConvocatoriaImg.find({estado:true, convocatoria_id:id}, {imagen_id:1,})     
+                                    .populate('imagen_id',['img'])                                
+            ]);
+    
+            if (!convocatoria || !convocatoria.estado) {
+                res.status(401).json({
+                msg: `La convocatoria ${id}, no existe`
+                });        
+            }
+    
+        return res.json({
+            'Convocatoria': convocatoria.nombre,
+            total,
+            // results:(carreras) ? [carreras] :[],
+            results:imagenes,
+        });    
+    }
+    
+    const buscarConvocatoriasPorImagen=async(id= '', res= response)=>{
+    
+    const query={estado:true, imagen_id:id};
+    
+        const [imagen,total,convocatorias]= await Promise.all( [
+                Image.findById(id),
+                ConvocatoriaImg.countDocuments(query),
+                // Oferta.find({estado:true, escuela:id}, {carrera:1, _id:0})
+                ConvocatoriaImg.find({estado:true, imagen_id:id}, {convocatoria_id:1,})     
+                                    .populate('convocatoria_id',['titulo'])                                
+            ]);
+    
+            if (!imagen || !imagen.estado) {
+                res.status(401).json({
+                msg: `La imagen ${id}, no existe`
+                });        
+            }
+    
+        return res.json({
+            'Imagen': imagen._id,
+            total,
+            // results:(escuelas) ? [escuelas] :[],
+            results:convocatorias,
+        });    
+    }
+    
+    
+    
+
+
+
+
+
+
 module.exports={
         obtenerConvocatoriasImagenes,
         obtenerConvocatoriaImagen,
         crearConvocatoriaImg,
         actualizarConvocatoriaImg,
         eliminarConvocatoriaImg,
+        buscarRelacion
 }
 
 
