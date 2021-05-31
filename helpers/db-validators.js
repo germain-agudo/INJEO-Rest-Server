@@ -26,8 +26,10 @@ const{
         RedInstructor,
         RedParticipante,
     
+    UsuarioForo,        
     
     }= require('../models/index');
+
 
 const esRoleValido = async(rol = '') => { 
 
@@ -610,6 +612,92 @@ const existeParticipanteNoticiaActivaPorId = async( id='' ) => {
     }
 }
 
+/**
+ * EXISTE UN ID DE RED SOCIAL
+ */
+ const existeRedSocialPorId = async( id='' ) => {
+    // Verificar si el correo existe
+
+    const existeId = await RedSocial.findById(id);
+    if ( !existeId ) {
+        throw new Error(`El id:'${ id }', no existe`);
+    }
+}
+// Comprobar que se encuentra activo
+const existeRedSocialActivaPorId = async( id='' ) => {
+    // Verificar si el correo existe
+    const existeId = await RedSocial.findById(id);
+    if ( !existeId.estado ) {
+        throw new Error(`El id:'${ id }', no existe`);
+    }
+}
+
+
+
+
+/**
+ * EXISTE UN ID DE Red - Instructores
+ */
+
+ const existeRedInstructorPorId = async( id='' ) => {
+    // Verificar si el correo existe
+    const existeId = await RedInstructor.findById(id);
+    if ( !existeId ) {
+        throw new Error(`El id:'${ id }', no existe`);
+    }
+}
+// Comprobar que se encuentra activo
+const existeRedInstructorActivoPorId = async( id='' ) => {
+    // Verificar si el correo existe
+    const existeId = await RedInstructor.findById(id);
+    if ( !existeId.estado ) {
+        throw new Error(`El id:'${ id }', no existe`);
+    }
+}
+
+
+/**
+ * EXISTE UN ID DE Red - participante
+ */
+
+ const existeRedParticipantePorId = async( id='' ) => {
+    // Verificar si el correo existe
+    const existeId = await RedParticipante.findById(id);
+    if ( !existeId ) {
+        throw new Error(`El id:'${ id }', no existe`);
+    }
+}
+// Comprobar que se encuentra activo
+const existeRedParticipanteActivoPorId = async( id='' ) => {
+    // Verificar si el correo existe
+    const existeId = await RedParticipante.findById(id);
+    if ( !existeId.estado ) {
+        throw new Error(`El id:'${ id }', no existe`);
+    }
+}
+
+
+
+/**
+ * EXISTE UN ID DE Usuario - foro
+ */
+
+ const existeUsuarioForoPorId = async( id='' ) => {
+    // Verificar si el correo existe
+    const existeId = await UsuarioForo.findById(id);
+    if ( !existeId ) {
+        throw new Error(`El id:'${ id }', no existe`);
+    }
+}
+// Comprobar que se encuentra activo
+const existeUsuarioForoActivoPorId = async( id='' ) => {
+    // Verificar si el correo existe
+    const existeId = await UsuarioForo.findById(id);
+    if ( !existeId.estado ) {
+        throw new Error(`El id:'${ id }', no existe`);
+    }
+}
+
 
 
 module.exports = {
@@ -682,9 +770,17 @@ module.exports = {
  existeParticipanteNoticiaPorId,
  existeParticipanteNoticiaActivaPorId,
 
+ existeRedSocialPorId,
+ existeRedSocialActivaPorId,
 
+ existeRedInstructorPorId,
+ existeRedInstructorActivoPorId,
 
-  
+ existeRedParticipantePorId,
+ existeRedParticipanteActivoPorId,
+ 
+ existeUsuarioForoPorId,
+existeUsuarioForoActivoPorId,
   
 }
 

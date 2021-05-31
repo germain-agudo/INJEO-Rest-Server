@@ -4,16 +4,16 @@ const { Schema, model} = require('mongoose');
 const RedesSocialesInstructoreSchema= Schema({
    
      
-    redSocial_id: {
+    red_id: {
         type: Schema.Types.ObjectId,
-        ref: 'RedSocial',
+        ref: 'RedesSociale',
         required:true,
     },
 
 
     instructor_id: {
         type: Schema.Types.ObjectId,
-        ref: 'Instructor',
+        ref: 'Instructore',
         required:true,
     },
 

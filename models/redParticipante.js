@@ -4,9 +4,9 @@ const { Schema, model} = require('mongoose');
 const RedesSocialesParticipanteSchema= Schema({
    
     
-    redSocial_id: {
+    red_id: {
         type: Schema.Types.ObjectId,
-        ref: 'RedSocial',
+        ref: 'RedesSociale',
         required:true,
     },
 

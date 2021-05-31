@@ -4,8 +4,8 @@ const { Taller } = require('../models');
 
 const obtenerTalleres = async(req, res = response ) => {
 
-    const { limite = 5, desde = 0 } = req.query;
-    const query = { estado: true };
+    const { limite = 5, desde = 0 ,estado=true} = req.query;
+    const query = { estado};
 
     const [ total, talleres ] = await Promise.all([
         Taller.countDocuments(query),

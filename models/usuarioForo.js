@@ -2,7 +2,7 @@ const { Schema, model } = require("mongoose")
 
 const UsuariosForoSchema = Schema({
   
-    Comentario: {
+    comentario: {
         type: String,
       
        

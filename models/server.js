@@ -40,6 +40,8 @@ class Server {
             externos: '/api/externos',
             personas: '/api/personas',
 
+            redes: '/api/redes',
+
 
 
 
@@ -57,7 +59,12 @@ class Server {
             participantes:    '/api/participantes',
 
             instructorTaller: '/api/instructores-talleres',
-            participantesNoticias: '/api/participantes-noticias'
+            participantesNoticias: '/api/participantes-noticias',
+            
+            redesInstructores: '/api/redes-instructores',
+            redesParticipantes: '/api/redes-participantes',
+
+            usuariosForos: '/api/comentarios-foros',
                          
         }
 
@@ -142,6 +149,13 @@ class Server {
 
         this.app.use( this.paths.instructorTaller, require('../routes/instructores-talleres')); 
         this.app.use( this.paths.participantesNoticias, require('../routes/participantes-noticias')); 
+
+        this.app.use( this.paths.redes, require('../routes/redes-sociales'));
+
+        this.app.use( this.paths.redesInstructores, require('../routes/redesSociales-instructores')); 
+        this.app.use( this.paths.redesParticipantes, require('../routes/redesSociales-Participantes')); 
+        
+        this.app.use( this.paths.usuariosForos, require('../routes/usuarios-foros')); 
 
 
 

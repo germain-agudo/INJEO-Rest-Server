@@ -179,7 +179,7 @@ const buscarRelacion = async(req, res =response ) => {
             }
     
         return res.json({
-            'Convocatoria': convocatoria.nombre,
+            'Convocatoria': convocatoria.titulo,
             total,
             // results:(carreras) ? [carreras] :[],
             results:imagenes,

@@ -32,13 +32,13 @@ const {InstructorTaller, Taller ,  Instructor, }= require('../models/index');
  */
 const obtenerInstructorTaller = async(req, res= response)=>{
     const {id}= req.params;
-    const Instructortaller = await InstructorTaller.findById(id)
+    const instructortaller = await InstructorTaller.findById(id)
                                                         
                                                         .populate('taller_id',['titulo'])
                                                         .populate('instructor_id',['nombre'])
                                                         .populate('usuario_id',['user_name'])                                        
 
-    res.json(Instructortaller);    
+    res.json(instructortaller);    
 }
 
 /** 
