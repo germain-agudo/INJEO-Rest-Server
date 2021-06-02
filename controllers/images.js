@@ -136,7 +136,7 @@ const actualizarImage = async(req, res= response)=>{
 const eliminarImage = async(req, res= response)=>{
 
     const fecha_eliminacion = Date.now();
-    const {id} = req.params;
+    const {id} = req.params; 
 
     const imageDB = await  Image.findById(id);
     let permiso = true;

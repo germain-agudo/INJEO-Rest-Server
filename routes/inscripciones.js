@@ -1,16 +1,29 @@
 const { Router } = require('express');
 const { check } = require('express-validator');
 
-const { validarJWT, validarCampos, esAdminRole, datosCompletos, tieneRole} = require('../middlewares');
+const { 
+    validarJWT, 
+    validarCampos,
+     esAdminRole, 
+     datosCompletos, 
+     tieneRole
+    
+    } = require('../middlewares');
 
 const {   crearInscripcion,
         actualizarInscripcion, 
         obtenerInscripciones,
         borrarInscripcion,
         obtenerInscripcion,
+        buscarRelacion
       
    } = require('../controllers/inscripciones');
-const { existeUsuarioPorId, existeInscripcionPorId, existeTallerPorId} = require('../helpers');
+const { 
+        existeUsuarioPorId,
+        existeInscripcionPorId,
+        existeTallerPorId,
+        coleccionesPermitidas
+    } = require('../helpers');
 
 // const { existeEscuelaPorId } = require('../helpers/db-validators');
 
@@ -88,6 +101,22 @@ router.delete('/:id',[
     // check('id').custom( existeOfertaPorId ),
     validarCampos,
 ],borrarInscripcion); 
+
+
+
+router.get('/:coleccion/:id',[
+    // validarJWT,
+    // check('id','El id debe de ser de mongo ').isMongoId(),
+  
+    // check('id').custom( existeOfertaPorId ),
+    check('id', 'No es un id de Mongo válido').isMongoId(),
+    check('coleccion').custom(c=> coleccionesPermitidas( c, [    
+        'talleres',
+        'usuarios',    
+  ] ) ),
+     validarCampos,
+  ], buscarRelacion); 
+
 
 
 module.exports = router;

@@ -1,7 +1,7 @@
 const {response, request} = require('express');
 
 const {Apoyo}= require('../models/index');
-const { findById } = require('../models/role');
+
 
 /**
  *  Obtener Todas Los Apoyos

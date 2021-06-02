@@ -26,6 +26,11 @@ const CarreaSchema = Schema({
             
     },
 
+    fecha_eliminacion: {
+        type:  Date,
+            
+    },
+
 
 });
 

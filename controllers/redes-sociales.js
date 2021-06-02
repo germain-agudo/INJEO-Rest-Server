@@ -1,6 +1,6 @@
 const {response, request} = require('express');
 
-const { RedSocial}= require('../models/index');
+const { RedSocial, RedInstructor, RedParticipante}= require('../models/index');
 
 /**
  *  Obtener Todas Las Redes Sociales
@@ -112,8 +112,41 @@ if (!permiso ) {
         msg: `EL id ${req.usuario.id} No cuenta con los permisos necesarios - No puede hacer esto`
     }); 
 }
-   const redSocial = await RedSocial.findByIdAndUpdate(id,{estado:false, fecha_eliminacion},{new:true});
-res.json(redSocial);    
+
+// const redSocial = await RedSocial.findByIdAndUpdate(id,{estado:false, fecha_eliminacion},{new:true});
+const [redSocial, redInstructor, redParticipante]= await Promise.all([
+/**
+ * 
+ */
+    RedSocial.findByIdAndUpdate(id,{estado:false, fecha_eliminacion},{new:true}),
+/**
+ * 
+ */     
+     RedInstructor.find({red_id:id, estado:true
+    }).then( (rI)=>{
+        if (rI.length>0) {
+            rI.forEach( async (i)=>{
+                await RedInstructor.findByIdAndUpdate( i._id,{estado:false, fecha_eliminacion},{new:true})
+            })
+        }
+     }),
+/**
+ * 
+ */
+     RedParticipante.find({red_id:id, estado:true
+     }).then( (rP)=>{
+         if (rP.length>0) {
+             rP.forEach( async (i)=>{
+                 await RedParticipante.findByIdAndUpdate( i._id,{estado:false, fecha_eliminacion},{new:true})
+             })
+         }
+      }),
+      
+
+]);
+
+
+   res.json(redSocial);    
 }
 
 

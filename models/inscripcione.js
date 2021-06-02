@@ -2,7 +2,7 @@
 const { Schema, model } = require('mongoose');
 
 
-const InstructoreSchema = Schema({
+const InscripcioneSchema = Schema({
 
     descripcion: {
         type: String,
@@ -41,6 +41,11 @@ const InstructoreSchema = Schema({
             
     },
 
+    fecha_eliminacion: {
+        type:  Date,
+            
+    },
+
 
     
 
@@ -51,11 +56,11 @@ const InstructoreSchema = Schema({
 });
 
 
-InstructoreSchema.methods.toJSON = function() {
+InscripcioneSchema.methods.toJSON = function() {
     const { __v, estado, ...data  } = this.toObject();
     return data;
 }
 
 
-module.exports = model( 'Intructore', InstructoreSchema );
+module.exports = model( 'Inscripcione', InscripcioneSchema );
  

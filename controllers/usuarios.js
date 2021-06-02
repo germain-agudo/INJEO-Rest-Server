@@ -2,7 +2,7 @@ const { response, request } = require('express');
 const bcryptjs = require('bcryptjs');
 
 
-const {Usuario, Externo, Persona  }= require('../models/index');
+const {Usuario, Externo, Persona , UsuarioForo }= require('../models/index');
 
 const obtenerUsuario = async(req, res = response ) => {
 
@@ -157,14 +157,25 @@ const usuario = await Usuario.findByIdAndUpdate( id, { estado: false },{new:true
 
 let dependencia;    
 if (personaRegistrada) {
-    console.log('existe en persona');
+    // console.log('existe en persona');
     dependencia= await Persona.findByIdAndUpdate(personaRegistrada._id,{estado:false},{new:true})
 }
 if (externoRegistrado) {
     dependencia = await Externo.findByIdAndUpdate(externoRegistrado._id,{estado:false},{new:true})    
-    console.log('existe en externo');
+    // console.log('existe en externo');
 }
 
+const [usuariosForos]= await Promise.all([
+    UsuarioForo.find({
+        usuario_id:id, estado:true
+    }).then( (uF)=>{
+            if (uF.length>0) {
+                uF.forEach(async (i)=>{
+                    await UsuarioForo.findByIdAndUpdate(i._id,{estado:false, fecha_eliminacion},{new:true});
+                })
+            }
+    })
+])
 
 
 

@@ -37,9 +37,9 @@ const crearEscuela = async(req, res = response ) => {
 
    const  nombre =req.body.nombre.toUpperCase();   
 
- const escuelaDB = await Escuela.findOne({ nombre });
+ const escuelaDB = await Escuela.findOne({ nombre, estado:true });
 
- if ( escuelaDB ) {
+/*  if ( escuelaDB ) {
     if (!escuelaDB.estado) {
         await Escuela.findByIdAndUpdate( escuelaDB._id, { estado : true, usuario: req.usuario._id, fecha_registro}, { new: true })
         return res.status(200).json({
@@ -53,7 +53,14 @@ const crearEscuela = async(req, res = response ) => {
         });
     }
    
+} */
+
+if (escuelaDB) {
+    return res.status(400).json({
+        msg: `La escuela: ${ escuelaDB.nombre }, ya existe`
+    });
 }
+
 
     // Generar la data a guardar
     const data = {
@@ -70,43 +77,38 @@ const crearEscuela = async(req, res = response ) => {
 }
 
 const actualizarEscuela = async( req, res = response ) => {
-    const fecha_registro = Date.now();
+    // const fecha_registro = Date.now();
 
     const { id } = req.params;
-    const { estado, usuario, ...data } = req.body;
+    const { estado, usuario, fecha_registro, fecha_eliminacion, ...data } = req.body;
 
-    data.nombre  = data.nombre.toUpperCase();
-    data.fecha_registro = fecha_registro;
-
+    data.nombre  = data.nombre.toUpperCase(); 
    
     const escuelaDB = await Escuela.findOne( { nombre:data.nombre}  );
 
-    if (escuelaDB) {
+/*     if (escuelaDB) {
         if (!escuelaDB.estado) {
             await Escuela.findByIdAndUpdate( escuelaDB._id, { estado: true, usuario: req.usuario._id , fecha_registro}, {new: true} )
             return res.status(200).json({
                 nombre:data.nombre,
                 usuario: req.usuario._id,
                 fecha_registro,
-
             })
-        
-        } else {
-
+                } else {
             if (escuelaDB._id!=id) {
                 return res.status(400).json({
                     msg: `La escuela ${ escuelaDB.nombre }, ya existe`
                 })
-            }
-
-            
+            }            
         }
     }
-    
+     */
 
-
-
-    
+    if (escuelaDB && escuelaDB._id!=id) {
+        return res.status(400).json({
+            msg: `La escuela: ${ escuelaDB.nombre }, ya existe`
+        });
+    }
     
     
     
@@ -117,9 +119,10 @@ const actualizarEscuela = async( req, res = response ) => {
 }
 
 const borrarEscuela = async(req, res =response ) => {
+    const fecha_eliminacion = Date.now();
 
     const { id } = req.params;
-    const escuelaBorrada = await Escuela.findByIdAndUpdate( id, { estado: false }, {new: true });
+    const escuelaBorrada = await Escuela.findByIdAndUpdate( id, { estado: false, fecha_eliminacion }, {new: true });
 
     res.json( escuelaBorrada );
 }

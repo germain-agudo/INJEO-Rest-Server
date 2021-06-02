@@ -20,6 +20,9 @@ const {
       Carrera,
       Convocatoria,
       Escuela,
+      Participante,
+      Instructor,
+      RedSocial,
 
 } = require('../models/index');
 
@@ -50,12 +53,6 @@ const cargarArchivo =async(req, res= response)=>{
 
 
 
-
-
-
-
-
-
 }
 
 
@@ -63,64 +60,64 @@ const cargarArchivo =async(req, res= response)=>{
 /**
  * 
  */
-const actualizarImagen = async (req, res = response)=>{
-/* lo volvimos middlewara
-  if (!req.files || Object.keys(req.files).length === 0|| !req.files.archivo) {
-    res.status(400).json(  {  msg:'No hay arcchivos que subir '  }  );
-   return;
- } */
+// const actualizarImagen = async (req, res = response)=>{
+// /* lo volvimos middlewara
+//   if (!req.files || Object.keys(req.files).length === 0|| !req.files.archivo) {
+//     res.status(400).json(  {  msg:'No hay arcchivos que subir '  }  );
+//    return;
+//  } */
 
-  const {id, coleccion} = req.params;
+//   const {id, coleccion} = req.params;
 
- let modelo;
+//  let modelo;
 
- switch (coleccion) {
-   case 'usuarios':
-     ///tenemos que verificar que exista
-     modelo = await Usuario.findById(id);
-     if (!modelo) {
-        return res.status(400).json({
-          msg:`No existe un usuario con el id ${ id}`
-        })
-     }
-     break;
+//  switch (coleccion) {
+//    case 'usuarios':
+//      ///tenemos que verificar que exista
+//      modelo = await Usuario.findById(id);
+//      if (!modelo) {
+//         return res.status(400).json({
+//           msg:`No existe un usuario con el id ${ id}`
+//         })
+//      }
+//      break;
 
 
-     case 'noticias':
-     ///tenemos que verificar que exista
-     modelo = await Persona.findById(id);
-     if (!modelo) {
-        return res.status(400).json({
-          msg:`No existe una persona con el id ${ id}`
-        })
-     }
-     break;
+//      case 'noticias':
+//      ///tenemos que verificar que exista
+//      modelo = await Noticia.findById(id);
+//      if (!modelo) {
+//         return res.status(400).json({
+//           msg:`No existe una noticia con el id ${ id}`
+//         })
+//      }
+//      break;
  
-   default:
-     return res.status(500).json({ msg: 'Esta colección se encuentra en desarollo o no existe'});
+//    default:
+//      return res.status(500).json({ msg: 'Esta colección se encuentra en desarollo o no existe'});
      
- }
+//  }
 
-///Limpiar imagenes previas
-if (modelo.img) {
-  // Hay que borrar la imagen del servidor 
-  const pathImagen = path.join(__dirname, '../uploads', coleccion, modelo.img);
-  if (fs.existsSync( pathImagen)) {
-    fs.unlinkSync( pathImagen);
-  }
+// ///Limpiar imagenes previas
+// if (modelo.img) {
+//   // Hay que borrar la imagen del servidor 
+//   const pathImagen = path.join(__dirname, '../uploads', coleccion, modelo.img);
+//   if (fs.existsSync( pathImagen)) {
+//     fs.unlinkSync( pathImagen);
+//   }
   
-}
+// }
 
- const nombre= await subirArchivo(req.files,undefined, coleccion);
-modelo.img = nombre;
-await modelo.save();
-
-
-
-  res.json(modelo);
+//  const nombre= await subirArchivo(req.files,undefined, coleccion);
+// modelo.img = nombre;
+// await modelo.save();
 
 
-}
+
+//   res.json(modelo);
+
+
+// }
 
 /**
  * 
@@ -172,7 +169,7 @@ await modelo.save();
        break;
    
     
-       case 'bolsasTrabajo':       
+       case 'bolsas':       
        modelo = await BolsaTrabajo.findById(id);
        if (!modelo || !modelo.estado) {
           return res.status(400).json({
@@ -217,6 +214,33 @@ await modelo.save();
        if (!modelo || !modelo.estado ) {
           return res.status(400).json({
             msg:`No existe un taller con el id ${ id}`
+          })
+       }
+       break;
+
+       case 'participantes':       
+       modelo = await Participante.findById(id);
+       if (!modelo || !modelo.estado ) {
+          return res.status(400).json({
+            msg:`No existe un participante con el id ${ id}`
+          })
+       }
+       break;
+
+       case 'instructores':       
+       modelo = await Instructor.findById(id);
+       if (!modelo || !modelo.estado ) {
+          return res.status(400).json({
+            msg:`No existe un instructor con el id ${ id}`
+          })
+       }
+       break;
+
+       case 'redes':       
+       modelo = await RedSocial.findById(id);
+       if (!modelo || !modelo.estado ) {
+          return res.status(400).json({
+            msg:`No existe una red con el id ${ id}`
           })
        }
        break;
@@ -317,9 +341,7 @@ const mostrarImagen =async(req, res = response)=>{
 
 
 module.exports={
-    cargarArchivo,
-    actualizarImagen,
-    mostrarImagen,
+
     actualizarImagenCloudinary,
 }
 

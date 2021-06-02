@@ -38,7 +38,7 @@ const crearCarrera = async(req, res = response ) => {
 
    const  nombre =req.body.nombre.toUpperCase();   
 
- const carreraDB = await Carrera.findOne({ nombre });
+ const carreraDB = await Carrera.findOne({ nombre , estado:true});
 
 //  const fecha_registro = new Date().toLocaleDateString();
  const fecha_registro = Date.now();
@@ -46,7 +46,7 @@ const crearCarrera = async(req, res = response ) => {
 //  const fecha_registro = new Date().toDateString() 
  
 
-    if ( carreraDB ) {
+/*     if ( carreraDB ) {
         if (!carreraDB.estado) {
             await Carrera.findByIdAndUpdate( carreraDB._id, { estado : true, usuario: req.usuario._id, fecha_registro}, { new: true })
             return res.status(200).json({
@@ -58,16 +58,21 @@ const crearCarrera = async(req, res = response ) => {
             return res.status(400).json({
                 msg: `La carrera ${ carreraDB.nombre }, ya existe`
             });
-        }
-       
+        }       
+    } */
+    if (carreraDB) {
+        return res.status(400).json({
+            msg: `La carrera: ${ carreraDB.nombre }, ya existe`
+        });
     }
-    
+
+
 
     // Generar la data a guardar
     const data = {
        nombre,       
         usuario: req.usuario._id,
-        fecha_registro 
+        fecha_registro
       
     }   
     
@@ -85,22 +90,16 @@ const crearCarrera = async(req, res = response ) => {
 
 const actualizarCarrera = async( req, res = response ) => {
 
-    const fecha_registro = Date.now();
-
-    
-
-
-
 
     const { id } = req.params;
-    const { estado, usuario, ...data } = req.body;
+    const { estado, usuario,fecha_registro,fecha_eliminacion, ...data } = req.body;
     data.nombre  = data.nombre.toUpperCase();
-    data.fecha_registro = fecha_registro;
+    // data.fecha_registro = fecha_registro;
 
 
-    const carreraDB = await Carrera.findOne( {nombre:data.nombre} );
+    const carreraDB = await Carrera.findOne( {nombre:data.nombre, estado:true} );
 
-    if ( carreraDB ) {
+/*     if ( carreraDB ) {
         if (!carreraDB.estado) {
             await Carrera.findByIdAndUpdate( carreraDB._id, { estado : true, usuario: req.usuario._id, fecha_registro}, { new: true })
             return res.status(200).json({
@@ -113,16 +112,16 @@ const actualizarCarrera = async( req, res = response ) => {
                 return res.status(400).json({
                     msg: `La carrera ${ carreraDB.nombre }, ya existe`
                 });
-            }
+            }            
+        }       
+    } */
 
 
-            
-        }
-       
-    }
-
-
-
+if (carreraDB && carreraDB._id!=id) {
+    return res.status(400).json({
+        msg: `La carrera ${ carreraDB.nombre }, ya existe`
+    });
+}
 
     const carrera = await Carrera.findByIdAndUpdate(id, data, { new: true });
     res.json( carrera);
@@ -130,9 +129,10 @@ const actualizarCarrera = async( req, res = response ) => {
 }
 
 const borrarCarrera = async(req, res =response ) => {
+ const fecha_eliminacion = Date.now();
 
     const { id } = req.params;
-    const carreraBorrada = await Carrera.findByIdAndUpdate( id, { estado: false }, {new: true });
+    const carreraBorrada = await Carrera.findByIdAndUpdate( id, { estado: false , fecha_eliminacion}, {new: true });
 
     res.json( carreraBorrada );
 }

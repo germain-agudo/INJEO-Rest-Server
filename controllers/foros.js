@@ -1,6 +1,6 @@
 const {response, request} = require('express');
 
-const {Foro}= require('../models/index');
+const {Foro, UsuarioForo}= require('../models/index');
  
 /**
  *  Obtener Todos Los Foros
@@ -82,6 +82,7 @@ const actualizarForo = async(req, res= response)=>{
     }
 
     const foro = await Foro.findByIdAndUpdate(id,data, {new:true});
+
     res.json(foro);    
         
 }
@@ -102,7 +103,24 @@ const eliminarForo = async(req, res= response)=>{
             msg: `EL id ${req.usuario.id} No cuenta con los permisos necesarios - No puede hacer esto`
         }); 
     }
-    const foro = await Foro.findByIdAndUpdate(id,{estado:false, fecha_eliminacion},{new:true});
+    
+const [foro, usuariosForos]= await Promise.all([
+    Foro.findByIdAndUpdate(id,{estado:false, fecha_eliminacion},{new:true}),
+    UsuarioForo.find({
+        foro_id:id, estado:true
+    }).then( (uF)=>{
+            if (uF.length>0) {
+                uF.forEach(async (i)=>{
+                    await UsuarioForo.findByIdAndUpdate(i._id,{estado:false, fecha_eliminacion},{new:true});
+                })
+            }
+    })
+    
+    , 
+]);
+
+    // const foro = await Foro.findByIdAndUpdate(id,{estado:false, fecha_eliminacion},{new:true});
+    
     res.json(foro);    
 
 }

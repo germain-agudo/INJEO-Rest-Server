@@ -18,6 +18,9 @@ const {
     Oferta,
     Persona,
     Taller,
+    Participante,
+    Instructor,
+    RedSocial
 }= require('../models/index');
 
 const coleccionesPermitidas=[
@@ -35,6 +38,9 @@ const coleccionesPermitidas=[
     'ofertas',
     'personas',
     'talleres',
+    'participantes'
+    ,'instructores',
+    'redes'
 ];
 
 /**
@@ -404,10 +410,119 @@ const buscarTaller= async(termino = '', res = response)=>{
 }
 
 /**
+ *  Búsqueda De Participantes
+ */
+const buscarParticipante= async(termino = '', res = response)=>{
+    const esMongoID = ObjectId.isValid( termino );
+    
+    if (esMongoID) {
+        const participante = await Participante.findById(termino).populate('usuario_id',['user_name']);
+        return res.json({
+            results: ( participante && participante.estado ) ? [ participante] :[]
+        });
+    }
+
+    // const regex = new RegExp(termino,'i');
+    const regex = termino.match(/^[a-zA-ZÀ-ÿ\u00f1\u00d1]+(\s*[a-zA-ZÀ-ÿ\u00f1\u00d1]*)*[a-zA-ZÀ-ÿ\u00f1\u00d1]+$/g)
+    function quitarAcentos(cadena){
+        const acentos = {'á':'a','é':'e','í':'i','ó':'o','ú':'u','Á':'A','É':'E','Í':'I','Ó':'O','Ú':'U'};
+        return cadena.split('').map( letra => acentos[letra] || letra).join('').toString();	
+    }
+
+    const participantes = await Participante.find(
+        {estado:true}
+    ).then((p)=>{
+        const nt = quitarAcentos(termino);
+        const aux=p;
+        const regex = new RegExp(aux,'i');
+           p.forEach( async (i)=>{
+      
+        //    const pp=  quitarAcentos(i.nombre);
+        //    console.log(pp);
+            i.nombre=quitarAcentos(i.nombre);
+            })
+            if (condition) {
+                
+            }
+            p.forEach(async (i)=>{
+                if (p) {
+                    
+                }
+                    // console.log(regex);
+            })
+            return p;            
+    });
+
+    return res.json({
+        participantes
+    })
+}
+
+/**
+ *  Búsqueda De Instructores
+ */
+const buscarInstructores= async(termino = '', res = response)=>{
+    
+        const esMongoID = ObjectId.isValid( termino );
+        
+        if (esMongoID) {
+            const instructor = await Instructor.findById(termino).populate('usuario_id',['user_name']);
+            return res.json({
+                results: ( instructor && instructor.estado ) ? [ instructor] :[]
+            });
+        }
+        const regex = new RegExp(termino,'i');
+        const instructores = await Instructor.find({
+            $or: [  {nombre:regex},    ],
+            $and: [ {estado:true}] 
+        }).populate('usuario_id',['user_name']);
+    
+        res.json({
+            results:instructores
+        });
+    
+    }
+
+/**
+ *  Búsqueda De Redes
+ */
+const buscarRedes= async(termino = '', res = response)=>{
+    
+        const esMongoID = ObjectId.isValid( termino );
+        
+        if (esMongoID) {
+            const red = await RedSocial.findById(termino).populate('usuario_id',['user_name']);
+            return res.json({
+                results: ( red && red.estado ) ? [ red] :[]
+            });
+        }
+        const regex = new RegExp(termino,'i');
+        const redes = await RedSocial.find({
+            $or: [  {nombre:regex},    ],
+            $and: [ {estado:true}] 
+        }).populate('usuario_id',['user_name']);
+    
+        res.json({
+            results:redes
+        });
+    
+    }
+
+
+
+
+
+/**
  * ******************************************************************
  * ******************************************************************
  * ******************************************************************
  */
+
+
+
+
+
+
 
 const buscar =(req= request, res= response)=>{
         const { coleccion, termino}= req.params;
@@ -461,6 +576,15 @@ switch (coleccion) {
         break;
     case 'talleres':
             buscarTaller(termino, res);
+        break;
+    case 'participantes':
+            buscarParticipante(termino, res);
+        break;
+    case 'instructores':
+            buscarInstructores(termino, res);
+        break;
+    case 'redes':
+            buscarRedes(termino, res);
         break;
 
     default:

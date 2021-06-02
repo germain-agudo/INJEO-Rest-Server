@@ -25,7 +25,10 @@ const EscuelaSchema = Schema({
             
     },
 
-
+    fecha_eliminacion: {
+        type:  Date,
+            
+    },
 
 
 
