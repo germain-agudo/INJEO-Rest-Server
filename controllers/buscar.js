@@ -441,9 +441,7 @@ const buscarParticipante= async(termino = '', res = response)=>{
         //    console.log(pp);
             i.nombre=quitarAcentos(i.nombre);
             })
-            if (condition) {
-                
-            }
+          
             p.forEach(async (i)=>{
                 if (p) {
                     

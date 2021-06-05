@@ -1,6 +1,6 @@
 const {response, request} = require('express');
 
-const { Instructor}= require('../models/index');
+const { Instructor, RedInstructor, InstructorTaller}= require('../models/index');
 
 /**
  *  Obtener Todos Los Instructores
@@ -100,7 +100,39 @@ if (!permiso ) {
         msg: `EL id ${req.usuario.id} No cuenta con los permisos necesarios - No puede hacer esto`
     }); 
 }
-   const instructor = await Instructor.findByIdAndUpdate(id,{estado:false, fecha_eliminacion},{new:true});
+
+//    const instructor = await Instructor.findByIdAndUpdate(id,{estado:false, fecha_eliminacion},{new:true});
+const [instructor, redInstructor, instructorTaller] = await Promise.all([
+/**
+ * 
+ */
+Instructor.findByIdAndUpdate(id,{estado:false, fecha_eliminacion},{new:true}),
+/**
+ * 
+ */
+RedInstructor.find({ instructor_id:id, estado:true}).then( (rI)=>{
+    if (rI.length>0) {
+        rI.forEach( async(i)=>{
+            await RedInstructor.findByIdAndUpdate(i._id,{estado:false, fecha_eliminacion},{new:true})
+        })
+    }
+}),
+/**
+ * 
+ */
+InstructorTaller.find({instructor_id:id, estado:true}).then( (iT)=>{
+    if (iT.length>0) {
+        iT.forEach( async(i)=>{
+          await  InstructorTaller.findByIdAndUpdate(i._id,{estado:false, fecha_eliminacion},{new:true})
+        })
+    }
+})
+
+
+])
+
+
+
 res.json(instructor);    
 }
 

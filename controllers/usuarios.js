@@ -2,21 +2,31 @@ const { response, request } = require('express');
 const bcryptjs = require('bcryptjs');
 
 
-const {Usuario, Externo, Persona , UsuarioForo }= require('../models/index');
+const {Usuario,
+     Externo,
+     Persona ,
+     UsuarioForo,
+     Foro,
+     Convocatoria,
+     Taller,
+     Beca,
+     Apoyo,
+     BolsaTrabajo,
+     Inscripccion,
+     Participante,
+     Instructor,
+     Carrera,
+     Escuela,
+     Oferta,
+ }= require('../models/index');
 
 const obtenerUsuario = async(req, res = response ) => {
-
     const { id } = req.params;
-    const usuario = await Usuario.findById( id );
-                            
-
+    const usuario = await Usuario.findById( id );                         
     res.json( usuario );
-
 }
  
-
 const usuariosGet = async(req = request, res = response) => {
-
     const { limite = 5, desde = 0 } = req.query;
     const query = { estado: true };
 
@@ -33,9 +43,6 @@ const usuariosGet = async(req = request, res = response) => {
         usuarios
     });
 }
-
-
-
 
 const usuariosPost = async(req, res = response) => {
     // console.log(req.body );
@@ -66,15 +73,9 @@ const usuariosPost = async(req, res = response) => {
     });
 }
 
-
 const usuariosPut = async(req, res = response) => {
 
-    
-
-
-
     const fecha_registro = Date.now();
-
     const { id } = req.params;
     
     const { numero_telefonico,  
@@ -86,7 +87,7 @@ const usuariosPut = async(req, res = response) => {
  if (correoDB) {
      if (correoDB._id!=id) {
         return res.status(400).json({
-            msg:`El correo: '${correoDB.correo}', ya está registrado `.toUpperCase(),
+            msg:`El correo: '${correoDB.correo}', ya está registrado `,
                 
             }); 
      }
@@ -145,9 +146,6 @@ const usuariosDelete = async(req, res = response) => {
     // Fisicamente lo borramos
     // const usuario = await Usuario.findByIdAndDelete( id );
 
-
-
-
     const [personaRegistrada , externoRegistrado] = await Promise.all([
         Persona.findOne({usuario_id:id , estado:true}),
         Externo.findOne({usuario_id:id , estado:true})        
@@ -165,17 +163,145 @@ if (externoRegistrado) {
     // console.log('existe en externo');
 }
 
-const [usuariosForos]= await Promise.all([
-    UsuarioForo.find({
-        usuario_id:id, estado:true
-    }).then( (uF)=>{
+const [foros,usuariosForos,convocatorias, talleres, becas, apoyos, bolsas, inscripciones, participantes, instructores, carreras, escuelas, ofertas]= await Promise.all([
+/**
+ * 
+ */
+Foro.find({usuario_id:id, estado:true}).then( (foro)=>{
+    if (foro>0) {
+        foro.forEach( async (i)=>{
+            await Foro.findByIdAndUpdate(i._id,{estado:false, fecha_eliminacion},{new:true})
+        })
+    }
+}),
+/**
+ * 
+ */
+UsuarioForo.find({ usuario_id:id, estado:true}).then( (uF)=>{
             if (uF.length>0) {
                 uF.forEach(async (i)=>{
                     await UsuarioForo.findByIdAndUpdate(i._id,{estado:false, fecha_eliminacion},{new:true});
                 })
             }
-    })
-])
+    }),
+
+/**
+ * 
+ */
+Convocatoria.find({ usuario_id:id, estado:true}).then( (conv)=>{
+      if (conv>0) {
+          conv.forEach( async(i)=>{
+              await Convocatoria.findByIdAndUpdate(i._id,{estado:false, fecha_eliminacion},{new:true})
+          });      
+        }
+}),
+/**
+ * 
+ */
+ Taller.find({ usuario:id, estado:true}).then( (t)=>{
+      if (t>0) {
+          t.forEach( async(i)=>{
+              await Taller.findByIdAndUpdate(i._id,{estado:false, fecha_eliminacion},{new:true})
+          });      
+        }
+}),
+/**
+ * 
+ */
+ Beca.find({ usuario_id:id, estado:true}).then( (b)=>{
+      if (b>0) {
+          b.forEach( async(i)=>{
+              await Beca.findByIdAndUpdate(i._id,{estado:false, fecha_eliminacion},{new:true})
+          });      
+        }
+}),
+/**
+ * 
+ */
+ Apoyo.find({    usuario_id:id, estado:true}).then( (a)=>{
+      if (a>0) {
+          a.forEach( async(i)=>{
+              await Apoyo.findByIdAndUpdate(i._id,{estado:false, fecha_eliminacion},{new:true})
+          });      
+        }
+}),
+/**
+/**
+ * 
+ */
+ BolsaTrabajo.find({    usuario_id:id, estado:true}).then( (bT)=>{
+      if (bT>0) {
+          bT.forEach( async(i)=>{
+              await BolsaTrabajo.findByIdAndUpdate(i._id,{estado:false, fecha_eliminacion},{new:true})
+          });      
+        }
+}),
+/**
+ * 
+ */
+Inscripccion.find({  usuario:id, estado:true}).then( (ins)=>{
+      if (ins>0) {
+          ins.forEach( async(i)=>{
+              await Inscripccion.findByIdAndUpdate(i._id,{estado:false, fecha_eliminacion},{new:true})
+          });      
+        }
+}),
+/**
+ * 
+ */
+ Participante.find({  usuario_id:id, estado:true}).then( (part)=>{
+    if (part>0) {
+        part.forEach( async(i)=>{
+            await Participante.findByIdAndUpdate(i._id,{estado:false, fecha_eliminacion},{new:true})
+        });      
+      }
+}),
+/**
+ * 
+ */
+
+ Instructor.find({  usuario_id:id, estado:true}).then( (instruc)=>{
+    if (instruc>0) {
+        instruc.forEach( async(i)=>{
+            await Instructor.findByIdAndUpdate(i._id,{estado:false, fecha_eliminacion},{new:true})
+        });      
+      }
+}),
+/**
+ * 
+ */
+ Carrera.find({  usuario:id, estado:true}).then( (carr)=>{
+    if (carr>0) {
+        carr.forEach( async(i)=>{
+            await Carrera.findByIdAndUpdate(i._id,{estado:false, fecha_eliminacion},{new:true})
+        });      
+      }
+}),
+/**
+ * 
+ */
+ Escuela.find({  usuario:id, estado:true}).then( (esc)=>{
+    if (esc>0) {
+        esc.forEach( async(i)=>{
+            await Escuela.findByIdAndUpdate(i._id,{estado:false, fecha_eliminacion},{new:true})
+        });      
+      }
+}),
+/**
+ * 
+ */
+ Oferta.find({  usuario:id, estado:true}).then( (o)=>{
+    if (o>0) {
+        o.forEach( async(i)=>{
+            await Oferta.findByIdAndUpdate(i._id,{estado:false, fecha_eliminacion},{new:true})
+        });      
+      }
+}),
+
+
+
+
+]);
 
 
 

@@ -1,6 +1,6 @@
 const {response, request} = require('express');
 
-const { Participante}= require('../models/index');
+const { Participante, ParticipanteNoticia, RedParticipante}= require('../models/index');
 
 /**
  *  Obtener Todos Los Participantes
@@ -100,7 +100,39 @@ if (!permiso ) {
         msg: `EL id ${req.usuario.id} No cuenta con los permisos necesarios - No puede hacer esto`
     }); 
 }
-   const participante = await Participante.findByIdAndUpdate(id,{estado:false, fecha_eliminacion},{new:true});
+   
+
+// const participante = await Participante.findByIdAndUpdate(id,{estado:false, fecha_eliminacion},{new:true});
+
+const [participante, participanteNoticia, redParticipante]= await Promise.all([
+/**
+ *  */    
+ Participante.findByIdAndUpdate(id,{estado:false, fecha_eliminacion},{new:true}),
+/**
+ * 
+ */
+ParticipanteNoticia.find({ noticia_id:id, estado:true}).then( (pN)=>{
+    if (pN.length>0) {
+        pN.forEach( async (i)=>{
+            await ParticipanteNoticia.findByIdAndUpdate( i._id,{estado:false, fecha_eliminacion},{new:true})
+        })
+    }
+} ),
+/**
+ * 
+ */
+RedParticipante.find({ participante_id:id, estado:true}).then( (rP)=>{
+    if (rP.length>0) {
+        rP.forEach(async (i)=>{
+            await RedParticipante.findByIdAndUpdate(i._id,{estado:false, fecha_eliminacion},{new:true})
+        })
+    }
+})
+
+])
+
+
+
 res.json(participante);    
 }
 

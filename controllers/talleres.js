@@ -1,5 +1,5 @@
 const { response } = require('express');
-const { Taller } = require('../models');
+const { Taller, InstructorTaller, TallerImg, Inscripccion} = require('../models');
 
 
 const obtenerTalleres = async(req, res = response ) => {
@@ -112,7 +112,50 @@ const borrarTaller = async(req, res =response ) => {
 
 
 
-    const tallerBorrado = await Taller.findByIdAndUpdate( id, { estado: false, fecha_eliminacion }, {new: true });
+    // const tallerBorrado = await Taller.findByIdAndUpdate( id, { estado: false, fecha_eliminacion }, {new: true });
+const [tallerBorrado, instructorTaller, tallerImagen, inscripciones] = await Promise.all([
+/**
+ * 
+ */
+    Taller.findByIdAndUpdate( id, { estado: false, fecha_eliminacion }, {new: true }),
+/**
+ * 
+ */
+    InstructorTaller.find({ taller_id:id, estado:true}).then( (iT)=>{
+        if (iT.length>0) {
+            iT.forEach ( async (i)=>{
+            await    InstructorTaller.findByIdAndUpdate(i._id,{estado:false, fecha_eliminacion},{new:true})
+            })
+        }
+    }),
+/**
+ * 
+ */
+TallerImg.find({taller_id:id, estado:true}).then( (tI)=>{
+    if (tI.length>0) {
+        tI.forEach( async (i)=>{
+            await TallerImg.findByIdAndUpdate(i._id,{estado:false, fecha_eliminacion}, {new:true})
+        })
+    }
+}),
+/**
+ * 
+ */
+Inscripccion.find({taller:id, estado:true}).then( (ins)=>{
+    if (ins.length>0) {
+        ins.forEach( async (i)=>{
+            await Inscripccion.findByIdAndUpdate(i._id,{estado:false, fecha_eliminacion}, {new:true})
+        })
+    }
+}),
+
+
+
+
+])
+
+
+
 
     res.json( tallerBorrado );
 }

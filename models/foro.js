@@ -36,7 +36,7 @@ const ForoSchema = Schema({
 });
 
 ForoSchema.methods.toJSON =function () {
-    const {_v, estado, ...data}= this.toObject();
+    const {__v, estado, ...data}= this.toObject();
     return data;
 }
 

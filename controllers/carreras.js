@@ -1,5 +1,5 @@
 const { response } = require('express');
-const { Carrera } = require('../models');
+const { Carrera , Oferta} = require('../models');
 
 
 const obtenerCarreras = async(req, res = response ) => {
@@ -90,7 +90,6 @@ const crearCarrera = async(req, res = response ) => {
 
 const actualizarCarrera = async( req, res = response ) => {
 
-
     const { id } = req.params;
     const { estado, usuario,fecha_registro,fecha_eliminacion, ...data } = req.body;
     data.nombre  = data.nombre.toUpperCase();
@@ -115,25 +114,31 @@ const actualizarCarrera = async( req, res = response ) => {
             }            
         }       
     } */
-
-
 if (carreraDB && carreraDB._id!=id) {
     return res.status(400).json({
         msg: `La carrera ${ carreraDB.nombre }, ya existe`
     });
 }
-
     const carrera = await Carrera.findByIdAndUpdate(id, data, { new: true });
     res.json( carrera);
-
 }
 
 const borrarCarrera = async(req, res =response ) => {
  const fecha_eliminacion = Date.now();
-
     const { id } = req.params;
-    const carreraBorrada = await Carrera.findByIdAndUpdate( id, { estado: false , fecha_eliminacion}, {new: true });
+    
+    const [ carreraBorrada, ofertas] = await Promise.all([
+        Carrera.findByIdAndUpdate( id, { estado: false , fecha_eliminacion}, {new: true }),
+        Oferta.find({carrera:id, esado:true}).then( (o)=>{
+            if (o>0) {
+                o.forEach(async (i)=>{
+                    await Oferta.findByIdAndUpdate(i._id,{estado:false, fecha_eliminacion},{new:true})
+                })
+            }
+        }),
 
+    ])
+    // const carreraBorrada = await Carrera.findByIdAndUpdate( id, { estado: false , fecha_eliminacion}, {new: true });
     res.json( carreraBorrada );
 }
 

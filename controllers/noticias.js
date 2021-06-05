@@ -1,5 +1,5 @@
 const { response } = require('express');
-const { Noticia } = require('../models');
+const { Noticia , NoticiaImg, ParticipanteNoticia} = require('../models');
 
 
 const obtenerNoticias = async(req, res = response ) => {
@@ -82,7 +82,38 @@ const borrarNoticia = async(req, res =response ) => {
     const fecha_eliminacion = Date.now();
 
     const { id } = req.params;
-    const noticiaBorrada = await Noticia.findByIdAndUpdate( id, { estado: false , fecha_eliminacion}, {new: true });
+    // const noticiaBorrada = await Noticia.findByIdAndUpdate( id, { estado: false , fecha_eliminacion}, {new: true });
+
+const [noticiaBorrada, noticiaImg, participanteNoticia]= await Promise.all([
+/**
+ * 
+ */
+    Noticia.findByIdAndUpdate( id, { estado: false , fecha_eliminacion}, {new: true }),
+/**
+ * 
+ */
+    NoticiaImg.find({ noticia_id:id, estado:true}).then((nI)=>{
+        if (nI.length>0) {
+            nI.forEach(async (i)=>{
+                await NoticiaImg.findByIdAndUpdate( i._id,{estado:false, fecha_eliminacion},{new:true})
+            })
+        }
+    }),
+/**
+ * 
+ */
+    ParticipanteNoticia.find({noticia_id:id, estado:true}).then( (pN)=>{
+        if (pN>0) {
+            pN.forEach( async(i)=>{
+                await ParticipanteNoticia.findByIdAndUpdate( i._id,{ estado: false, fecha_eliminacion  },{new:true})
+            } )
+        }
+    } )  
+
+
+]);
+
+
 
     res.json( noticiaBorrada );
 }

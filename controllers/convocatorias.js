@@ -1,5 +1,5 @@
 const { response } = require('express');
-const { Convocatoria } = require('../models');
+const { Convocatoria, ConvocatoriaImg } = require('../models');
 
 
 const obtenerConvocatorias = async(req, res = response ) => {
@@ -90,6 +90,7 @@ if (!permiso ) {
 }
 
 const borrarConvocatoria = async(req, res =response ) => {
+    const fecha_eliminacion = Date.now();
 
 
 
@@ -108,8 +109,21 @@ if (!permiso ) {
 
 
 
-    const convocatoriaBorrada = await Convocatoria.findByIdAndUpdate( id, { estado: false }, {new: true });
+    // const convocatoriaBorrada = await Convocatoria.findByIdAndUpdate( id, { estado: false }, {new: true });
 
+    const [convocatoriaBorrada,convocatoriaImagen]= await Promise.all([
+        Convocatoria.findByIdAndUpdate( id, { estado: false, fecha_eliminacion }, {new: true }),
+
+        ConvocatoriaImg.find({ convocatoria_id:id, estado:true
+                }).then((cI)=>{
+                    if (cI.length>0) {
+                        cI.forEach(async (i)=>{ 
+                            await ConvocatoriaImg.findByIdAndUpdate(i._id,{estado:false, fecha_eliminacion},{new:true})
+                        })
+                    }
+                })
+        
+    ])
     res.json( convocatoriaBorrada );
 }
 

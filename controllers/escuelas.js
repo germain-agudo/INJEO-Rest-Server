@@ -1,5 +1,5 @@
 const { response } = require('express');
-const { Escuela } = require('../models');
+const { Escuela , Oferta} = require('../models');
 
 
 const obtenerEscuelas = async(req, res = response ) => {
@@ -122,7 +122,20 @@ const borrarEscuela = async(req, res =response ) => {
     const fecha_eliminacion = Date.now();
 
     const { id } = req.params;
-    const escuelaBorrada = await Escuela.findByIdAndUpdate( id, { estado: false, fecha_eliminacion }, {new: true });
+ const [escuelaBorrada, ofertas] = await Promise.all([
+    Escuela.findByIdAndUpdate( id, { estado: false, fecha_eliminacion }, {new: true }),
+/**
+ * 
+ */
+    Oferta.find({escuela:id, esado:true}).then( (esc)=>{
+        if (esc>0) {
+            esc.forEach(async (i)=>{
+                await Oferta.findByIdAndUpdate(i._id,{estado:false, fecha_eliminacion},{new:true})
+            })
+        }
+    }),
+ ]) 
+    // const escuelaBorrada = await Escuela.findByIdAndUpdate( id, { estado: false, fecha_eliminacion }, {new: true });
 
     res.json( escuelaBorrada );
 }

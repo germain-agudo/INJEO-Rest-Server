@@ -50,6 +50,10 @@ const ConvocatoriaSchema = Schema({
         type:  Date,
             
     },
+    fecha_eliminacion: {
+        type:  Date,
+            
+    },
 });
 
 
