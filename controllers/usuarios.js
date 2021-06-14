@@ -19,6 +19,7 @@ const {Usuario,
      Escuela,
      Oferta,
  }= require('../models/index');
+const { generarJWT } = require('../helpers');
 
 const obtenerUsuario = async(req, res = response ) => {
     const { id } = req.params;
@@ -66,9 +67,13 @@ const usuariosPost = async(req, res = response) => {
 
     // // Guardar en BD
     await usuario.save();
-        
+ 
+    //Generar mi jwt
+    const token = await generarJWT( usuario.id );
+
     res.json({
-        usuario
+        usuario,
+        token
        
     });
 }
