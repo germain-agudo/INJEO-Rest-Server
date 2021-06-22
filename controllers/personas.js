@@ -32,11 +32,54 @@ const personasGet = async(req = request, res = response) => {
             
     ]);
 
+    // console.log(getEdad('06-05-1997' ));
     res.json({
         total,
         personas
     });
 }
+
+
+
+function getEdad(dateString) {
+    let hoy = new Date()
+    let fechaNacimiento = new Date(dateString)
+    let edad = hoy.getFullYear() - fechaNacimiento.getFullYear()
+    let diferenciaMeses = hoy.getMonth() - fechaNacimiento.getMonth()
+    if (
+      diferenciaMeses < 0 ||
+      (diferenciaMeses === 0 && hoy.getDate() < fechaNacimiento.getDate())
+    ) {
+      edad--
+    }
+    return edad
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -52,7 +95,7 @@ const {
 nombre
 , apellido_paterno
 ,apellido_materno
-,edad
+
 ,sexo
 ,curp
 ,fecha_nacimiento
@@ -62,7 +105,7 @@ nombre
 
 } = req.body;
 
-const user_name = `${nombre} ${apellido_paterno} ${apellido_materno}`.toUpperCase();
+const user_name = `${nombre}`.toUpperCase();
 
 
 const usuario = await Usuario.findByIdAndUpdate(usuario_id,{user_name, datos_completos:true},{new:true})
@@ -73,6 +116,7 @@ if (!usuarioDB.estado) {
     
 } */
  
+const edad = getEdad(fecha_nacimiento); 
     const persona = new Persona({            
  nombre       
 ,apellido_paterno
@@ -112,7 +156,7 @@ const personaPut = async(req, res = response) => {
         nombre
         , apellido_paterno
         ,apellido_materno
-        ,edad
+       
         ,sexo
         ,curp
         ,fecha_nacimiento
@@ -147,6 +191,8 @@ if (!permiso ) {
             }); 
      }
  }
+
+ const edad = getEdad(fecha_nacimiento); 
 
     const personaDB = {    
         nombre

@@ -102,7 +102,7 @@ router.post('/',[
     check('nombre', 'El nombre es obligatorio').not().isEmpty(),
     check('apellido_paterno', 'El apellido paterno es obligatorio').not().isEmpty(),
     check('apellido_materno', 'El apellido materno es obligatorio').not().isEmpty(),
-    check('edad', 'la edad es obligatoria').not().isEmpty(),
+    // check('edad', 'la edad es obligatoria').not().isEmpty(),
     check('sexo', 'El sexo es obligatorio').not().isEmpty(),
     check('curp', 'La CURP  es obligatoria').not().isEmpty(),
     check('curp').custom(curpExiste),
