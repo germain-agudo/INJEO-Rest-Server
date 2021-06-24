@@ -35,7 +35,7 @@ const crearExterno = async(req, res = response ) => {
  // console.log(req.body );
  const fecha_registro = Date.now();
  
- const {  nombre,numero_telefonico, 
+ const {  nombre, 
     rfc, direccion, usuario_id,
      
 
@@ -55,7 +55,7 @@ const usuario = await Usuario.findByIdAndUpdate(usuario_id,{user_name, datos_com
 
 
 const externo = new Externo({ 
-    nombre,numero_telefonico, 
+    nombre,
     rfc, direccion,  fecha_registro, usuario_id
    });
 

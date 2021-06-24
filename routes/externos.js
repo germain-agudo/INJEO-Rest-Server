@@ -55,7 +55,7 @@ router.put('/:id',[
 
     check('nombre', 'El nombre es obligatorio').not().isEmpty(),
     check('direccion', 'La dirección es obligatoria').not().isEmpty(),
-    check('numero_telefonico', 'El número telefonico es obligatorio').not().isEmpty(),
+    // check('numero_telefonico', 'El número telefonico es obligatorio').not().isEmpty(),
     check('rfc', 'El RFC  es obligatorio').not().isEmpty(),
 
     
@@ -73,7 +73,7 @@ router.post('/',[
     tieneRole('EXTERNO_ROLE','ADMIN_ROLE'),
     check('nombre', 'El nombre es obligatorio').not().isEmpty(),
     check('direccion', 'La dirección es obligatoria').not().isEmpty(),
-    check('numero_telefonico', 'El número telefonico es obligatorio').not().isEmpty(),
+    // check('numero_telefonico', 'El número telefonico es obligatorio').not().isEmpty(),
     check('rfc', 'El RFC  es obligatorio').not().isEmpty(),
     check('rfc').custom( rfcExiste),
     // check('correo', 'El correo no es válido').isEmail(),
