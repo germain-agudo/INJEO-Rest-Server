@@ -50,7 +50,7 @@ const crearNoticia = async(req, res = response ) => {
         "titulo":titulo.toUpperCase(),
         subtitulo,
         descripcion,
-        usuario: req.usuario._id,
+        usuario: req.usuario,
         fecha_registro
     }
    
