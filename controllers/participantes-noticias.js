@@ -178,7 +178,7 @@ const buscarRelacion = async(req, res =response ) => {
                 Noticia.findById(id),
                 ParticipanteNoticia.countDocuments(query),
                 ParticipanteNoticia.find({estado:true, noticia_id:id}, {participante_id:1,})     
-                                    .populate('participante_id',['nombre'])                                
+                                    .populate('participante_id',['nombre', 'img'])                                
             ]);
     
             if (!noticia || !noticia.estado) {
