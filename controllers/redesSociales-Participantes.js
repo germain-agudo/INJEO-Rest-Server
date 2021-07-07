@@ -13,7 +13,7 @@ const {RedParticipante,  RedSocial ,  Participante, }= require('../models/index'
     const [total, redesParticipantes] = await Promise.all([
         RedParticipante.countDocuments(query),
         RedParticipante.find(query)
-                        .populate('red_id',['red', 'img'])
+                        .populate('red_id',['red'])
                         .populate('participante_id',['nombre'])
                         .populate('usuario_id',['user_name'])
                         .skip(Number( desde ) )
@@ -223,7 +223,7 @@ const buscarRelacion = async(req, res =response ) => {
                 Participante.findById(id),
                 RedParticipante.countDocuments(query),
                 RedParticipante.find({estado:true, participante_id:id}, {red_id:1,url:1})     
-                                    .populate('red_id',['red'])                                
+                                    .populate('red_id',['red','img'])                                
             ]);
     
             if (!participante || !participante.estado) {
