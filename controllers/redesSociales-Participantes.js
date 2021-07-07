@@ -13,7 +13,7 @@ const {RedParticipante,  RedSocial ,  Participante, }= require('../models/index'
     const [total, redesParticipantes] = await Promise.all([
         RedParticipante.countDocuments(query),
         RedParticipante.find(query)
-                        .populate('red_id',['red'])
+                        .populate('red_id',['red', 'img'])
                         .populate('participante_id',['nombre'])
                         .populate('usuario_id',['user_name'])
                         .skip(Number( desde ) )
