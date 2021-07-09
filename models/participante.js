@@ -11,6 +11,11 @@ const ParticipanteSchema= Schema({
         required: [true, 'El nombre es obligatorio']
     },
     
+    cargo:{
+        type: String,
+        required:true,
+
+    },
     descripcion:{
         type: String,
         required:true,

@@ -69,6 +69,7 @@ router.get('/:id',[
 
         check('nombre','El nombre es obligatorio').not().isEmpty(),
         check('descripcion','La descripción es obligatoria').not().isEmpty(),
+        check('cargo','el cargo es obligatoria').not().isEmpty(),
         // check('descripcion','La descripciòn es obligatoria').not().isEmpty(),
         validarCampos,
 ], crearParticipante);
@@ -89,6 +90,7 @@ router.get('/:id',[
 
         check('nombre','El nombre es obligatorio').not().isEmpty(),
         check('descripcion','La descripción es obligatoria').not().isEmpty(),
+        check('cargo','el cargo es obligatoria').not().isEmpty(),
 
 
         validarCampos,

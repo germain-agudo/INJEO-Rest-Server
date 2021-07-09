@@ -40,12 +40,13 @@ res.json(participante);
 const crearParticipante = async(req, res= response)=>{
 
     const fecha_registro = Date.now();  
-    const {nombre,descripcion, }= req.body;   
+    const {nombre,descripcion, cargo}= req.body;   
 
     const data = {
 
         nombre:nombre.toUpperCase(),
         descripcion,
+        cargo,
         usuario_id: req.usuario._id,
         fecha_registro
     }
@@ -61,7 +62,7 @@ res.status(201).json(participante);
 const actualizarParticipante = async(req= request, res= response)=>{
   
 const {id }= req.params;   
-const {nombre,descripcion, }= req.body;
+const {nombre,descripcion, cargo, }= req.body;
 
 const participanteDB = await  Participante.findById(id);
 
@@ -77,6 +78,7 @@ if (!permiso ) {
 const data = {
     nombre:nombre.toUpperCase(),
     descripcion,
+    cargo,
 
 }
 
