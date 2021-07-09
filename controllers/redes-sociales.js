@@ -42,7 +42,7 @@ const crearRedSocial = async(req, res= response)=>{
     const fecha_registro = Date.now();  
     const {red }= req.body;   
 
-    const redDB = await RedSocial.findOne({red:red.toUpperCase()});
+    const redDB = await RedSocial.findOne({red:red.toUpperCase(), estado:true});
     if (redDB) {
         return res.status(401).json({
             msg: ` ${red.toUpperCase()}, ya existe - No puede hacer esto`
