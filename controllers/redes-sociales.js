@@ -78,7 +78,7 @@ if (!permiso ) {
         msg: `EL id ${req.usuario.id} No cuenta con los permisos necesarios - No puede hacer esto`
     }); 
 }
-const redDB = await  RedSocial.findOne({red:red.toUpperCase()});
+const redDB = await  RedSocial.findOne({red:red.toUpperCase(), estado: true });
 
 if (redDB && redDB._id!=id) {
     return res.status(401).json({
