@@ -101,7 +101,7 @@ const actualizarExterno = async( req, res = response ) => {
     if (rfcDB) {
         if (rfcDB._id!=id) {
            return res.status(400).json({
-               msg:`El RFC : '${curpDB.rfc}', ya está registrada `.toUpperCase(),
+               msg:`El RFC : '${curpDB.rfc}', ya está registrado `.toUpperCase(),
                    
                }); 
         }
