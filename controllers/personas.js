@@ -119,7 +119,7 @@ const edad = getEdad(fecha_nacimiento);
 // console.log(edad);
 if (edad<10||isNaN(edad)) {
    return  res.status(400).json({
-       msg:'Edad no válida',
+       msg:'Fecha de Nacimiento no válida',
         // usuario
        
     });
@@ -205,7 +205,7 @@ if (!permiso ) {
  const edad = getEdad(fecha_nacimiento); 
  if (edad<10) {
     return  res.status(400).json({
-         msg:'Edad no válida',
+         msg:'Fecha de Nacimiento no válida',
          // usuario
         
      });
