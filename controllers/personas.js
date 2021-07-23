@@ -89,20 +89,16 @@ const personaPost = async(req, res = response) => {
 
  const fecha_registro = Date.now();
 
-
-
 const {
 nombre
 , apellido_paterno
 ,apellido_materno
-
 ,sexo
 ,curp
 ,fecha_nacimiento
 ,municipio
 ,region
 ,usuario_id
-
 } = req.body;
 
 const user_name = `${nombre}`.toUpperCase();
@@ -116,8 +112,8 @@ if (!usuarioDB.estado) {
 } */
 
 const edad = getEdad(fecha_nacimiento); 
-console.log(edad);
-if (edad   <10||isNaN(edad)) {
+console.log(edad.toString);
+if (edad < 10 || Number.isNaN(edad)) {
    return  res.status(400).json({
        msg:'Fecha de Nacimiento no válida',
         // usuario
