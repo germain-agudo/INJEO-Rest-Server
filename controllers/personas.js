@@ -118,7 +118,7 @@ if (!usuarioDB.estado) {
  
 const edad = getEdad(fecha_nacimiento); 
 if (edad<10) {
-    res.json({
+   return  res.status(400).json({
         msg:'Edad no válida',
         // usuario
        
@@ -143,7 +143,7 @@ if (edad<10) {
     // // Guardar en BD
 await persona.save();
         
-res.json({
+return res.status(200).json({
         persona,
         // usuario
        
@@ -200,7 +200,13 @@ if (!permiso ) {
  }
 
  const edad = getEdad(fecha_nacimiento); 
-
+ if (edad<10) {
+    return  res.status(400).json({
+         msg:'Edad no válida',
+         // usuario
+        
+     });
+ }
     const personaDB = {    
         nombre
         , apellido_paterno
