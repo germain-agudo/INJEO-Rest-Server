@@ -86,6 +86,14 @@ router.put('/:id',[
     check('region', 'La region es obligatoria').not().isEmpty(),   
     // check('rol', 'No es un rol válido').isIn(['ADMIN_ROLE','USER_ROLE']),
     check('sexo', 'Sexo no valildo').isIn(['Masculino','Femenino']),
+    check('region', 'Sexo no valildo').isIn(['Cañada',
+    'Costa',
+    'Istmo',
+    'Mixteca',
+    'Papaloapan',
+    'Sierra Sur',
+    'Sierra Norte',
+    'Valles Centrales']),
 
 
 // manipulacionPersonaExterno,
@@ -127,7 +135,14 @@ router.post('/',[
 
     check('usuario_id').custom(relacion=>existeRelacion ( relacion, ['ADMIN_ROLE','USER_ROLE'] ) ),
     check('sexo', 'Sexo no valildo').isIn(['Masculino','Femenino']),
-   
+    check('region', 'Sexo no valildo').isIn(['Cañada',
+    'Costa',
+    'Istmo',
+    'Mixteca',
+    'Papaloapan',
+    'Sierra Sur',
+    'Sierra Norte',
+    'Valles Centrales']),
     validarCampos
 ], personaPost );
 
