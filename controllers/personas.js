@@ -117,6 +117,13 @@ if (!usuarioDB.estado) {
 } */
  
 const edad = getEdad(fecha_nacimiento); 
+if (edad<10) {
+    res.json({
+        msg:'Edad no válida',
+        // usuario
+       
+    });
+}
     const persona = new Persona({            
  nombre       
 ,apellido_paterno
