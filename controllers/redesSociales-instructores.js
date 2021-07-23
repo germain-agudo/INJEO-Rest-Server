@@ -210,7 +210,7 @@ const buscarRelacion = async(req, res =response ) => {
             ]);
     
             if (!red || !red.estado) {
-                res.status(401).json({
+                return   res.status(401).json({
                 msg: `La red: ${id}, no existe`
                 });        
             }
@@ -235,7 +235,7 @@ const buscarRelacion = async(req, res =response ) => {
             ]);
     
             if (!instructor || !instructor.estado) {
-                res.status(401).json({
+               return res.status(401).json({
                 msg: `El instructor ${id}, no existe`
                 });        
             }

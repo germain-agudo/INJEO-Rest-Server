@@ -315,6 +315,80 @@ Inscripccion.find({  usuario:id, estado:true}).then( (ins)=>{
 
 
 
+const buscarRelacion = async(req, res =response ) => {
+
+    const {id, coleccion}= req.params;
+    
+
+    switch (coleccion) {
+        case 'persona':
+               buscarPersonaPorRed(id, res);
+             
+            break;
+        case 'externo':
+               buscarExternoPorRed(id, res);
+             
+            break;
+  
+    
+        default:
+           return res.status(500).json({ msg: 'Coloección en desarollo'});
+    
+            
+    } 
+    
+    // console.log(req.params);
+    }
+
+    const buscarPersonaPorRed=async(id= '', res= response)=>{
+        const query={estado:true, usuario_id:id};
+            const [persona]= await Promise.all( [
+
+                    Persona.findOne(query),
+                    // RedParticipante.find({estado:true, red_id:id}, {participante_id:1,url:1,})     
+                    //                     .populate('participante_id',['nombre'])                                
+                ]);
+        
+                if (!persona || !persona.estado) {
+               return res.status(401).json({
+                    msg: `La persona  : ${id}, no existe`
+                    });        
+                }
+        
+            return res.json({
+                persona,
+               
+            });    
+        }
+
+        const buscarExternoPorRed=async(id= '', res= response)=>{
+            const query={estado:true, usuario_id:id};
+                const [externo]= await Promise.all( [
+    
+                        Externo.findOne(query),
+                        // RedParticipante.find({estado:true, red_id:id}, {participante_id:1,url:1,})     
+                        //                     .populate('participante_id',['nombre'])                                
+                    ]);
+            
+                    if (!externo || !externo.estado) {
+                        return res.status(401).json({
+                        msg: `El externo  : ${id}, no existe`
+                        });        
+                    }
+            
+                return res.json({
+                    externo,
+                   
+                });    
+            }
+    
+    
+    
+
+
+
+
+
 
 module.exports = {
     usuariosGet,
@@ -322,5 +396,6 @@ module.exports = {
     usuariosPut,
     usuariosPatch,
     usuariosDelete,
-    obtenerUsuario
+    obtenerUsuario,
+    buscarRelacion,
 }

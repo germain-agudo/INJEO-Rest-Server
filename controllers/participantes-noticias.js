@@ -182,7 +182,7 @@ const buscarRelacion = async(req, res =response ) => {
             ]);
     
             if (!noticia || !noticia.estado) {
-                res.status(401).json({
+                return    res.status(401).json({
                 msg: `La noticia: ${id}, no existe`
                 });        
             }
@@ -207,7 +207,7 @@ const buscarRelacion = async(req, res =response ) => {
             ]);
     
             if (!participante || !participante.estado) {
-                res.status(401).json({
+                return  res.status(401).json({
                 msg: `El participante ${id}, no existe`
                 });        
             }

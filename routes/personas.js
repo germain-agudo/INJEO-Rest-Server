@@ -9,12 +9,14 @@ const {
     validarCampos,
     
     validarJWT,
-     
+      
 
     manipulacionPersonaExterno,
 
     esAdminRole,
     tieneRole,
+  
+
 
 } = require('../middlewares');
 const {
@@ -26,6 +28,8 @@ const {
      existePersonaPorId,
      existeUsuarioActivoPorId,
 existeRelacionConUsuario,
+
+
      } = require('../helpers/db-validators');
 
 const { 
@@ -34,6 +38,7 @@ const {
         personaDelete,
         personasGet,
         obtenerPersona,
+      
        
 
   
@@ -135,6 +140,7 @@ router.delete('/:id',[
 
 
 
+  
 
 
 

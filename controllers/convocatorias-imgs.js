@@ -173,7 +173,7 @@ const buscarRelacion = async(req, res =response ) => {
             ]);
     
             if (!convocatoria || !convocatoria.estado) {
-                res.status(401).json({
+                return   res.status(401).json({
                 msg: `La convocatoria ${id}, no existe`
                 });        
             }
@@ -199,7 +199,7 @@ const buscarRelacion = async(req, res =response ) => {
             ]);
     
             if (!imagen || !imagen.estado) {
-                res.status(401).json({
+                return  res.status(401).json({
                 msg: `La imagen ${id}, no existe`
                 });        
             }

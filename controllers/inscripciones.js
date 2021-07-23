@@ -261,7 +261,7 @@ const buscarRelacion = async(req, res =response ) => {
             ]);
     
             if (!taller || !taller.estado) {
-                res.status(401).json({
+                return  res.status(401).json({
                 msg: `El taller: ${id}, no existe`
                 });        
             }
@@ -286,7 +286,7 @@ const buscarRelacion = async(req, res =response ) => {
             ]);
     
             if (!usuario || !usuario.estado) {
-                res.status(401).json({
+                return res.status(401).json({
                 msg: `El usuario ${id}, no existe`
                 });        
             }

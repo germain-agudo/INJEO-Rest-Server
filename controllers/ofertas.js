@@ -248,7 +248,7 @@ const query={estado:true, escuela:id};
         ]);
 
         if (!escuela || !escuela.estado) {
-            res.status(401).json({
+            return   res.status(401).json({
             msg: `La escuela ${id}, no existe`
             });        
         }
@@ -274,7 +274,7 @@ const query={estado:true, carrera:id};
         ]);
 
         if (!carrera || !carrera.estado) {
-            res.status(401).json({
+            return   res.status(401).json({
             msg: `La carrera ${id}, no existe`
             });        
         }

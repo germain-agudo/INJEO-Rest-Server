@@ -8,10 +8,16 @@ const {
     validarJWT,
     esAdminRole,
     tieneRole,
-     manipulacionValida
+     manipulacionValida,
+     
 } = require('../middlewares');
 
-const { esRoleValido, emailExiste, existeUsuarioPorId } = require('../helpers/db-validators');
+const { 
+    esRoleValido, 
+    emailExiste, 
+    existeUsuarioPorId ,
+    coleccionesPermitidas,
+} = require('../helpers/db-validators');
 
 const { usuariosGet,
         usuariosPut,
@@ -19,6 +25,7 @@ const { usuariosGet,
         usuariosDelete,
         usuariosPatch,
         obtenerUsuario,
+        buscarRelacion,
     } = require('../controllers/usuarios');
 
 const router = Router();
@@ -103,7 +110,21 @@ router.delete('/:id',[
 
 router.patch('/', usuariosPatch );
 
-
+router.get('/:coleccion/:id',[
+    // validarJWT,
+    // check('id','El id debe de ser de mongo ').isMongoId(),
+  
+    // check('id').custom( existeOfertaPorId ),
+    check('id', 'No es un id de Mongo válido').isMongoId(),
+    check('coleccion').custom(c=> coleccionesPermitidas( c, [    
+        'persona',
+        'externo'
+        
+  ] ) ),
+     validarCampos,
+  ], buscarRelacion); 
+  
+  
 
 
 

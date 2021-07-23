@@ -238,11 +238,11 @@ const persona = await Persona.findByIdAndUpdate( id, { estado: false ,fecha_elim
 
 
 
-
 module.exports = {
 personaPost,
 personaPut,
 personaDelete,
 personasGet,
 obtenerPersona,
+
 }

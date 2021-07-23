@@ -147,7 +147,7 @@ const buscarRelacion = async(req, res =response ) => {
             ]);
     
             if (!foro || !foro.estado) {
-                res.status(401).json({
+                return  res.status(401).json({
                 msg: `El foro: ${id}, no existe`
                 });        
             }
@@ -172,7 +172,7 @@ const buscarRelacion = async(req, res =response ) => {
             ]);
     
             if (!usuario || !usuario.estado) {
-                res.status(401).json({
+               return  res.status(401).json({
                 msg: `El usuario ${id}, no existe`
                 });        
             }
