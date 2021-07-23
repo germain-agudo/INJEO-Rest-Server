@@ -117,8 +117,8 @@ if (!usuarioDB.estado) {
 } */
  
 const edad = getEdad(fecha_nacimiento); 
-console.log(edad);
-if (edad<10) {
+// console.log(edad);
+if (edad<10||isNaN(edad)) {
    return  res.status(400).json({
         msg:'Edad no válida',
         // usuario
