@@ -108,24 +108,26 @@ nombre
 const user_name = `${nombre}`.toUpperCase();
 
 
-const usuario = await Usuario.findByIdAndUpdate(usuario_id,{user_name, datos_completos:true},{new:true})
 /* 
 const usuarioDB = await usuario.findById(usuario_id);
 
 if (!usuarioDB.estado) {
     
 } */
- 
+
 const edad = getEdad(fecha_nacimiento); 
 // console.log(edad);
 if (edad<10||isNaN(edad)) {
    return  res.status(400).json({
-        msg:'Edad no válida',
+       msg:'Edad no válida',
         // usuario
        
     });
 }
-    const persona = new Persona({            
+
+const usuario = await Usuario.findByIdAndUpdate(usuario_id,{user_name, datos_completos:true},{new:true})
+
+const persona = new Persona({            
  nombre       
 ,apellido_paterno
 ,apellido_materno
