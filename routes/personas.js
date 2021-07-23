@@ -57,6 +57,7 @@ router.get('/', personasGet );
 router.get('/:id',[
     check('id', 'No es un ID válido').isMongoId(),
     check('id').custom( existePersonaPorId ),   
+
     validarCampos
 ],obtenerPersona );
 
@@ -83,6 +84,9 @@ router.put('/:id',[
     check('fecha_nacimiento', 'La fecha de nacimiento es obligatoria').not().isEmpty(),
     check('municipio', 'El municipio es obligatorio').not().isEmpty(),
     check('region', 'La region es obligatoria').not().isEmpty(),   
+    // check('rol', 'No es un rol válido').isIn(['ADMIN_ROLE','USER_ROLE']),
+    check('sexo', 'Sexo no valildo').isIn(['Masculino','Femenino']),
+
 
 // manipulacionPersonaExterno,
 
@@ -122,6 +126,7 @@ router.post('/',[
     check('usuario_id').custom( existeRelacionConUsuario ),    
 
     check('usuario_id').custom(relacion=>existeRelacion ( relacion, ['ADMIN_ROLE','USER_ROLE'] ) ),
+    check('sexo', 'Sexo no valildo').isIn(['Masculino','Femenino']),
    
     validarCampos
 ], personaPost );

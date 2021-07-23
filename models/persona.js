@@ -21,7 +21,7 @@ const PersonaSchema= Schema({
     sexo: {
         type: String,
         required: [true, 'El sexo es obligatorio'],
-        emun: ['Masculino', 'Femenino']
+        // emun: ['Masculino', 'Femenino']
 
      
     },

@@ -96,7 +96,7 @@ router.post('/',[
     // check('rol', 'No es un rol válido').isIn(['ADMIN_ROLE','USER_ROLE']),
     check('rol').custom( esRoleValido ), 
     validarCampos
-], usuariosPost );
+], usuariosPost ); 
 
 router.delete('/:id',[
     validarJWT,
