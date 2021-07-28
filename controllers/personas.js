@@ -40,10 +40,40 @@ const personasGet = async(req = request, res = response) => {
 }
 
 
+function convertirFecha(dateString){
+    var dateString = dateString;
+    var dataSplit = dateString.split('-');
+    var dateConverted;
 
-function getEdad(dateString) {
+    if (dataSplit[2].split(" ").length > 1) {
+
+        var hora = dataSplit[2].split(" ")[1].split(':');
+        dataSplit[2] = dataSplit[2].split(" ")[0];
+        dateConverted = new Date(dataSplit[2], dataSplit[1]-1, dataSplit[0], hora[0], hora[1]);
+
+    } else {
+        dateConverted = new Date(dataSplit[2], dataSplit[1] - 1, dataSplit[0]);
+    }
+    // console.log(dateConverted);
+    return dateConverted;
+}
+
+
+function getEdad(date) {
+const dateString = convertirFecha(date);
+
+
+    // console.log(dateString);
     let hoy = new Date()
+
+
+
     let fechaNacimiento = new Date(dateString)
+   
+// if (hoy.getFullYear) {
+    
+// }
+
     let edad = hoy.getFullYear() - fechaNacimiento.getFullYear()
     let diferenciaMeses = hoy.getMonth() - fechaNacimiento.getMonth()
     if (
@@ -52,7 +82,10 @@ function getEdad(dateString) {
     ) {
       edad--
     }
-    return edad
+
+
+    // console.log(edad);
+    return edad;
   }
 
 
@@ -111,6 +144,7 @@ if (!usuarioDB.estado) {
     
 } */
 
+// console.log(fecha_nacimiento);
 const edad = getEdad(fecha_nacimiento); 
 // console.log(edad.toString());
 if (edad < 10 || Number.isNaN(edad)) {
