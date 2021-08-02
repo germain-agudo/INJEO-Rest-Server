@@ -166,15 +166,48 @@ const buscarRelacion = async(req, res =response ) => {
     
     // console.log(req.params);
     }
-    
+        
     const buscarImagenesPorNoticia=async(id= '', res= response)=>{
     
     const query={estado:true, noticia_id:id};
         const [noticia,total,imagenes]= await Promise.all( [
                 Noticia.findById(id),
                 NoticiaImg.countDocuments(query),
-                NoticiaImg.find({estado:true, noticia_id:id}, {imagen_id:1,})     
-                                    .populate('imagen_id',['img'])                                
+                NoticiaImg.find({estado:true, noticia_id:id}, {imagen_id:1,})  
+                                    .sort({fecha_registro:-1})
+                                            // .populate('imagen_id',{usuario}) 
+                                    .populate(
+                                        [
+                                            {
+                                                path: 'imagen_id',
+                                                select:{__v:false},
+                                                populate:{
+                                                    path :'usuario_id',
+                                                    select:{__v:false, password:false}
+                                                   
+                                                }
+                                              
+
+                                            
+
+                                        //     {
+                                        //         path: 'usuario_id',
+                                        //         slect:'password'
+                                        //         // populate: [{
+                                        //         //     path: 'benefits'
+                                        //         // }, {
+                                        //         //     path: 'eligibility', 
+                                        //         //     model: 'Eligibility'
+                                        //         // }]
+                                        // }
+
+
+
+
+
+                                        }
+                                        ]
+                                    )                              
             ]);
     
             if (!noticia || !noticia.estado) {

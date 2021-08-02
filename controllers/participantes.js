@@ -12,7 +12,10 @@ const { Participante, ParticipanteNoticia, RedParticipante}= require('../models/
     const [total, participantes] = await Promise.all([
         Participante.countDocuments(query),
         Participante.find(query)
-                        .populate('usuario_id',['user_name'])
+                        // .populate('usuario_id',['user_name'])
+        .sort({fecha_registro:-1})
+
+                        .populate('usuario_id',{password:0, __v:0})
                         .skip(Number( desde ) )
                         .limit(Number( limite) )
     ]);
@@ -30,7 +33,8 @@ const { Participante, ParticipanteNoticia, RedParticipante}= require('../models/
 const obtenerParticipante = async(req, res= response)=>{
     const {id}= req.params;
     const participante = await Participante.findById(id)
-                                        .populate('usuario_id',['user_name']);
+                                        // .populate('usuario_id',['user_name']);
+                                        .populate('usuario_id',{password:0, __v:0});
 res.json(participante);    
 }
 

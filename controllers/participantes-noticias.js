@@ -178,8 +178,18 @@ const buscarRelacion = async(req, res =response ) => {
                 Noticia.findById(id),
                 ParticipanteNoticia.countDocuments(query),
                 ParticipanteNoticia.find({estado:true, noticia_id:id}, {participante_id:1,})     
-                                    .populate('participante_id',['nombre', 'img','descripcion','cargo'])                                
-            ]);
+                                    // .populate('participante_id',['nombre', 'img','descripcion','cargo'])                                
+           
+                    .sort({fecha_registro:-1})
+                    .populate([{
+                        path: 'participante_id',
+                        select:{__v:false},
+                            populate:{
+                                path : 'usuario_id',
+                                select:{__v:false, password:false}
+                            }
+                    }])
+                                ]);
     
             if (!noticia || !noticia.estado) {
                 return    res.status(401).json({

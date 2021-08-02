@@ -223,7 +223,18 @@ const buscarRelacion = async(req, res =response ) => {
                 Participante.findById(id),
                 RedParticipante.countDocuments(query),
                 RedParticipante.find({estado:true, participante_id:id}, {red_id:1,url:1})     
-                                    .populate('red_id',['red','img'])                                
+                .sort({fecha_registro:-1})
+                                    
+                // .populate('red_id',['red','img'])     
+                .populate([{
+                    path: 'red_id',
+                   select:{__v:false},
+                        populate:{
+                            path:'usuario_id',
+                            select:{__v:false, password:false}
+                            
+                        }
+                }])                           
             ]);
     
             if (!participante || !participante.estado) {

@@ -17,7 +17,8 @@ const {Image, ConvocatoriaImg, TallerImg, NoticiaImg}= require('../models/index'
     const [total, images] = await Promise.all([
         Image.countDocuments(query),
         Image.find(query)
-                        .populate('usuario_id',['user_name'])
+        .sort({fecha_registro:-1})
+        .populate('usuario_id', {password:0, __v:0})
                         .skip(Number( desde ) )
                         .limit(Number( limite) )
     ]);
@@ -25,7 +26,6 @@ const {Image, ConvocatoriaImg, TallerImg, NoticiaImg}= require('../models/index'
         total,
         images
     });
-
 }
 
 /**

@@ -12,7 +12,11 @@ const { RedSocial, RedInstructor, RedParticipante}= require('../models/index');
     const [total, redes] = await Promise.all([
         RedSocial.countDocuments(query),
         RedSocial.find(query)
-                        .populate('usuario_id',['user_name'])
+                        // .populate('usuario_id',['user_name'])
+        .sort({fecha_registro:-1})
+
+                        .populate('usuario_id',{password:0, __v:0})
+                        
                         .skip(Number( desde ) )
                          .limit(Number( limite) )
     ]);
@@ -30,7 +34,9 @@ const { RedSocial, RedInstructor, RedParticipante}= require('../models/index');
 const obtenerRedSocial = async(req, res= response)=>{
     const {id}= req.params;
     const red = await RedSocial.findById(id)
-                                        .populate('usuario_id',['user_name']);
+    .populate('usuario_id',{password:0, __v:0})
+
+                                        // .populate('usuario_id',['user_name']);
  res.json(red);    
 }
 
