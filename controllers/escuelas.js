@@ -10,7 +10,10 @@ const obtenerEscuelas = async(req, res = response ) => {
     const [ total, escuelas ] = await Promise.all([
         Escuela.countDocuments(query),
         Escuela.find(query)
-            .populate('usuario', 'user_name')
+            .sort({fecha_registro:-1})
+            // .populate('usuario', 'user_name')
+            .populate('usuario', {password:0, __v:0})
+
             .skip( Number( desde ) )
             .limit(Number( limite ))
     ]);
@@ -25,7 +28,9 @@ const obtenerEscuela = async(req, res = response ) => {
 
     const { id } = req.params;
     const escuela = await Escuela.findById( id )
-                            .populate('usuario', 'user_name');
+    .populate('usuario', {password:0, __v:0});
+    
+    // .populate('usuario', 'user_name');
 
     res.json( escuela );
 

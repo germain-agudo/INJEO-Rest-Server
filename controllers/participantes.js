@@ -49,8 +49,8 @@ const crearParticipante = async(req, res= response)=>{
     const data = {
 
         nombre:nombre.toUpperCase(),
-        descripcion,
-        cargo,
+        descripcion:descripcion.trim(),
+        cargo:cargo.trim(),
         usuario_id: req.usuario._id,
         fecha_registro
     }
@@ -81,8 +81,8 @@ if (!permiso ) {
 
 const data = {
     nombre:nombre.toUpperCase(),
-    descripcion,
-    cargo,
+    descripcion:descripcion.trim(),
+    cargo:cargo.trim(),
 
 }
 

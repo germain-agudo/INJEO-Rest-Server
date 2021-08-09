@@ -10,7 +10,9 @@ const obtenerConvocatorias = async(req, res = response ) => {
     const [ total, convocatorias ] = await Promise.all([
         Convocatoria.countDocuments(query),
         Convocatoria.find(query)
-            .populate('usuario', 'user_name')
+        .sort({fecha_registro:-1})
+
+            .populate('usuario', {password:0, __v:0})
             .skip( Number( desde ) )
             .limit(Number( limite ))
     ]);
@@ -25,13 +27,14 @@ const obtenerConvocatoria = async(req, res = response ) => {
 
     const { id } = req.params;
     const convocatoria = await Convocatoria.findById( id )
-                            .populate('usuario', 'user_name');
+                            .populate('usuario',  {password:0, __v:0}  );
 
     res.json( convocatoria );
 
 }
 
 const crearConvocatoria = async(req, res = response ) => {
+    const fecha_registro = Date.now();
 
    const { titulo,subtitulo, descripcion, enlace}=req.body;
     // titulo = titulo.toUpperCase();
@@ -50,6 +53,7 @@ const crearConvocatoria = async(req, res = response ) => {
         subtitulo,
         descripcion,
         enlace,
+        fecha_registro,
         usuario: req.usuario._id
     }
    

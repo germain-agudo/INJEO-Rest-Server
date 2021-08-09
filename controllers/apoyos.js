@@ -13,7 +13,10 @@ const {Apoyo}= require('../models/index');
   const [total, apoyos ]= await Promise.all([
       Apoyo.countDocuments(query),
       Apoyo.find(query)
-                        .populate('usuario_id',['user_name'])
+      .sort({fecha_registro:-1})
+
+                        // .populate('usuario_id',['user_name'])
+                        .populate('usuario_id',{password:0, __v:0})
                         .skip( Number( desde ))
                         .limit( Number( limite ) )
   ]);
@@ -31,7 +34,8 @@ const {Apoyo}= require('../models/index');
 const obtenerApoyo = async(req=request, res= response)=>{
     const {id} = req.params;
     const apoyo = await Apoyo.findById(id)
-                                    .populate('usuario_id',['user_name']);
+                                    // .populate('usuario_id',['user_name']);
+                .populate('usuario_id',{password:0, __v:0});
 
     res.json(apoyo)
 
