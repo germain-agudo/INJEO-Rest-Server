@@ -13,7 +13,9 @@ const {BolsaTrabajo}= require('../models/index');
     const [total, bolsas] = await Promise.all([
         BolsaTrabajo.countDocuments(query),
         BolsaTrabajo.find(query)
-                        .populate('usuario_id',['user_name'])
+                        .sort({fecha_registro:-1})
+                        // .populate('usuario_id',['user_name'])
+                        .populate('usuario_id',{password:0, __v:0})
                         .skip(Number( desde ) )
                         .limit(Number( limite) )
     ]);
@@ -32,7 +34,9 @@ const {BolsaTrabajo}= require('../models/index');
 const obtenerBolsa = async(req, res= response)=>{
     const {id}= req.params;
     const bolsaTrabajo = await BolsaTrabajo.findById(id)
-                                        .populate('usuario_id',['user_name']);
+                                        // .populate('usuario_id',['user_name']);
+                                        .populate('usuario_id',{password:0, __v:0})
+
 res.json(bolsaTrabajo);   
 }
 
@@ -46,10 +50,10 @@ const crearBolsa = async(req, res= response)=>{
 
     const data = {
 
-        titulo:titulo.toUpperCase(),
-        descripcion,
-        requisitos,
-        enlace,
+        titulo:titulo.toUpperCase().trim(),
+        descripcion:descripcion.trim(),
+        requisitos:requisitos.trim(),
+        enlace:enlace.trim(),
         usuario_id: req.usuario._id,
         fecha_registro
     }
@@ -80,9 +84,9 @@ if (!permiso ) {
 
 const data = {
     titulo:titulo.toUpperCase(),
-    descripcion,
-    requisitos,
-    enlace, 
+    descripcion:descripcion.trim(),
+    requisitos:requisitos.trim(),
+    enlace:enlace.trim(), 
 }
 
 const bolsaTrabajo = await BolsaTrabajo.findByIdAndUpdate(id,data, {new:true});
