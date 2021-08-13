@@ -84,9 +84,9 @@ if (escuelaDB) {
 
 const actualizarEscuela = async( req, res = response ) => {
     // const fecha_registro = Date.now();
-
+ 
     const { id } = req.params;
-    const { estado, usuario, fecha_registro, fecha_eliminacion,  enlace, ...data } = req.body;
+    const { estado, usuario, fecha_registro, fecha_eliminacion, ...data } = req.body;
 
     data.nombre  = data.nombre.toUpperCase(); 
    
@@ -123,7 +123,7 @@ const actualizarEscuela = async( req, res = response ) => {
     res.json( escuela);
 
 }
-
+ 
 const borrarEscuela = async(req, res =response ) => {
     const fecha_eliminacion = Date.now();
 
