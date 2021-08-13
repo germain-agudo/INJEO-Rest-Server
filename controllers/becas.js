@@ -46,10 +46,10 @@ const crearBeca = async(req, res= response)=>{
 
     const data = {
 
-        titulo:titulo.toUpperCase(),
-        descripcion,
-        requisitos,
-        enlace,
+        titulo:titulo.toUpperCase().trim(),
+        descripcion:descripcion.trim(),
+        requisitos:requisitos.trim(),
+        enlace:enlace.trim(),
         usuario_id: req.usuario._id,
         fecha_registro
     }
@@ -79,10 +79,10 @@ if (!permiso ) {
 }
 
 const data = {
-    titulo:titulo.toUpperCase(),
-    descripcion,
-    requisitos,
-    enlace, 
+    titulo:titulo.toUpperCase().trim(),
+    descripcion:descripcion.trim(),
+    requisitos:requisitos.trim(),
+    enlace:enlace.trim(), 
 }
 
 const beca = await Beca.findByIdAndUpdate(id,data, {new:true});

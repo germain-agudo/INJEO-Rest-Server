@@ -38,6 +38,7 @@ const RedInstructor = require('./redInstructor');
 const RedParticipante = require('./redParticipante');
 
 const UsuarioForo = require('./usuarioForo');
+const Webinar = require('./webinar');
 
 module.exports = {
     Role,
@@ -67,6 +68,7 @@ module.exports = {
     RedSocial,
     RedInstructor,
     RedParticipante,
+    Webinar,
 
     UsuarioForo,
 }

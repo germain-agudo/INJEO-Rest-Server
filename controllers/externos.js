@@ -40,7 +40,11 @@ const crearExterno = async(req, res = response ) => {
      
 
 } = req.body;
-    
+if(usuario_id==null){
+    return res.status(400).json({
+        msg:'Usuario Invalido'
+    })
+}
 
  /*    const externoDB= await Externo.findOne({rfc, estado:true});
 
@@ -54,10 +58,13 @@ const user_name = `${nombre}`.toUpperCase();
 const usuario = await Usuario.findByIdAndUpdate(usuario_id,{user_name, datos_completos:true},{new:true})
 
 
+
+
 const externo = new Externo({ 
     nombre,
     rfc, direccion,  fecha_registro, usuario_id
    });
+
 
 // // Encriptar la contraseña
 /* const salt = bcryptjs.genSaltSync();

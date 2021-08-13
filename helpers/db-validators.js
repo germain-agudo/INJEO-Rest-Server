@@ -26,7 +26,8 @@ const{
         RedInstructor,
         RedParticipante,
     
-    UsuarioForo,        
+    UsuarioForo,
+    Webinar,        
     
     }= require('../models/index');
 
@@ -699,6 +700,29 @@ const existeUsuarioForoActivoPorId = async( id='' ) => {
 }
 
 
+/**
+ * EXISTE UN ID DE Webinar
+ */
+
+ const existeWebinarPorId = async( id='' ) => {
+    // Verificar si el  id webinar existe
+    const existeId = await Webinar.findById(id);
+    if ( !existeId ) {
+        throw new Error(`El id:'${ id }', no existe`);
+    }
+}
+// Comprobar que se encuentra activo
+const existeWebinarActivoPorId = async( id='' ) => {
+    // Verificar si el correo existe
+    const existeId = await Webinar.findById(id);
+    if ( !existeId.estado ) {
+        throw new Error(`El id:'${ id }', no existe`);
+    }
+}
+
+
+
+
 
 module.exports = {
     esRoleValido,
@@ -782,5 +806,9 @@ module.exports = {
  existeUsuarioForoPorId,
 existeUsuarioForoActivoPorId,
   
+
+existeWebinarPorId,
+existeWebinarActivoPorId,
+
 }
 

@@ -23,6 +23,7 @@ const {
       Participante,
       Instructor,
       RedSocial,
+      Webinar,
 
 } = require('../models/index');
 
@@ -246,7 +247,16 @@ const cargarArchivo =async(req, res= response)=>{
        break;
    
     
-
+       case 'webinars':       
+       modelo = await Webinar.findById(id);
+       if (!modelo || !modelo.estado ) {
+          return res.status(400).json({
+            msg:`No existe un webinar con el id ${ id}`
+          })
+       }
+       break;
+   
+    
    
      default:
        return res.status(500).json({ msg: 'Coloección en desarollo'});

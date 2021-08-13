@@ -51,10 +51,10 @@ const crearApoyo = async(req=request, res= response)=>{
     const {titulo, descripcion, requisitos, enlace }= req.body;
 
     const data = {
-        titulo:titulo.toUpperCase(),
-        descripcion,
-        requisitos,
-        enlace,
+        titulo:titulo.toUpperCase().trim(),
+        descripcion:descripcion.trim(),
+        requisitos:requisitos.trim(),
+        enlace:enlace.trim(),
         usuario_id:req.usuario._id,
         fecha_registro
     }
@@ -85,10 +85,10 @@ if (!permiso ) {
 }
 
 const data = {
-    titulo:titulo.toUpperCase(),
-    descripcion,
-    requisitos,
-    enlace, 
+    titulo:titulo.toUpperCase().trim(),
+    descripcion:descripcion.trim(),
+    requisitos:requisitos.trim(),
+    enlace:enlace.trim(), 
 }
 
 const apoyo = await Apoyo.findByIdAndUpdate(id,data, {new:true});

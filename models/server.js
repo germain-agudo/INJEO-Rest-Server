@@ -65,6 +65,8 @@ class Server {
             redesParticipantes: '/api/redes-participantes',
 
             usuariosForos: '/api/comentarios-foros',
+
+            webinars :'/api/webinars',
                          
         }
 
@@ -156,6 +158,8 @@ class Server {
         this.app.use( this.paths.redesParticipantes, require('../routes/redesSociales-Participantes')); 
         
         this.app.use( this.paths.usuariosForos, require('../routes/usuarios-foros')); 
+
+        this.app.use( this.paths.webinars, require('../routes/webinars')); 
 
 
 
