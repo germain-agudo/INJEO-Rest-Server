@@ -40,8 +40,8 @@ const crearEscuela = async(req, res = response ) => {
  const fecha_registro = Date.now();
 
 
-   const  nombre =req.body.nombre.toUpperCase();   
-
+   const  nombre =req.body.nombre.toUpperCase().trim();   
+const enlace = req.body.enlace.trim();
  const escuelaDB = await Escuela.findOne({ nombre, estado:true });
 
 /*  if ( escuelaDB ) {
@@ -69,7 +69,8 @@ if (escuelaDB) {
 
     // Generar la data a guardar
     const data = {
-       nombre,       
+       nombre,      
+       enlace, 
         usuario: req.usuario._id,
         fecha_registro,
     }   
@@ -85,7 +86,7 @@ const actualizarEscuela = async( req, res = response ) => {
     // const fecha_registro = Date.now();
 
     const { id } = req.params;
-    const { estado, usuario, fecha_registro, fecha_eliminacion, ...data } = req.body;
+    const { estado, usuario, fecha_registro, fecha_eliminacion,  enlace, ...data } = req.body;
 
     data.nombre  = data.nombre.toUpperCase(); 
    

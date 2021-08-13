@@ -5,9 +5,14 @@ const EscuelaSchema = Schema({
         type: String,
         required: [true, 'El nombre de la escuela es obligatorio']
     },
+
     img: {
         type: String,
         
+    },
+    enlace: {
+        type: String,
+        required: [true, 'El enlace es obligatorio']
     },
     estado: {
         type: Boolean,

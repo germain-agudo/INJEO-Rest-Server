@@ -30,6 +30,7 @@ router.post('/', [
     esAdminRole,
 datosCompletos,
     check('nombre','El nombre es obligatorio').not().isEmpty(),   
+    check('enlace','El enlace es obligatorio').not().isEmpty(),   
     validarCampos
 ], crearEscuela );
 
@@ -38,7 +39,9 @@ router.put('/:id',[
     validarJWT,
     esAdminRole,
     datosCompletos,
-    check('nombre','El nombre es obligatorio').not().isEmpty(),   
+    check('nombre','El nombre es obligatorio').not().isEmpty(), 
+    check('enlace','El enlace es obligatorio').not().isEmpty(),   
+
     validarCampos
 ],actualizarEscuela );
 
