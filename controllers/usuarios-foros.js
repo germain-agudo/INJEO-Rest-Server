@@ -143,7 +143,13 @@ const buscarRelacion = async(req, res =response ) => {
                 Foro.findById(id),
                 UsuarioForo.countDocuments(query),
                 UsuarioForo.find({estado:true, foro_id:id}, {usuario_id:1,comentario:1,})     
-                                    .populate('usuario_id',['user_name'])                                
+                                    // .populate('usuario_id',['user_name'])  
+                                    .sort({fecha_registro:-1})
+                                    .populate('usuario_id',{password:0, __v:0})  
+ 
+                                    
+                                    
+
             ]);
     
             if (!foro || !foro.estado) {
@@ -168,7 +174,18 @@ const buscarRelacion = async(req, res =response ) => {
                 Usuario.findById(id),
                 UsuarioForo.countDocuments(query),
                 UsuarioForo.find({estado:true, usuario_id:id}, {foro_id:1,comentario:1,})     
-                                    .populate('foro_id',['titulo'])                                
+                // .populate('foro_id',['titulo'])                                
+                .sort({fecha_registro:-1})
+                .populate([{
+                    path: 'foro_id',
+                    select:{__v:false},
+                        populate:{
+                            path : 'usuario_id',
+                            select:{__v:false, password:false}
+                        }
+                }])
+                                   
+                
             ]);
     
             if (!usuario || !usuario.estado) {

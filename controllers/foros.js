@@ -13,7 +13,11 @@ const {Foro, UsuarioForo}= require('../models/index');
     const [total, foros] = await Promise.all([
         Foro.countDocuments(query),
         Foro.find(query)
-                        .populate('usuario_id',['user_name'])
+        .sort({fecha_registro:-1})
+
+                        // .populate('usuario_id',['user_name'])
+                        .populate('usuario_id',{password:0, __v:0})
+                        // .populate('usuario_id',['user_name'])
                         .skip(Number( desde ) )
                         .limit(Number( limite) )
     ]);
@@ -31,7 +35,9 @@ const obtenerForo = async(req, res= response)=>{
 
     const {id}= req.params;
     const foro = await Foro.findById(id)
-                                        .populate('usuario_id',['user_name']);
+    .populate('usuario_id',{password:0, __v:0});
+
+                                        // .populate('usuario_id',['user_name']);
     res.json(foro);    
     
 }

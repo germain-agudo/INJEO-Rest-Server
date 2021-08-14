@@ -36,7 +36,7 @@ const usuariosGet = async(req = request, res = response) => {
         Usuario.find(query)
             .skip( Number( desde ) )
             .limit(Number( limite ))
-            .sort({fecha_registro:1})
+            .sort({fecha_registro:-1})
     ]);
 
     res.json({
@@ -84,7 +84,7 @@ const usuariosPut = async(req, res = response) => {
     const { id } = req.params;
     
     const { numero_telefonico,  
-        correo, password, rol,    
+        correo, password, rol, user_name    
    } = req.body;
 
    const correoDB= await Usuario.findOne({correo, estado:true})
@@ -114,12 +114,12 @@ const usuariosPut = async(req, res = response) => {
 if (req.usuario.rol==='ADMIN_ROLE') {
     // console.log('es igual');    
     usuarioDB = {    
-        correo, password, rol,numero_telefonico, fecha_registro, };
+        correo, password, rol,numero_telefonico, fecha_registro, user_name };
     // console.log(req.usuario.rol);
 }else{
     // console.log('no es igual');
      usuarioDB = {    
-        correo, password,numero_telefonico, fecha_registro, };  
+        correo, password,numero_telefonico, fecha_registro, user_name};  
 }
 
 

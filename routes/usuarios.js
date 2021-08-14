@@ -60,6 +60,7 @@ router.put('/:id',[
     check('id').custom( existeUsuarioPorId ),
     
     check('numero_telefonico', 'El número telefonico es obligatorio').not().isEmpty(),
+    check('user_name', 'El user_name es obligatorio').not().isEmpty(),
     check('password', 'El password debe de ser más de 6 letras').isLength({ min: 6 }),
     check('correo', 'El correo no es válido').isEmail(),
     // check('correo').custom( emailExiste ),
