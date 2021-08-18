@@ -39,7 +39,7 @@ const UsuariosForoSchema = Schema({
 });
 
 UsuariosForoSchema.methods.toJSON =function () {
-    const {_v, estado, ...data}= this.toObject();
+    const {__v, estado, ...data}= this.toObject();
     return data;
 }
 

@@ -12,8 +12,20 @@ const { Foro, Usuario,UsuarioForo}= require('../models/index');
     const [total, usuariosForos] = await Promise.all([
         UsuarioForo.countDocuments(query),
         UsuarioForo.find(query)
-                        .populate('usuario_id',['user_name'])
-                        .populate('foro_id',['titulo'])
+        .sort({fecha_registro:-1})
+        .populate('usuario_id', {password:0, __v:0})
+        // .populate('foro_id', { __v:0})
+        .populate(   [
+                {
+                    path: 'foro_id',
+                    select:{__v:false},
+                    populate:{
+                        path :'usuario_id',
+                        select:{__v:false, password:false}                       
+                    }           
+            }
+            ]
+        )   
                         .skip(Number( desde ) )
                         .limit(Number( limite) )
     ]);
@@ -31,8 +43,25 @@ const { Foro, Usuario,UsuarioForo}= require('../models/index');
 const obtenerUsuarioForo = async(req, res= response)=>{
     const {id}= req.params;
     const usuarioForo = await UsuarioForo.findById(id)
-                                        .populate('usuario_id',['user_name'])
-                                        .populate('foro_id',['titulo'])
+    .sort({fecha_registro:-1})
+    .populate('usuario_id', {password:0, __v:0})
+    // .populate('foro_id', { __v:0});
+    .populate(   [
+        {
+            path: 'foro_id',
+            select:{__v:false},
+            populate:{
+                path :'usuario_id',
+                select:{__v:false, password:false}                       
+            }           
+    }
+    ]
+) 
+    
+
+
+                                        // .populate('usuario_id',['user_name'])
+                                        // .populate('foro_id',['titulo'])
                                         ;
 res.json(usuarioForo);    
 }
