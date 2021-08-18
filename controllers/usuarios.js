@@ -173,7 +173,7 @@ const [foros,usuariosForos,convocatorias, talleres, becas, apoyos, bolsas, inscr
  * 
  */
 Foro.find({usuario_id:id, estado:true}).then( (foro)=>{
-    if (foro>0) {
+    if (foro.length>0) {
         foro.forEach( async (i)=>{
             await Foro.findByIdAndUpdate(i._id,{estado:false, fecha_eliminacion},{new:true})
         })
@@ -194,7 +194,7 @@ UsuarioForo.find({ usuario_id:id, estado:true}).then( (uF)=>{
  * 
  */
 Convocatoria.find({ usuario_id:id, estado:true}).then( (conv)=>{
-      if (conv>0) {
+      if (conv.length>0) {
           conv.forEach( async(i)=>{
               await Convocatoria.findByIdAndUpdate(i._id,{estado:false, fecha_eliminacion},{new:true})
           });      
@@ -204,7 +204,7 @@ Convocatoria.find({ usuario_id:id, estado:true}).then( (conv)=>{
  * 
  */
  Taller.find({ usuario:id, estado:true}).then( (t)=>{
-      if (t>0) {
+      if (t.length>0) {
           t.forEach( async(i)=>{
               await Taller.findByIdAndUpdate(i._id,{estado:false, fecha_eliminacion},{new:true})
           });      
@@ -214,7 +214,7 @@ Convocatoria.find({ usuario_id:id, estado:true}).then( (conv)=>{
  * 
  */
  Beca.find({ usuario_id:id, estado:true}).then( (b)=>{
-      if (b>0) {
+      if (b.length>0) {
           b.forEach( async(i)=>{
               await Beca.findByIdAndUpdate(i._id,{estado:false, fecha_eliminacion},{new:true})
           });      
@@ -224,7 +224,7 @@ Convocatoria.find({ usuario_id:id, estado:true}).then( (conv)=>{
  * 
  */
  Apoyo.find({    usuario_id:id, estado:true}).then( (a)=>{
-      if (a>0) {
+      if (a.length>0) {
           a.forEach( async(i)=>{
               await Apoyo.findByIdAndUpdate(i._id,{estado:false, fecha_eliminacion},{new:true})
           });      
@@ -235,7 +235,7 @@ Convocatoria.find({ usuario_id:id, estado:true}).then( (conv)=>{
  * 
  */
  BolsaTrabajo.find({    usuario_id:id, estado:true}).then( (bT)=>{
-      if (bT>0) {
+      if (bT.length>0) {
           bT.forEach( async(i)=>{
               await BolsaTrabajo.findByIdAndUpdate(i._id,{estado:false, fecha_eliminacion},{new:true})
           });      
@@ -245,7 +245,7 @@ Convocatoria.find({ usuario_id:id, estado:true}).then( (conv)=>{
  * 
  */
 Inscripccion.find({  usuario:id, estado:true}).then( (ins)=>{
-      if (ins>0) {
+      if (ins.length>0) {
           ins.forEach( async(i)=>{
               await Inscripccion.findByIdAndUpdate(i._id,{estado:false, fecha_eliminacion},{new:true})
           });      
@@ -255,7 +255,7 @@ Inscripccion.find({  usuario:id, estado:true}).then( (ins)=>{
  * 
  */
  Participante.find({  usuario_id:id, estado:true}).then( (part)=>{
-    if (part>0) {
+    if (part.length>0) {
         part.forEach( async(i)=>{
             await Participante.findByIdAndUpdate(i._id,{estado:false, fecha_eliminacion},{new:true})
         });      
@@ -266,7 +266,7 @@ Inscripccion.find({  usuario:id, estado:true}).then( (ins)=>{
  */
 
  Instructor.find({  usuario_id:id, estado:true}).then( (instruc)=>{
-    if (instruc>0) {
+    if (instruc.length>0) {
         instruc.forEach( async(i)=>{
             await Instructor.findByIdAndUpdate(i._id,{estado:false, fecha_eliminacion},{new:true})
         });      
@@ -276,7 +276,7 @@ Inscripccion.find({  usuario:id, estado:true}).then( (ins)=>{
  * 
  */
  Carrera.find({  usuario:id, estado:true}).then( (carr)=>{
-    if (carr>0) {
+    if (carr.length>0) {
         carr.forEach( async(i)=>{
             await Carrera.findByIdAndUpdate(i._id,{estado:false, fecha_eliminacion},{new:true})
         });      
@@ -286,7 +286,7 @@ Inscripccion.find({  usuario:id, estado:true}).then( (ins)=>{
  * 
  */
  Escuela.find({  usuario:id, estado:true}).then( (esc)=>{
-    if (esc>0) {
+    if (esc.length>0) {
         esc.forEach( async(i)=>{
             await Escuela.findByIdAndUpdate(i._id,{estado:false, fecha_eliminacion},{new:true})
         });      
@@ -296,7 +296,7 @@ Inscripccion.find({  usuario:id, estado:true}).then( (ins)=>{
  * 
  */
  Oferta.find({  usuario:id, estado:true}).then( (o)=>{
-    if (o>0) {
+    if (o.length>0) {
         o.forEach( async(i)=>{
             await Oferta.findByIdAndUpdate(i._id,{estado:false, fecha_eliminacion},{new:true})
         });      

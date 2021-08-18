@@ -133,9 +133,11 @@ const borrarCarrera = async(req, res =response ) => {
     
     const [ carreraBorrada, ofertas] = await Promise.all([
         Carrera.findByIdAndUpdate( id, { estado: false , fecha_eliminacion}, {new: true }),
-        Oferta.find({carrera:id, esado:true}).then( (o)=>{
-            if (o>0) {
+        Oferta.find({carrera:id, estado:true}).then( (o)=>{
+       
+            if (o.length>0) {
                 o.forEach(async (i)=>{
+                    console.log(i);
                     await Oferta.findByIdAndUpdate(i._id,{estado:false, fecha_eliminacion},{new:true})
                 })
             }

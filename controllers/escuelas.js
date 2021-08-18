@@ -133,8 +133,8 @@ const borrarEscuela = async(req, res =response ) => {
 /**
  * 
  */
-    Oferta.find({escuela:id, esado:true}).then( (esc)=>{
-        if (esc>0) {
+    Oferta.find({escuela:id, estado:true}).then( (esc)=>{
+        if (esc.length>0) {
             esc.forEach(async (i)=>{
                 await Oferta.findByIdAndUpdate(i._id,{estado:false, fecha_eliminacion},{new:true})
             })

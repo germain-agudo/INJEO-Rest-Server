@@ -106,7 +106,7 @@ const [noticiaBorrada, noticiaImg, participanteNoticia]= await Promise.all([
  * 
  */
     ParticipanteNoticia.find({noticia_id:id, estado:true}).then( (pN)=>{
-        if (pN>0) {
+        if (pN.length>0) {
             pN.forEach( async(i)=>{
                 await ParticipanteNoticia.findByIdAndUpdate( i._id,{ estado: false, fecha_eliminacion  },{new:true})
             } )

@@ -244,7 +244,19 @@ const query={estado:true, escuela:id};
             Oferta.countDocuments(query),
             // Oferta.find({estado:true, escuela:id}, {carrera:1, _id:0})
             Oferta.find({estado:true, escuela:id}, {carrera:1,})     
-                                .populate('carrera',['nombre'])                                
+                                // .populate('carrera',['nombre'])
+                                // .sort({fecha_registro:-1})
+                                
+                                .sort({fecha_registro:-1})
+                                .populate([{
+                                    // sort: {nombre:-1},
+                                    path: 'carrera',
+                                    select:{__v:false},
+                                        populate:{
+                                            path : 'usuario',
+                                            select:{__v:false, password:false}
+                                        }
+                                }])                               
         ]);
 
         if (!escuela || !escuela.estado) {
@@ -252,6 +264,8 @@ const query={estado:true, escuela:id};
             msg: `La escuela ${id}, no existe`
             });        
         }
+
+
 
     return res.json({
         'Escuela': escuela.nombre,
@@ -270,7 +284,17 @@ const query={estado:true, carrera:id};
             Oferta.countDocuments(query),
             // Oferta.find({estado:true, escuela:id}, {carrera:1, _id:0})
             Oferta.find({estado:true, carrera:id}, {escuelas:1,})     
-                                .populate('escuela',['nombre'])                                
+                                // .populate('escuela',['nombre']) 
+                                .sort({fecha_registro:-1})
+                                .populate([{
+                                    // sort: {nombre:-1},
+                                    path: 'escuela',
+                                    select:{__v:false},
+                                        populate:{
+                                            path : 'usuario',
+                                            select:{__v:false, password:false}
+                                        }
+                                }])                                
         ]);
 
         if (!carrera || !carrera.estado) {
