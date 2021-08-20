@@ -26,6 +26,7 @@ const { usuariosGet,
         usuariosPatch,
         obtenerUsuario,
         buscarRelacion,
+        cambiarPassword
     } = require('../controllers/usuarios');
 
 const router = Router();
@@ -61,7 +62,7 @@ router.put('/:id',[
     
     check('numero_telefonico', 'El número telefonico es obligatorio').not().isEmpty(),
     check('user_name', 'El user_name es obligatorio').not().isEmpty(),
-    check('password', 'El password debe de ser más de 6 letras').isLength({ min: 6 }),
+    // check('password', 'El password debe de ser más de 6 letras').isLength({ min: 6 }),
     check('correo', 'El correo no es válido').isEmail(),
     // check('correo').custom( emailExiste ),
 
@@ -124,6 +125,25 @@ router.get('/:coleccion/:id',[
   ] ) ),
      validarCampos,
   ], buscarRelacion); 
+  
+
+
+  
+  router.put('/:coleccion/:id',[
+    // validarJWT,
+    // check('id','El id debe de ser de mongo ').isMongoId(),
+  
+    // check('id').custom( existeOfertaPorId ),
+    check('id', 'No es un id de Mongo válido').isMongoId(),
+    check('password', 'El password debe de ser más de 6 letras').isLength({ min: 6 }),
+
+    check('coleccion').custom(c=> coleccionesPermitidas( c, [    
+        'actualizarPassword',
+        // 'externo'
+        
+  ] ) ),
+     validarCampos,
+  ], cambiarPassword); 
   
   
 

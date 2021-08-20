@@ -84,7 +84,7 @@ const usuariosPut = async(req, res = response) => {
     const { id } = req.params;
     
     const { numero_telefonico,  
-        correo, password, rol, user_name    
+        correo, rol, user_name    
    } = req.body;
 
    const correoDB= await Usuario.findOne({correo, estado:true})
@@ -114,19 +114,19 @@ const usuariosPut = async(req, res = response) => {
 if (req.usuario.rol==='ADMIN_ROLE') {
     // console.log('es igual');    
     usuarioDB = {    
-        correo, password, rol,numero_telefonico, fecha_registro, user_name };
+        correo, rol,numero_telefonico, fecha_registro, user_name };
     // console.log(req.usuario.rol);
 }else{
     // console.log('no es igual');
      usuarioDB = {    
-        correo, password,numero_telefonico, fecha_registro, user_name};  
+        correo,numero_telefonico, fecha_registro, user_name};  
 }
 
 
 
-   // // Encriptar la contraseña
-   const salt = bcryptjs.genSaltSync();
-   usuarioDB.password = bcryptjs.hashSync( password, salt );
+//    // // Encriptar la contraseña
+//    const salt = bcryptjs.genSaltSync();
+//    usuarioDB.password = bcryptjs.hashSync( password, salt );
 
 
 
@@ -372,12 +372,47 @@ const buscarRelacion = async(req, res =response ) => {
 
         
     
+        const cambiarPassword = async(req, res =response ) => {
+
+            const {id, coleccion}= req.params;
+            const  password = req.body.password.trim(); 
+        
+            switch (coleccion) {
+                case 'actualizarPassword':
+                     
+                    // return res.json({ msg: password });
+                    cambiarContraseña(id, res, password);
+                  
+                    break;
+           
+          
+            
+                default:
+                   return res.status(500).json({ msg: 'Coloección en desarollo'});
+            
+                    
+            } 
+            
+            // console.log(req.params);
+            }
     
-    
 
 
 
+            const cambiarContraseña=async(id= '', res= response, password ='')=>{
+                const query={estado:true, usuario_id:id};
 
+                   // // Encriptar la contraseña
+   const salt = bcryptjs.genSaltSync();
+   const passwordEncriptada  = bcryptjs.hashSync( password, salt );
+
+
+   const usuario = await Usuario.findByIdAndUpdate(id,{password: passwordEncriptada},{new:true})
+
+             return res.json({
+                 usuario
+             })
+                }
 
 
 module.exports = {
@@ -388,4 +423,5 @@ module.exports = {
     usuariosDelete,
     obtenerUsuario,
     buscarRelacion,
+    cambiarPassword
 }
