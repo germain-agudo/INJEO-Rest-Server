@@ -74,7 +74,7 @@ const crearUsuarioForo = async(req, res= response)=>{
     const fecha_registro = Date.now();  
     const {comentario,foro_id, }= req.body;   
 
-    console.log(comentario);
+    // console.log(comentario);
     const data = {
 
         comentario,
@@ -94,7 +94,8 @@ res.status(201).json(usuarioForo);
 const actualizarUsuarioForo = async(req= request, res= response)=>{
   
 const {id }= req.params;   
-const {comentario, foro_id, }= req.body;
+const comentario = req.body.comentario.trim();
+
 
 const usuarioForoDB = await  UsuarioForo.findById(id);
 
@@ -107,14 +108,14 @@ if (!permiso ) {
     }); 
 }
 
-const data = {
-    comentario,
-    foro_id,
+// const data = {
+//     comentario,
+//     // foro_id,
      
 
-}
+// }
 
-   const usuarioForo = await UsuarioForo.findByIdAndUpdate(id,data, {new:true});
+   const usuarioForo = await UsuarioForo.findByIdAndUpdate(id,{comentario}, {new:true});
 res.json(usuarioForo);    
 }
 

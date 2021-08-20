@@ -111,10 +111,10 @@ router.get('/:id',[
   check('id').custom(existeUsuarioForoPorId),
   check('id').custom(existeUsuarioForoActivoPorId),
 
-    check('foro_id','No es un ID válido').isMongoId(),  
-    check('foro_id','El campo: foro_id es obligatorio').not().isEmpty(),
-    check('foro_id').custom(existeForoPorId),
-    check('foro_id').custom(existeForoActivoPorId),
+    // check('foro_id','No es un ID válido').isMongoId(),  
+    // check('foro_id','El campo: foro_id es obligatorio').not().isEmpty(),
+    // check('foro_id').custom(existeForoPorId),
+    // check('foro_id').custom(existeForoActivoPorId),
     // check('id').custom(id=>existeModeloPorId(id,'Beca')),
     check('comentario','El comentario es obligatorio').not().isEmpty(),
 

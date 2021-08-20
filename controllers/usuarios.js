@@ -321,14 +321,11 @@ const buscarRelacion = async(req, res =response ) => {
     
 
     switch (coleccion) {
-        case 'persona':
-               buscarPersonaPorRed(id, res);
+        case 'buscar':
+               buscarUsuarioEnColeccion(id, res);
              
             break;
-        case 'externo':
-               buscarExternoPorRed(id, res);
-             
-            break;
+   
   
     
         default:
@@ -340,7 +337,7 @@ const buscarRelacion = async(req, res =response ) => {
     // console.log(req.params);
     }
 
-    const buscarPersonaPorRed=async(id= '', res= response)=>{
+    const buscarUsuarioEnColeccion=async(id= '', res= response)=>{
         const query={estado:true, usuario_id:id};
             const [persona]= await Promise.all( [
 
@@ -349,38 +346,31 @@ const buscarRelacion = async(req, res =response ) => {
                     //                     .populate('participante_id',['nombre'])                                
                 ]);
         
-                if (!persona || !persona.estado) {
-               return res.status(401).json({
-                    msg: `La persona  : ${id}, no existe`
+                if (persona) {
+               return res.json({
+                    msg: `persona`
                     });        
                 }
-        
-            return res.json({
-                persona,
-               
-            });    
-        }
 
-        const buscarExternoPorRed=async(id= '', res= response)=>{
-            const query={estado:true, usuario_id:id};
                 const [externo]= await Promise.all( [
     
                         Externo.findOne(query),
                         // RedParticipante.find({estado:true, red_id:id}, {participante_id:1,url:1,})     
                         //                     .populate('participante_id',['nombre'])                                
                     ]);
+                if (externo) {
+                    return res.json({
+                        msg: `externo`
+                        }); 
+                } else {
+                    return res.status(401).json({
+                        msg: `El usuario  : ${id}, no existe dentro de las colecciones, o tiene su registro incompleto`
+                        });  
+                }   
             
-                    if (!externo || !externo.estado) {
-                        return res.status(401).json({
-                        msg: `El externo  : ${id}, no existe`
-                        });        
-                    }
-            
-                return res.json({
-                    externo,
-                   
-                });    
-            }
+        }
+
+        
     
     
     
