@@ -135,7 +135,7 @@ RedParticipante.find({ participante_id:id, estado:true}).then( (rP)=>{
         })
     }
 })
-
+ 
 ])
 
 
