@@ -117,8 +117,9 @@ const [participante, participanteNoticia, redParticipante]= await Promise.all([
 /**
  * 
  */
-ParticipanteNoticia.find({ noticia_id:id, estado:true}).then( (pN)=>{
+ParticipanteNoticia.find({ participante_id:id, estado:true}).then( (pN)=>{
     if (pN.length>0) {
+        // console.log(pN);
         pN.forEach( async (i)=>{
             await ParticipanteNoticia.findByIdAndUpdate( i._id,{estado:false, fecha_eliminacion},{new:true})
         })
