@@ -40,6 +40,24 @@ const RedParticipante = require('./redParticipante');
 const UsuarioForo = require('./usuarioForo');
 const Webinar = require('./webinar');
 
+
+const PracticaP = require('./practicas-profesionales');
+const ServicioS = require('./servicio-social');
+
+const CatCategoriaB = require('./cat-categoriaBolsa');
+const CatCategoriaP = require('./cat-categoriaProducto');
+const CatEstado = require('./cat-estado');
+const CatGiro = require('./cat-giro');
+const CatMunicipio = require('./cat-municipio');
+const CatRazonS = require('./cat-razon-social');
+const CatTipoN = require('./cat-tipo-negocio');
+const Postulacion = require('./postulacion');
+const Producto = require('./producto');
+const TitularExterno = require('./titular-externo');
+const ProductoImg = require('./cat-producto-img');
+const RedExterno = require('./cat-red-externos');
+
+
 module.exports = {
     Role,
     Server,
@@ -71,5 +89,25 @@ module.exports = {
     Webinar,
 
     UsuarioForo,
+
+
+    PracticaP,
+    ServicioS,
+
+    
+    CatCategoriaB,
+    CatCategoriaP,
+    CatEstado,
+    CatGiro,
+    CatMunicipio,
+    CatRazonS,
+    CatTipoN,
+    Postulacion,
+    Producto,
+    TitularExterno,
+    ProductoImg,
+    RedExterno
+
+
 }
 

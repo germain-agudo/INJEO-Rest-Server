@@ -10,7 +10,9 @@ const obtenerExternos = async(req, res = response ) => {
     const [ total, externos ] = await Promise.all([
         Externo.countDocuments(query),
         Externo.find(query)
-            .populate('usuario_id', 'user_name')
+            // .populate('usuario_id', 'user_name')
+            .populate('usuario_id',{password:0, __v:0})
+
             .skip( Number( desde ) )
             .limit(Number( limite ))
     ]);
@@ -25,7 +27,9 @@ const obtenerExterno = async(req, res = response ) => {
 
     const { id } = req.params;
     const externo = await Externo.findById( id )
-                            .populate('usuario_id', 'user_name');
+                            // .populate('usuario_id', 'user_name');
+                        .populate('usuario_id',{password:0, __v:0})
+
 
     res.json( externo );
 
@@ -35,8 +39,20 @@ const crearExterno = async(req, res = response ) => {
  // console.log(req.body );
  const fecha_registro = Date.now();
  
- const {  nombre, 
-    rfc, direccion, usuario_id,
+ const {  
+
+    nombre, 
+     rfc, 
+     direccion, 
+
+     usuario_id,
+     tipoNegocio_id,
+     giro_id,
+     titularempresa_id,
+     pagina_web,
+     latitud,
+     longitud,
+
      
 
 } = req.body;
@@ -55,14 +71,29 @@ if(usuario_id==null){
     } */
 
 const user_name = `${nombre}`.toUpperCase();
-const usuario = await Usuario.findByIdAndUpdate(usuario_id,{user_name, datos_completos:true},{new:true})
+const usuario = await Usuario.findByIdAndUpdate(
+    usuario_id,{
+        user_name
+        // , datos_completos:true
+    
+    },{new:true})
 
 
 
 
 const externo = new Externo({ 
-    nombre,
-    rfc, direccion,  fecha_registro, usuario_id
+    nombre : nombre.toUpperCase().trim(),
+    rfc : rfc.toUpperCase().trim(), 
+    direccion,  
+    pagina_web,
+    longitud, 
+    latitud,
+    titularempresa_id,
+    tipoNegocio_id,
+    giro_id,
+    fecha_registro,
+    usuario_id,
+
    });
 
 
@@ -87,6 +118,12 @@ const actualizarExterno = async( req, res = response ) => {
          nombre
         ,rfc
         ,direccion
+        ,pagina_web,
+        longitud, 
+        latitud,
+        titularempresa_id,
+        tipoNegocio_id,
+        giro_id,
     } = req.body;
 
     const [externoRegistrado , rfcDB] = await Promise.all([
@@ -115,9 +152,15 @@ const actualizarExterno = async( req, res = response ) => {
     }    
 
     const externoDB = {    
-        nombre
-        ,rfc
-        ,direccion
+        nombre : nombre.toUpperCase().trim(),
+    rfc : rfc.toUpperCase().trim(), 
+    direccion,  
+    pagina_web,
+    longitud, 
+    latitud,
+    titularempresa_id,
+    tipoNegocio_id,
+    giro_id,
     };   
 
     const externo = await Externo.findByIdAndUpdate( id, externoDB,{new:true});
@@ -152,6 +195,8 @@ const borrarExterno = async(req, res =response ) => {
 
     res.json( externoBorrado );
 }
+
+
 
 
 

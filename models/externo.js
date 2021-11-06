@@ -2,6 +2,28 @@ const { Schema, model }= require('mongoose');
 
 const ExternoSchema= Schema({
     
+    tipoNegocio_id: {
+        type: Schema.Types.ObjectId,
+        ref: 'CatTipoNegocio',
+        required:true,        
+    },
+    
+    giro_id: {
+        type: Schema.Types.ObjectId,
+        ref: 'CatGiro',
+        required:true,        
+    },
+
+    
+    titularempresa_id: {
+        type: Schema.Types.ObjectId,
+        ref: 'TitularesExterno',
+        required:true,        
+    },
+    
+
+    
+    
     nombre: {
         type: String,
         required: [true, 'El nombre es obligatorio']
@@ -12,40 +34,40 @@ const ExternoSchema= Schema({
         required: [true, 'El RFC es obligatorio']
     },
 
+
+
+
+
+    pagina_web: {
+        type: String,
+        required: [true, 'La pagina_web es obligatoria']
+    },
     direccion: {
         type: String,
         required: [true, 'La direccion es obligatoria']
     },
-/* 
-     numero_telefonico: {
+    latitud: {
         type: String,
-        required: [true, 'El numero telefonico es obligatorio']
-    }, 
-
-
-    correo: {
+        required: [true, 'La latitud es obligatoria']
+    },
+    longitud: {
         type: String,
-        required: [true, 'El correo es obligatorio'],
-        
+        required: [true, 'La longitud es obligatoria']
     },
 
-    password: {
-        type: String,
-        required: [true, 'La contraseña es obligatoria'],
+    fecha_aceptacion: {
+        type:  Date,          
     },
-    img: {
-        type: String,
-    },
-    rol: {
-        type: String,
-        required: true,
-        // emun: ['ADMIN_ROLE', 'USER_ROLE']
-    },
-    estado: {
+    aceptacion: {
         type: Boolean,
-        default: true
+        default:false
     },
-*/
+
+    // tipo_persona: {
+    //     type: String,
+    //     required: [true, 'El tipo_persona es obligatoria']
+    // },
+
 estado: {
     type: Boolean,
     default: true

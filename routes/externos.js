@@ -16,6 +16,11 @@ const {
     crearExterno, borrarExterno, actualizarExterno,  obtenerExterno,obtenerExternos
     } = require('../controllers/externos');
 const {
+    existeTitularExternoActivoPorId,
+    existeCatTipoNegocioActivoPorId,
+    existeCatGiroActivoPorId,
+
+
     existeUsuarioPorId, 
     existeExternoPorId, 
     existeRelacion , 
@@ -57,6 +62,19 @@ router.put('/:id',[
     check('direccion', 'La dirección es obligatoria').not().isEmpty(),
     // check('numero_telefonico', 'El número telefonico es obligatorio').not().isEmpty(),
     check('rfc', 'El RFC  es obligatorio').not().isEmpty(),
+    
+    check('pagina_web', 'La pagina_web  es obligatoria').not().isEmpty(),
+    check('longitud', 'La longitud  es obligatoria').not().isEmpty(),
+    check('latitud', 'La latitud  es obligatoria').not().isEmpty(),
+    
+    check('titularempresa_id', 'El titularempresa_id  es obligatorio').not().isEmpty(),
+    check('titularempresa_id').custom( existeTitularExternoActivoPorId ),
+
+    check('tipoNegocio_id', 'El tipoNegocio_id  es obligatorio').not().isEmpty(),
+    check('tipoNegocio_id').custom( existeCatTipoNegocioActivoPorId ),
+
+    check('giro_id', 'El giro_id  es obligatorio').not().isEmpty(),
+    check('giro_id').custom( existeCatGiroActivoPorId ),
 
     
     // check('id').custom( existeUsuarioPorId ),
@@ -76,6 +94,20 @@ router.post('/',[
     // check('numero_telefonico', 'El número telefonico es obligatorio').not().isEmpty(),
     check('rfc', 'El RFC  es obligatorio').not().isEmpty(),
     check('rfc').custom( rfcExiste),
+    check('pagina_web', 'La pagina_web  es obligatoria').not().isEmpty(),
+    check('longitud', 'La longitud  es obligatoria').not().isEmpty(),
+    check('latitud', 'La latitud  es obligatoria').not().isEmpty(),
+    
+    check('titularempresa_id', 'El titularempresa_id  es obligatorio').not().isEmpty(),
+    check('titularempresa_id').custom( existeTitularExternoActivoPorId ),
+    
+    check('tipoNegocio_id', 'El tipoNegocio_id  es obligatorio').not().isEmpty(),
+    check('tipoNegocio_id').custom( existeCatTipoNegocioActivoPorId ),
+    
+    check('giro_id', 'El giro_id  es obligatorio').not().isEmpty(),
+    check('giro_id').custom( existeCatGiroActivoPorId ),
+
+
     // check('correo', 'El correo no es válido').isEmail(),
     // check('password', 'El password debe de ser más de 6 letras').isLength({ min: 6 }),
     // check('rol', 'El rol es obligatorio').not().isEmpty(),

@@ -37,9 +37,15 @@ const router = Router();
 
 
 
-router.get('/', usuariosGet );
+router.get('/', [
+
+    validarJWT,
+
+],usuariosGet );
 
 router.get('/:id',[
+    validarJWT,
+
     check('id', 'No es un ID válido').isMongoId(),
     check('id').custom( existeUsuarioPorId ),   
     validarCampos

@@ -28,6 +28,22 @@ const{
     
     UsuarioForo,
     Webinar,        
+
+
+ServicioS,
+PracticaP,
+CatEstado,
+CatGiro,
+CatMunicipio,
+CatTipoN,
+TitularExterno,
+CatCategoriaP,
+Producto,
+CatRazonS,
+CatCategoriaB,
+Postulacion,
+ProductoImg,
+RedExterno,
     
     }= require('../models/index');
 
@@ -113,6 +129,25 @@ const rfcExiste = async( rfc = '' ) => {
 
 
 
+
+const curpTitularExternoExiste = async( curp = '' ) => {
+
+    // Verificar si la curp de titular de externo existe
+    const existeCurpTitularExterno = await TitularExterno.findOne({ curp:curp.toUpperCase().trim(), estado:true });
+    if ( existeCurpTitularExterno ) {
+        throw new Error(`La CURP: ${ curp }, ya está registrada, `);
+    }
+}
+
+
+const razonSocialExiste = async( razon_social = '' ) => {
+
+    // Verificar si la razon_social existe
+    const existerazon_social = await CatRazonS.findOne({ razon_social:razon_social.toUpperCase().trim(), estado:true });
+    if (  existerazon_social ) {
+        throw new Error(`La Razon Social: ${ razon_social }, ya está registrada, `);
+    }
+}
 
 
 
@@ -305,23 +340,19 @@ const existeExternoPorId = async( id ) => {
     }
 }
 
+const existeExternoActivoPorId = async( id ) => {
 
-
-
-
-
-
-/**
- * Productos
- */
-const existeProductoPorId = async( id ) => {
-
-    // Verificar si el correo existe
-    const existeProducto = await Producto.findById(id);
-    if ( !existeProducto ) {
-        throw new Error(`El id no existe ${ id }`);
+    const existeId = await Externo.findById(id);
+    if ( !existeId.estado ) {
+        throw new Error(`El id:'${ id }', no existe`);
     }
 }
+
+
+
+
+
+
 
 
 
@@ -724,6 +755,359 @@ const existeWebinarActivoPorId = async( id='' ) => {
 
 
 
+/**
+ * EXISTE UN ID DE Servicio Social 
+ */
+
+ const existeServicioSocialPorId = async( id='' ) => {
+    // Verificar si el  id del servicio social existe
+    const existeId = await ServicioS.findById(id);
+    if ( !existeId ) {
+        throw new Error(`El id:'${ id }', no existe`);
+    }
+}
+
+
+// Comprobar que se encuentra activo
+const existeServicioSocialActivoPorId = async( id='' ) => {
+    // Verificar si el correo existe
+    const existeId = await ServicioS.findById(id);
+    if ( !existeId.estado ) {
+        throw new Error(`El id:'${ id }', no existe`);
+    }
+}
+
+
+
+/**
+ * EXISTE UN ID DE Practicas profesionales 
+ */
+
+ const existePracticaProfesionalPorId = async( id='' ) => {
+    // Verificar si el  id del servicio social existe
+    const existeId = await PracticaP.findById(id);
+    if ( !existeId ) {
+        throw new Error(`El id:'${ id }', no existe`);
+    }
+}
+
+
+// Comprobar que se encuentra activo
+const existePracticaProfesionalActivoPorId = async( id='' ) => {
+    // Verificar si el correo existe
+    const existeId = await PracticaP.findById(id);
+    if ( !existeId.estado ) {
+        throw new Error(`El id:'${ id }', no existe`);
+    }
+}
+
+
+
+
+
+/**
+ * EXISTE UN ID de CatEstado
+ */
+
+ const existeCatEstadoPorId = async( id='' ) => {
+
+    const existeId = await CatEstado.findById(id);
+    if ( !existeId ) {
+        throw new Error(`El id:'${ id }', no existe`);
+    }
+
+}
+// Compobar que se encuentra activo
+ const existeCatEstadoActivoPorId = async( id='' ) => {
+
+    const existeId = await CatEstado.findById(id);
+    if ( !existeId.activo ) {
+        throw new Error(`El id:'${ id }', no existe`);
+    }
+
+}
+
+
+
+/**
+ * EXISTE UN ID de Cat-Giros
+ */
+
+ const existeCatGiroPorId = async( id='' ) => {
+
+    const existeId = await CatGiro.findById(id);
+    if ( !existeId ) {
+        throw new Error(`El id:'${ id }', no existe`);
+    }
+
+}
+// Compobar que se encuentra activo
+ const existeCatGiroActivoPorId = async( id='' ) => {
+
+    const existeId = await CatGiro.findById(id);
+    if ( !existeId.estado ) {
+        throw new Error(`El id:'${ id }', no existe`);
+    }
+
+}
+
+
+
+/**
+ * EXISTE UN ID de Cat-Municipio
+ */
+
+ const existeCatMunicipioPorId = async( id='' ) => {
+
+    const existeId = await CatMunicipio.findById(id);
+    if ( !existeId ) {
+        throw new Error(`El id:'${ id }', no existe`);
+    }
+
+}
+// Compobar que se encuentra activo
+ const existeCatMunicipioActivoPorId = async( id='' ) => {
+
+    const existeId = await CatMunicipio.findById(id);
+    if ( !existeId.estado ) {
+        throw new Error(`El id:'${ id }', no existe`);
+    }
+
+}
+
+
+
+
+
+/**
+ * EXISTE UN ID de Cat-Tipo-Negocio
+ */
+
+ const existeCatTipoNegocioPorId = async( id='' ) => {
+
+    const existeId = await CatTipoN.findById(id);
+    if ( !existeId ) {
+        throw new Error(`El id:'${ id }', no existe`);
+    }
+
+}
+// Compobar que se encuentra activo
+ const existeCatTipoNegocioActivoPorId = async( id='' ) => {
+
+    const existeId = await CatTipoN.findById(id);
+    if ( !existeId.estado ) {
+        throw new Error(`El id:'${ id }', no existe`);
+    }
+
+}
+
+
+
+
+/**
+ * EXISTE UN ID DE BECA
+ */
+
+ const existeTitularExternoPorId = async( id='' ) => {
+
+    const existeId = await  TitularExterno.findById(id);
+    if ( !existeId ) {
+        throw new Error(`El id:'${ id }', no existe`);
+    }
+
+}
+// Compobar que se encuentra activo
+ const existeTitularExternoActivoPorId = async( id='' ) => {
+
+    const existeId = await TitularExterno.findById(id);
+    if ( !existeId.estado ) {
+        throw new Error(`El id:'${ id }', no existe`);
+    }
+
+}
+
+
+
+
+/**
+ * EXISTE UN ID DE cat-categoria-producto
+ */
+
+ const existeCatCategoriaProductoPorId = async( id='' ) => {
+
+    const existeId = await   CatCategoriaP.findById(id);
+    if ( !existeId ) {
+        throw new Error(`El id:'${ id }', no existe`);
+    }
+
+}
+// Compobar que se encuentra activo
+ const existeCatCategoriaProductoActivoPorId = async( id='' ) => {
+
+    const existeId = await CatCategoriaP.findById(id);
+    if ( !existeId.estado ) {
+        throw new Error(`El id:'${ id }', no existe`);
+    }
+
+}
+
+
+
+
+/**
+ * EXISTE UN ID DE BECA
+ */
+
+ const existeProductoPorId = async( id='' ) => {
+
+    const existeId = await Producto.findById(id);
+    if ( !existeId ) {
+        throw new Error(`El id:'${ id }', no existe`);
+    }
+
+}
+// Compobar que se encuentra activo
+ const existeProductoActivoPorId = async( id='' ) => {
+
+    const existeId = await Producto.findById(id);
+    if ( !existeId.estado ) {
+        throw new Error(`El id:'${ id }', no existe`);
+    }
+
+}
+
+
+
+/**
+ * EXISTE UN ID DE RAZON SOCIAL
+ */
+
+ const existeCatRazonSocialPorId = async( id='' ) => {
+
+    const existeId = await CatRazonS.findById(id);
+    if ( !existeId ) {
+        throw new Error(`El id:'${ id }', no existe`);
+    }
+
+}
+// Compobar que se encuentra activo
+ const existeCatRazonSocialActivaPorId = async( id='' ) => {
+
+    const existeId = await CatRazonS.findById(id);
+    if ( !existeId.estado ) {
+        throw new Error(`El id:'${ id }', no existe`);
+    }
+
+}
+
+
+
+
+/**
+ * EXISTE UN ID de CatCategoriaEMpleo
+ */
+
+ const existeCatCategoriaBolsaPorId = async( id='' ) => {
+
+    const existeId = await CatCategoriaB .findById(id);
+    if ( !existeId ) {
+        throw new Error(`El id:'${ id }', no existe`);
+    }
+
+}
+// Compobar que se encuentra activo
+ const existeCatCategoriaBolsaActivoPorId = async( id='' ) => {
+
+    const existeId = await CatCategoriaB.findById(id);
+    if ( !existeId.estado) {
+        throw new Error(`El id:'${ id }', no existe`);
+    }
+
+}
+
+
+
+
+/**
+ * EXISTE UN ID de Postulacion
+ */
+
+ const existePostulacionPorId = async( id='' ) => {
+
+    const existeId = await Postulacion.findById(id);
+    if ( !existeId ) {
+        throw new Error(`El id:'${ id }', no existe`);
+    }
+
+}
+// Compobar que se encuentra activo
+ const existePostulacionActivoPorId = async( id='' ) => {
+
+    const existeId = await Postulacion.findById(id);
+    if ( !existeId.estado) {
+        throw new Error(`El id:'${ id }', no existe`);
+    }
+
+}
+
+
+
+
+
+/**
+ * EXISTE UN ID DE Producto img
+ */
+
+ const existeProductoImgPorId = async( id='' ) => {
+    const existeId = await ProductoImg.findById(id);
+    if ( !existeId ) {
+        throw new Error(`El id:'${ id }', no existe`);
+    }
+}
+// Comprobar que se encuentra activo
+const existeProductoImgActivoPorId = async( id='' ) => {
+    const existeId = await ProductoImg.findById(id);
+    if ( !existeId.estado ) {
+        throw new Error(`El id:'${ id }', no existe`);
+    }
+}
+
+
+
+
+
+/**
+ * EXISTE UN ID DE Red - Externo
+ */
+
+ const existeRedExternoPorId = async( id='' ) => {
+    // Verificar si el correo existe
+    const existeId = await RedExterno.findById(id);
+    if ( !existeId ) {
+        throw new Error(`El id:'${ id }', no existe`);
+    }
+}
+// Comprobar que se encuentra activo
+const existeRedExternoActivoPorId = async( id='' ) => {
+    // Verificar si el correo existe
+    const existeId = await RedExterno.findById(id);
+    if ( !existeId.estado ) {
+        throw new Error(`El id:'${ id }', no existe`);
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
 module.exports = {
     esRoleValido,
     emailExiste,
@@ -744,6 +1128,8 @@ module.exports = {
     existeOfertaPorId, 
     existeInscripcionPorId, 
     existeExternoPorId,
+    existeExternoActivoPorId,
+    
 
   curpExiste,  
   rfcExiste,
@@ -809,6 +1195,50 @@ existeUsuarioForoActivoPorId,
 
 existeWebinarPorId,
 existeWebinarActivoPorId,
+
+
+
+existeServicioSocialPorId,
+existeServicioSocialActivoPorId,
+
+existePracticaProfesionalPorId,
+existePracticaProfesionalActivoPorId,
+
+
+
+existeCatEstadoPorId,
+existeCatEstadoActivoPorId,
+existeCatGiroPorId,
+existeCatGiroActivoPorId,
+existeCatMunicipioPorId,
+existeCatMunicipioActivoPorId,
+existeCatTipoNegocioPorId,
+existeCatTipoNegocioActivoPorId,
+existeTitularExternoPorId,
+existeTitularExternoActivoPorId,
+existeCatCategoriaProductoPorId,
+existeCatCategoriaProductoActivoPorId,
+existeProductoPorId,
+existeProductoActivoPorId,
+existeCatRazonSocialPorId,
+existeCatRazonSocialActivaPorId,
+existePostulacionPorId,
+existePostulacionActivoPorId,
+existeProductoImgPorId,
+existeProductoImgActivoPorId,
+existeRedExternoPorId,
+existeRedExternoActivoPorId,
+
+
+
+
+
+
+
+curpTitularExternoExiste,
+razonSocialExiste,
+existeCatCategoriaBolsaPorId,
+existeCatCategoriaBolsaActivoPorId,
 
 }
 

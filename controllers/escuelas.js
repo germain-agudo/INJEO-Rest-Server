@@ -90,7 +90,7 @@ const actualizarEscuela = async( req, res = response ) => {
 
     data.nombre  = data.nombre.toUpperCase(); 
    
-    const escuelaDB = await Escuela.findOne( { nombre:data.nombre}  );
+    const escuelaDB = await Escuela.findOne( { nombre:data.nombre, estado:true}  );
 
 /*     if (escuelaDB) {
         if (!escuelaDB.estado) {

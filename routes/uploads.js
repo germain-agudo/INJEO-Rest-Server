@@ -29,6 +29,8 @@ router.put('/:coleccion/:id',[ //los checks no se ejecutan hasta que se manda  a
                         'instructores',
                         'redes',
                         'webinars',
+                        'servicio-social',
+                        'practicas-profesionales',
     ] ) ),
     validarCampos,
 ],actualizarImagenCloudinary);

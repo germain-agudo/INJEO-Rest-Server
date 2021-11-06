@@ -24,6 +24,8 @@ const {
       Instructor,
       RedSocial,
       Webinar,
+      ServicioS,
+      PracticaP,
 
 } = require('../models/index');
 
@@ -255,6 +257,25 @@ const cargarArchivo =async(req, res= response)=>{
           })
        }
        break;
+
+       case 'servicio-social':       
+       modelo = await ServicioS.findById(id);
+       if (!modelo || !modelo.estado ) {
+          return res.status(400).json({
+            msg:`No existe un webinar con el id ${ id}`
+          })
+       }
+       break;
+   
+       case 'practicas-profesionales':       
+       modelo = await PracticaP.findById(id);
+       if (!modelo || !modelo.estado ) {
+          return res.status(400).json({
+            msg:`No existe un webinar con el id ${ id}`
+          })
+       }
+       break;
+   
    
     
    

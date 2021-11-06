@@ -1,6 +1,6 @@
 const {response, request} = require('express');
  
-const {BolsaTrabajo}= require('../models/index');
+const {BolsaTrabajo, Externo}= require('../models/index');
 
 /**
  *  Obtener Todas Las Bolsa De Trabajo
@@ -15,7 +15,89 @@ const {BolsaTrabajo}= require('../models/index');
         BolsaTrabajo.find(query)
                         .sort({fecha_registro:-1})
                         // .populate('usuario_id',['user_name'])
-                        .populate('usuario_id',{password:0, __v:0})
+                        // .populate('usuario_id',{password:0, __v:0})
+                        .populate(
+                            [
+                                {
+                                    path: 'usuario_id',
+                                    select:{__v:false, password: false },
+                                },
+                                {
+                                    path: 'categoriabolsa_id',
+                                    select:{__v:false,  },
+                                    populate:{
+                                        path :'usuario_id',
+                                        select:{__v:false, password:false, } 
+                                    }
+                                },
+                                {
+                                    path: 'estado_id',
+                                    select:{__v:false,  },
+                                    populate:{
+                                        path :'usuario_id',
+                                        select:{__v:false, password:false, } 
+                                    }
+                                },
+                                {
+                                    path: 'municipio_id',
+                                    select:{__v:false, },
+                                    populate:
+                                         [      
+                                        {
+                                        path: 'usuario_id',
+                                        select:{__v:false, password: false},
+                                        },
+                                        {
+                                        path: 'estado_id',
+                                        select:{__v:false},
+                                        populate:{
+                                            path :'usuario_id',
+                                            select:{__v:false, password:false}                       
+                                        }           
+                                                }
+                                ]
+                                },
+                                {
+                                    path: 'externo_id',
+                                    select:{__v:false, },
+                                    populate:
+                                   [ 
+                                    {
+                                        path :'usuario_id',
+                                        select:{__v:false, password:false, }                       
+                                    }, 
+                                    {
+                                        path :'titularempresa_id',
+                                        select:{__v:false,}        
+                                        ,                        populate:{
+                                            path :'usuario_id',
+                                            select:{__v:false, password:false}                       
+                                        }                 
+                                    }, 
+                                    {
+                                        path :'tipoNegocio_id',
+                                        select:{__v:false,} ,
+                                        populate:{
+                                            path :'usuario_id',
+                                            select:{__v:false, password:false}                       
+                                        }                        
+                                    }, 
+                                    {
+                                        path :'giro_id',
+                                        select:{__v:false, } ,
+                                        populate:{
+                                            path :'usuario_id',
+                                            select:{__v:false, password:false}                       
+                                        }                        
+                                    }, 
+                                
+                                ],          
+                            }
+                            ]
+                        )
+
+
+
                         .skip(Number( desde ) )
                         .limit(Number( limite) )
     ]);
@@ -35,7 +117,87 @@ const obtenerBolsa = async(req, res= response)=>{
     const {id}= req.params;
     const bolsaTrabajo = await BolsaTrabajo.findById(id)
                                         // .populate('usuario_id',['user_name']);
-                                        .populate('usuario_id',{password:0, __v:0})
+                                        // .populate('usuario_id',{password:0, __v:0})
+                                        .populate(
+                                            [
+                                                {
+                                                    path: 'usuario_id',
+                                                    select:{__v:false, password: false },
+                                                },
+                                                {
+                                                    path: 'categoriabolsa_id',
+                                                    select:{__v:false,  },
+                                                    populate:{
+                                                        path :'usuario_id',
+                                                        select:{__v:false, password:false, } 
+                                                    }
+                                                },
+                                                {
+                                                    path: 'estado_id',
+                                                    select:{__v:false,  },
+                                                    populate:{
+                                                        path :'usuario_id',
+                                                        select:{__v:false, password:false, } 
+                                                    }
+                                                },
+                                                {
+                                                    path: 'municipio_id',
+                                                    select:{__v:false, },
+                                                    populate:
+                                                         [      
+                                                        {
+                                                        path: 'usuario_id',
+                                                        select:{__v:false, password: false},
+                                                        },
+                                                        {
+                                                        path: 'estado_id',
+                                                        select:{__v:false},
+                                                        populate:{
+                                                            path :'usuario_id',
+                                                            select:{__v:false, password:false}                       
+                                                        }           
+                                                                }
+                                                ]
+                                                },
+                                                {
+                                                    path: 'externo_id',
+                                                    select:{__v:false, },
+                                                    populate:
+                                                   [ 
+                                                    {
+                                                        path :'usuario_id',
+                                                        select:{__v:false, password:false, }                       
+                                                    }, 
+                                                    {
+                                                        path :'titularempresa_id',
+                                                        select:{__v:false,}        
+                                                        ,                        populate:{
+                                                            path :'usuario_id',
+                                                            select:{__v:false, password:false}                       
+                                                        }                 
+                                                    }, 
+                                                    {
+                                                        path :'tipoNegocio_id',
+                                                        select:{__v:false,} ,
+                                                        populate:{
+                                                            path :'usuario_id',
+                                                            select:{__v:false, password:false}                       
+                                                        }                        
+                                                    }, 
+                                                    {
+                                                        path :'giro_id',
+                                                        select:{__v:false, } ,
+                                                        populate:{
+                                                            path :'usuario_id',
+                                                            select:{__v:false, password:false}                       
+                                                        }                        
+                                                    }, 
+                                                
+                                                ],          
+                                            }
+                                            ]
+                                        )
+                                
 
 res.json(bolsaTrabajo);   
 }
@@ -46,7 +208,30 @@ res.json(bolsaTrabajo);
 const crearBolsa = async(req, res= response)=>{
 
     const fecha_registro = Date.now();  
-    const {titulo, descripcion, requisitos, enlace }= req.body;   
+    const {
+        titulo, 
+        descripcion, 
+        requisitos, 
+        enlace,
+    
+        usuario_empresa_id,
+        fecha_inicio,
+        salario,
+        beneficios,
+        modalidad,
+        horario,
+        categoriabolsa_id,
+        estado_id,
+        municipio_id,
+    }= req.body;   
+
+  const externo = await Externo.findOne({usuario_id:usuario_empresa_id, estado:true})
+    // Generar la data a guardar
+    if (! externo) {
+        return res.status(401).json({
+            msg: `EL id ${usuario_empresa_id} No cuenta con los permisos necesarios - No es una empresa`
+        });  
+    }
 
     const data = {
 
@@ -55,7 +240,17 @@ const crearBolsa = async(req, res= response)=>{
         requisitos:requisitos.trim(),
         enlace:enlace.trim(),
         usuario_id: req.usuario._id,
-        fecha_registro
+        fecha_registro,
+        
+        externo_id : externo._id,
+        fecha_inicio,
+        salario,
+        beneficios,
+        modalidad,
+        horario,
+        categoriabolsa_id,
+        estado_id,
+        municipio_id,
     }
     
     const bolsaTrabajo = new BolsaTrabajo(data);
@@ -69,7 +264,22 @@ await bolsaTrabajo.save();
 const actualizarBolsa = async(req, res= response)=>{
 
     const {id }= req.params;   
-const {titulo, descripcion, requisitos, enlace }= req.body;
+const {
+    titulo, 
+    descripcion, 
+    requisitos, 
+    enlace ,
+
+    fecha_inicio,
+    salario,
+    beneficios,
+    modalidad,
+    horario,
+    categoriabolsa_id,
+    estado_id,
+    municipio_id,
+
+}= req.body;
 
 const bolsaTrabajoDB = await  BolsaTrabajo.findById(id);
 
@@ -86,7 +296,16 @@ const data = {
     titulo:titulo.toUpperCase(),
     descripcion:descripcion.trim(),
     requisitos:requisitos.trim(),
-    enlace:enlace.trim(), 
+    enlace:enlace.trim(),
+
+    fecha_inicio,
+    salario,
+    beneficios,
+    modalidad,
+    horario,
+    categoriabolsa_id,
+    estado_id,
+    municipio_id,
 }
 
 const bolsaTrabajo = await BolsaTrabajo.findByIdAndUpdate(id,data, {new:true});

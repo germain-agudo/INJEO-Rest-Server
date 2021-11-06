@@ -19,6 +19,10 @@ const {
 const  {
         existeBolsaPorId,
         existeBolsaActivaPorId,
+        existeCatCategoriaBolsaActivoPorId,
+        existeCatEstadoActivoPorId,
+        existeCatMunicipioActivoPorId,
+        existeUsuarioActivoPorId,
 }= require('../helpers/db-validators');
 
 /**
@@ -60,7 +64,26 @@ router.get('/:id',[
         check('titulo','El título es obligatorio').not().isEmpty(),
         check('descripcion','La descripciòn es obligatoria').not().isEmpty(),
         check('requisitos','Los requisitos son obligatorios').not().isEmpty(),
-        check('enlace','El enlace es obligatorio').not().isEmpty(),       
+        check('enlace','El enlace es obligatorio').not().isEmpty(),
+
+      
+      
+        check('usuario_empresa_id','El usuario_empresa_id es obligatoria').not().isEmpty(),
+        check('usuario_empresa_id').custom( existeUsuarioActivoPorId ), 
+
+        check('fecha_inicio','La fecha de inicio es obligatoria').not().isEmpty(),
+        check('salario','El salario es obligatorio').not().isEmpty(),       
+        check('beneficios','Los beneficios son obligatorio').not().isEmpty(),       
+        check('modalidad','La modalidad es obligatorio').not().isEmpty(),       
+        check('horario','El horario es obligatorio').not().isEmpty(),       
+        check('categoriabolsa_id','La categoria de la bolsa es obligatorio').not().isEmpty(),       
+        check('categoriabolsa_id').custom( existeCatCategoriaBolsaActivoPorId ),       
+        check('estado_id','El estado es obligatorio').not().isEmpty(),       
+        check('estado_id').custom( existeCatEstadoActivoPorId ),       
+        check('municipio_id','El municipio es obligatorio').not().isEmpty(),       
+        check('municipio_id').custom( existeCatMunicipioActivoPorId ),       
+
+
         validarCampos,
 ], crearBolsa);
 
@@ -79,6 +102,19 @@ router.get('/:id',[
         check('descripcion','La descripciòn es obligatoria').not().isEmpty(),
         check('requisitos','Los requisitos son obligatorios').not().isEmpty(),
         check('enlace','El enlace es obligatorio').not().isEmpty(),
+
+
+        check('fecha_inicio','La fecha de inicio es obligatoria').not().isEmpty(),       
+        check('salario','El salario es obligatorio').not().isEmpty(),       
+        check('beneficios','Los beneficios son obligatorio').not().isEmpty(),       
+        check('modalidad','La modalidad es obligatorio').not().isEmpty(),       
+        check('horario','El horario es obligatorio').not().isEmpty(),       
+        check('categoriabolsa_id','La categoria de la bolsa es obligatorio').not().isEmpty(),       
+        check('categoriabolsa_id').custom( existeCatCategoriaBolsaActivoPorId ),       
+        check('estado_id','El estado es obligatorio').not().isEmpty(),       
+        check('estado_id').custom( existeCatEstadoActivoPorId ),       
+        check('municipio_id','El municipio es obligatorio').not().isEmpty(),       
+        check('municipio_id').custom( existeCatMunicipioActivoPorId ),  
         validarCampos,
 ], actualizarBolsa);
 

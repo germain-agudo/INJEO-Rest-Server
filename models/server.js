@@ -67,6 +67,26 @@ class Server {
             usuariosForos: '/api/comentarios-foros',
 
             webinars :'/api/webinars',
+
+
+            servicioSocial : '/api/servicio-social',
+            practicasProfesionales : '/api/practicas-profesionales',
+
+            catEstados: '/api/estados',
+            catGiros: '/api/giros',
+            catMunicipios : '/api/municipios',
+            catTipoNegocios: '/api/tipo-negocios',
+            titularesExternos:'/api/titulares-empresas',
+            aceptacionEmpresa:'/api/aceptacion-empresas',
+            catCategoriasProductos:'/api/categorias-productos',
+            productos:'/api/productos',
+            razonSocial:'/api/razones-sociales',
+            catgoriasBolsasTrabajo:'/api/categorias-bolsas',
+            postulaciones:'/api/postulaciones',
+            productosIMG:'/api/productos-imagenes',
+            externosRedes:'/api/redes-empresas',
+
+
                          
         }
 
@@ -160,6 +180,26 @@ class Server {
         this.app.use( this.paths.usuariosForos, require('../routes/usuarios-foros')); 
 
         this.app.use( this.paths.webinars, require('../routes/webinars')); 
+
+
+        this.app.use( this.paths.servicioSocial, require('../routes/servicio-social') );
+        this.app.use( this.paths.practicasProfesionales, require('../routes/practicas-profesionales') )
+        
+        
+        
+        this.app.use( this.paths.catEstados, require('../routes/cat-estados') );
+        this.app.use( this.paths.catGiros, require('../routes/cat-giros') );
+        this.app.use( this.paths.catMunicipios, require('../routes/cat-municipios') );
+        this.app.use( this.paths.catTipoNegocios, require('../routes/cat-tipoNegocios') );
+        this.app.use( this.paths.titularesExternos, require('../routes/titulares-externos') );
+        this.app.use( this.paths.aceptacionEmpresa, require('../routes/aceptacion-externo') );
+        this.app.use( this.paths.catCategoriasProductos, require('../routes/cat-categorias-productos') );
+        this.app.use( this.paths.productos, require('../routes/productos') );
+        this.app.use( this.paths.razonSocial, require('../routes/cat-razon-social') );
+        this.app.use( this.paths.catgoriasBolsasTrabajo, require('../routes/cat-categoria-bolsas') );
+        this.app.use( this.paths.postulaciones, require('../routes/postulacion') );
+        this.app.use( this.paths.productosIMG, require('../routes/cat-productos-img') );
+        this.app.use( this.paths.externosRedes, require('../routes/cat-redes-externos') );
 
 
 

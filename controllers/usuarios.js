@@ -28,8 +28,25 @@ const obtenerUsuario = async(req, res = response ) => {
 }
  
 const usuariosGet = async(req = request, res = response) => {
-    const { limite = 5, desde = 0 } = req.query;
-    const query = { estado: true };
+    const { limite = 5, desde = 0,rol= 'todos'  } = req.query;
+
+let query;
+    switch (rol) {
+        case 'administradores':
+         query = { estado: true, rol:'ADMIN_ROLE' };
+
+            break;
+        case 'empresas':
+            query = { estado: true, rol: 'EXTERNO_ROLE' };
+
+                break;
+        case 'jovenes':
+         query = { estado: true , rol :'USER_ROLE'};
+                break;
+        default:
+           query = { estado: true };
+           break;
+    } 
 
     const [ total, usuarios ] = await Promise.all([
         Usuario.countDocuments(query),
@@ -413,6 +430,13 @@ const buscarRelacion = async(req, res =response ) => {
                  usuario
              })
                 }
+
+
+
+
+
+
+
 
 
 module.exports = {
