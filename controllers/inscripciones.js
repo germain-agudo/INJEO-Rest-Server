@@ -250,7 +250,9 @@ const buscarRelacion = async(req, res =response ) => {
                 Taller.findById(id),
                 Inscripccion.countDocuments(query),
                 Inscripccion.find({estado:true, taller:id}, {usuario:1,})     
-                                    .populate('usuario',['user_name'])                                
+                                    // .populate('usuario',['user_name'])                                
+                                    .populate('usuario',{password:0, __v:0})
+                                
             ]);
     
             if (!taller || !taller.estado) {
@@ -275,7 +277,17 @@ const buscarRelacion = async(req, res =response ) => {
                 Usuario.findById(id),
                 Inscripccion.countDocuments(query),
                 Inscripccion.find({estado:true, usuario:id}, {taller:1,})     
-                                    .populate('taller',['titulo'])                                
+                                    // .populate('taller',['titulo'])
+                                    // .populate('taller',{ __v:0})
+                                    .populate({
+                                        path: 'taller',
+                                        select:{__v:false, },
+                                        populate:{
+                                            path :'usuario',
+                                            select:{__v:false, password:false, }  
+                                                 }
+                                    })
+
             ]);
     
             if (!usuario || !usuario.estado) {
