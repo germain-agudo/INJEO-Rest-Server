@@ -328,6 +328,15 @@ const existeRelacionConUsuario= async(usuario_id='')=>{
     }
 }
 
+const existeInscripcionActivaPorId = async( id ) => {
+
+    // Verificar si la noticia existe
+    const existeInscripcion = await Inscripccion.findById(id);
+    if ( !existeInscripcion.estado ) {
+        throw new Error(`El id  ${ id } no existe`);
+    }
+}
+
 /**
  * Externos
  */
@@ -1239,6 +1248,7 @@ curpTitularExternoExiste,
 razonSocialExiste,
 existeCatCategoriaBolsaPorId,
 existeCatCategoriaBolsaActivoPorId,
+existeInscripcionActivaPorId
 
 }
 

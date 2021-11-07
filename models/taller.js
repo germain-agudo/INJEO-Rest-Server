@@ -23,6 +23,12 @@ const TallerSchema = Schema({
 
     },
 
+    cupo: {
+        type: Number,
+        required: [true, 'Cupo es obligatorio'],
+       
+    },
+
     enlace:{
         type: String,
         required:[true, 'El enlace es obligatorio'],

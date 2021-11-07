@@ -68,7 +68,12 @@ const crearInscripcion = async(req, res = response ) => {
             msg:`Actualmente: ${participanteDB.user_name}, es participante  en el taller: ${tallerDB.titulo}`,
         })
     }
-       
+    
+    
+    
+
+
+
     // const resultados=( inscripcionDB) ? [ inscripcionDB] :[]     
 
 /*    if (inscripcionDB.length>0) {   
@@ -98,6 +103,18 @@ const crearInscripcion = async(req, res = response ) => {
             fecha_registro     
        }   
 
+
+
+    //    console.log(tallerDB.cupo);
+       if ( tallerDB.cupo <1 ) {
+        return res.status(401).json({
+            msg: `EL cupo del taller: ${ tallerDB.titulo } llegó a su limite `
+        }); 
+       }
+
+       const cupoNuevo = tallerDB.cupo - 1;
+    //    console.log(tallerDB._id);
+    await Taller.findByIdAndUpdate(tallerDB._id, {cupo: cupoNuevo }, {new:true} );
     const inscripcion = new Inscripccion(data);
     await inscripcion.save();
     res.status(201).json(inscripcion);
@@ -106,39 +123,21 @@ const crearInscripcion = async(req, res = response ) => {
 
 const actualizarInscripcion = async( req, res = response ) => {
     // const fecha_registro = Date.now();
-
-  
     const { id } = req.params;
     const {participante_id, taller_id} = req.body;    
-
     // const { estado, usuario, descripcion, carrera_id, escuela_id,...data } = req.body;
-    
-
-
-  
-  
-  
-  
-  
-  
-  
     const [ inscripcionDB,participanteDB, tallerDB ] = await Promise.all([    
             Inscripccion.findOne({ usuario: participante_id, taller:taller_id, estado:true}),
             Usuario.findById(participante_id),
             Taller.findById(taller_id)
       ]);        
-
-
-
       const descripcion = `${participanteDB.user_name} - ${tallerDB.titulo}`.toUpperCase();        
-      
 /*       const descripcionDB = await Inscripccion.findOne({descripcion});
       if (descripcionDB&&descripcionDB.id!==id) {
           return res.status(400).json({
               msg:`La relación entre las entidades ${descripcion} ya existe`
           });
       } */
-    
       const inscripcion_id = await  Inscripccion.findById(id);
       let permiso = true;
       (inscripcion_id.usuario.equals(req.usuario._id) || req.usuario.rol==='ADMIN_ROLE' ) ? permiso = true :permiso=false; 
@@ -155,8 +154,6 @@ const actualizarInscripcion = async( req, res = response ) => {
             msg:`Actualmente: ${participanteDB.user_name}, es participante  en el taller: ${tallerDB.titulo}`,
         });
       }
-
-    
 /*       if (inscripcionDB.length>0) {    
         if (!inscripcionDB[0].estado) {
             await Inscripccion.findByIdAndUpdate(inscripcionDB[0]._id,{estado:true, responsable_registro:req.usuario._id, fecha_registro, descripcion}, {new: true} );
@@ -176,11 +173,6 @@ const actualizarInscripcion = async( req, res = response ) => {
         }
     } */
 
-
-
-
-
-
 const data ={
     descripcion,
     usuario:participanteDB._id, 
@@ -190,20 +182,15 @@ const data ={
 
 }
 
-
-
-
-
     const inscripcion = await Inscripccion.findByIdAndUpdate(id, data, { new: true });
     res.json( inscripcion); 
-  
-   
 
 }
  
 const borrarInscripcion = async(req, res =response ) => {
     const fecha_eliminacion = Date.now();
 
+    const {id} = req.params;
     const inscripcion_id = await  Inscripccion.findById(id);
     let permiso = true;
     (inscripcion_id.usuario.equals(req.usuario._id) || req.usuario.rol==='ADMIN_ROLE' ) ? permiso = true :permiso=false; 
@@ -213,12 +200,18 @@ const borrarInscripcion = async(req, res =response ) => {
             msg: `EL id ${req.usuario.id} No cuenta con los permisos necesarios - No puede hacer esto`
         }); 
     }
+    // console.log(inscripcion_id.taller._id);
+const taller = await Taller.findById(inscripcion_id.taller._id);
 
-
-    const { id } = req.params;
+    const cupoNuevo = taller.cupo + 1;
+    // const { id } = req.params;
     const inscripcionBorrada = await Inscripccion.findByIdAndUpdate( id, { estado: false, fecha_eliminacion }, {new: true });
+    await Taller.findByIdAndUpdate(taller._id, {cupo: cupoNuevo }, {new:true} );
+
     res.json( inscripcionBorrada );
     
+
+
 }
 
 

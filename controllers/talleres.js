@@ -36,7 +36,7 @@ const obtenerTaller = async(req, res = response ) => {
 const crearTaller = async(req, res = response ) => {
     const fecha_registro = Date.now();
 
-   const { titulo,subtitulo, descripcion, enlace}=req.body;
+   const { titulo,subtitulo, descripcion, enlace, cupo}=req.body;
     // titulo = titulo.toUpperCase();
 
     // const tituloDB = await Noticia.findOne({ titulo });
@@ -53,6 +53,7 @@ const crearTaller = async(req, res = response ) => {
         subtitulo,
         descripcion,
         enlace,
+        cupo,
         usuario: req.usuario._id,
         fecha_registro,
     }

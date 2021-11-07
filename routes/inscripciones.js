@@ -22,7 +22,8 @@ const {
         existeUsuarioPorId,
         existeInscripcionPorId,
         existeTallerPorId,
-        coleccionesPermitidas
+        coleccionesPermitidas,
+        existeInscripcionActivaPorId
     } = require('../helpers');
 
 // const { existeEscuelaPorId } = require('../helpers/db-validators');
@@ -96,7 +97,8 @@ router.delete('/:id',[
     tieneRole('ADMIN_ROLE','USER_ROLE'),
     datosCompletos,
     check('id', 'No es un id de Mongo válido').isMongoId(),
-    check('id').custom( existeInscripcionPorId ), 
+    check('id').custom( existeInscripcionActivaPorId ), 
+    // check('id').custom( existeInscripcionPorId ), 
 
     // check('id').custom( existeOfertaPorId ),
     validarCampos,

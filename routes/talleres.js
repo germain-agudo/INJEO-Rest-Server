@@ -33,6 +33,7 @@ router.post('/', [
     check('subtitulo','El subTitulo es obligatorio').not().isEmpty(),
     check('descripcion','La descripción es obligatoria').not().isEmpty(),
     check('enlace','El enlace es obligatorio').not().isEmpty(),
+    check('cupo','El valor del cupo no es válido').isNumeric(),
     validarCampos
 ], crearTaller );
 
@@ -42,6 +43,7 @@ router.put('/:id',[
     tieneRole('ADMIN_ROLE','EXTERNO_ROLE'),
     datosCompletos,
     check('titulo','El titulo es obligatorio').not().isEmpty(),
+    check('cupo','El cupo es obligatorio').isNumeric(),
     check('id').custom( existeTallerPorId ),
     validarCampos
 ],actualizarTaller );
