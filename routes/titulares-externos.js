@@ -59,7 +59,7 @@ router.get('/:id',[
  router.post('/',[
    validarJWT,
     tieneRole('ADMIN_ROLE','EXTERNO_ROLE'),
-   datosCompletos,
+  //  datosCompletos,
   //  esAdminRole,
    check('nombre','El nombre es obligatorio').not().isEmpty(),
    check('apellidos','El apellidos es obligatorio').not().isEmpty(),

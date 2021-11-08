@@ -4,10 +4,9 @@ const { Schema, model } = require('mongoose');
 
 const InscripcioneSchema = Schema({
 
-    descripcion: {
-        type: String,
-        
-        required:true,
+    cursando: {
+        type: Boolean,
+        default: true,
         
     },
 
