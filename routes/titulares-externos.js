@@ -64,8 +64,10 @@ router.get('/:id',[
    check('nombre','El nombre es obligatorio').not().isEmpty(),
    check('apellidos','El apellidos es obligatorio').not().isEmpty(),
    check('curp','La CURP es obligatorio').not().isEmpty(),
-   check('curp','La CURP no es válida').isLength({ min: 10, max:10 }),
-   check('curp').custom( curpTitularExternoExiste ),
+  //  check('curp','La CURP no es válida').isLength({ min: 10, max:10 }),
+  check('curp','La CURP se integra por 18 caracteres, revise nuevamente').isLength({ min: 18, max:18 }),
+
+  check('curp').custom( curpTitularExternoExiste ),
 
 
    check('ine_url','El INE es obligatorio').not().isEmpty(),
@@ -94,7 +96,7 @@ router.get('/:id',[
     check('nombre','El nombre es obligatorio').not().isEmpty(),
     check('apellidos','El apellidos es obligatorio').not().isEmpty(),
     check('curp','La CURP es obligatorio').not().isEmpty(),
-    check('curp','La CURP no es válida').isLength({ min: 10, max:10 }),
+    check('curp','La CURP se integra por 18 caracteres, revise nuevamente').isLength({ min: 18, max:18 }),
     check('ine_url','El INE es obligatorio').not().isEmpty(),
     check('direccion','La dirección del domicilio es obligatoria').not().isEmpty(),
     check('correo_electronico','El correo_electronico es obligatorio').not().isEmpty(),
