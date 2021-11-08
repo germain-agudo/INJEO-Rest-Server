@@ -14,7 +14,7 @@ const titularExternoSchema= Schema({
         type: String,
         required: [true, 'La CURP es obligatoria']
     },
-    ine: {
+    ine_url: {
         type: String,
         // required: [true, 'El INE es obligatorio']
     },
