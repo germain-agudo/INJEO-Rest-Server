@@ -26,6 +26,7 @@ const {
       Webinar,
       ServicioS,
       PracticaP,
+      Producto,
 
 } = require('../models/index');
 
@@ -277,6 +278,16 @@ const cargarArchivo =async(req, res= response)=>{
        break;
    
    
+       case 'productos':       
+       modelo = await Producto.findById(id);
+       if (!modelo || !modelo.estado ) {
+          return res.status(400).json({
+            msg:`No existe un producto con el id ${ id}`
+          })
+       }
+       break;
+   
+   
     
    
      default:
@@ -309,6 +320,7 @@ const cargarArchivo =async(req, res= response)=>{
 
 
 
+  
 
 const mostrarImagen =async(req, res = response)=>{
 

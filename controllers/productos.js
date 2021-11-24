@@ -1,6 +1,6 @@
 const {response, request} = require('express');
 
-const {Producto}= require('../models/index');
+const {Producto, Externo}= require('../models/index');
 
 /**
  *  Obtener Todas 
@@ -14,18 +14,51 @@ const {Producto}= require('../models/index');
         Producto.find(query)
         .sort({fecha_registro:-1})
 
-                        .populate('usuario_id',{password:0, __v:0})
+                        // .populate('usuario_id',{password:0, __v:0})
                         .populate(
                             [
                                 {
                                     path: 'empresa_id',
-                                    select:{__v:false, password: false},
+                                    select:{__v:false},
                                     // populate:{
                                     //     path :'usuario_id',
                                     //     select:{__v:false, password:false}                       
-                                    // }           
+                                    // }        
+                                    populate:
+                                    [ 
+                                        {
+                                            path :'usuario_id',
+                                            select:{__v:false, password:false, }                       
+                                        }, 
+                                        {
+                                            path :'titularempresa_id',
+                                            select:{__v:false,}        
+                                            , populate:{
+                                                path :'usuario_id',
+                                                select:{__v:false, password:false}                       
+                                            }                 
+                                        }, 
+                                        {
+                                            path :'tipoNegocio_id',
+                                            select:{__v:false,} ,
+                                            populate:{
+                                                path :'usuario_id',
+                                                select:{__v:false, password:false}                       
+                                            }                        
+                                        }, 
+                                        {
+                                            path :'giro_id',
+                                            select:{__v:false, } ,
+                                            populate:{
+                                                path :'usuario_id',
+                                                select:{__v:false, password:false}                       
+                                            }                        
+                                        }, 
+                                    
+                                    ],    
                                 }
-                                ,{
+                                ,
+                                {
                                     path: 'categoria_id',
                                     select:{__v:false},
                                     populate:{
@@ -33,8 +66,8 @@ const {Producto}= require('../models/index');
                                         select:{__v:false, password:false}                       
                                     }           
                                 }
-
-
+    
+    
                             ]
                         )
 
@@ -57,18 +90,51 @@ const {Producto}= require('../models/index');
 const obtenerProducto = async(req, res= response)=>{
     const {id}= req.params;
     const producto = await Producto.findById(id)
-                    .populate('usuario_id',{password:0, __v:0})
+                    // .populate('usuario_id',{password:0, __v:0})
                     .populate(
                         [
                             {
                                 path: 'empresa_id',
-                                select:{__v:false, password:false},
+                                select:{__v:false},
                                 // populate:{
                                 //     path :'usuario_id',
                                 //     select:{__v:false, password:false}                       
-                                // }           
+                                // }        
+                                populate:
+                                [ 
+                                    {
+                                        path :'usuario_id',
+                                        select:{__v:false, password:false, }                       
+                                    }, 
+                                    {
+                                        path :'titularempresa_id',
+                                        select:{__v:false,}        
+                                        , populate:{
+                                            path :'usuario_id',
+                                            select:{__v:false, password:false}                       
+                                        }                 
+                                    }, 
+                                    {
+                                        path :'tipoNegocio_id',
+                                        select:{__v:false,} ,
+                                        populate:{
+                                            path :'usuario_id',
+                                            select:{__v:false, password:false}                       
+                                        }                        
+                                    }, 
+                                    {
+                                        path :'giro_id',
+                                        select:{__v:false, } ,
+                                        populate:{
+                                            path :'usuario_id',
+                                            select:{__v:false, password:false}                       
+                                        }                        
+                                    }, 
+                                
+                                ],    
                             }
-                            ,{
+                            ,
+                            {
                                 path: 'categoria_id',
                                 select:{__v:false},
                                 populate:{
@@ -92,7 +158,7 @@ const crearProducto = async(req, res= response)=>{
 
     const fecha_registro = Date.now();  
     const {
-        empresa_id,
+        // empresa_id,
         categoria_id,
         nombre,
         precio_original,
@@ -104,9 +170,18 @@ const crearProducto = async(req, res= response)=>{
 const porcentaje = (precio_original * descuento)/100;
 const precio_final= precio_original-porcentaje;
 
+const  usuario_empresa_id = req.usuario._id;
+const externo = await Externo.findOne({usuario_id:usuario_empresa_id, estado:true})
+// Generar la data a guardar
+if (! externo  ) {
+    return res.status(401).json({
+        msg: `EL id ${usuario_empresa_id} No cuenta con los permisos necesarios - No es una empresa`
+    });  
+}
+
     const data = {
 
-empresa_id : empresa_id,
+empresa_id : externo._id,
 categoria_id : categoria_id,
 nombre : nombre.toUpperCase().trim(),
 precio_original : precio_original.trim().toString(),
@@ -114,7 +189,7 @@ descuento : descuento.trim(),
 precio_final,
 fecha_inicio : fecha_inicio.trim(),
 fecha_fin : fecha_fin.trim(),
-usuario_id: req.usuario._id,
+// usuario_id: req.usuario._id,
 fecha_registro
     }
     
@@ -143,10 +218,20 @@ const porcentaje = (precio_original * descuento)/100;
 const precio_final= precio_original-porcentaje;
 
 
-const productoDB = await  Producto.findById(id);
+const productoDB = await  Producto.findById(id). 
+populate(
+    {
+        path: 'empresa_id',
+        select:{__v:false},
+
+    }
+
+    );
+
+
 
 let permiso = true;
-(productoDB.usuario_id.equals(req.usuario._id) || req.usuario.rol==='ADMIN_ROLE' ) ? permiso = true :permiso=false; 
+(productoDB.empresa_id.usuario_id==req.usuario._id || req.usuario.rol==='ADMIN_ROLE' ) ? permiso = true :permiso=false; 
 
 if (!permiso ) {    
     return res.status(401).json({
@@ -175,9 +260,18 @@ const eliminarProducto = async(req= request, res= response)=>{
     const fecha_eliminacion = Date.now();
 
 const {id} = req.params;
-const productoDB = await  Producto.findById(id);
+const productoDB = await  Producto.findById(id). 
+populate(
+    {
+        path: 'empresa_id',
+        select:{__v:false},
+
+    }
+
+    );
+
 let permiso = true;
-(productoDB.usuario_id.equals(req.usuario._id) || req.usuario.rol==='ADMIN_ROLE' ) ? permiso = true :permiso=false; 
+(productoDB.empresa_id.usuario_id==req.usuario._id  || req.usuario.rol==='ADMIN_ROLE' ) ? permiso = true :permiso=false; 
 
 if (!permiso ) {    
     return res.status(401).json({

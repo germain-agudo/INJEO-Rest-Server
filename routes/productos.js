@@ -21,7 +21,9 @@ const  {
     existeProductoPorId,
     existeProductoActivoPorId,
     existeCatCategoriaProductoActivoPorId,
-    existeUsuarioActivoPorId
+    existeUsuarioActivoPorId,
+    existeExternoActivoPorId,
+    existeCatCategoriaProductoPorId
  }= require('../helpers/db-validators');
 
 /**
@@ -62,9 +64,10 @@ router.get('/:id',[
     tieneRole('ADMIN_ROLE','EXTERNO_ROLE'),
    datosCompletos,
   //  esAdminRole,
-   check('empresa_id','El empresa_id es obligatorio').not().isEmpty(),
-   check('empresa_id').custom( existeUsuarioActivoPorId ),
+  //  check('empresa_id','El empresa_id es obligatorio').not().isEmpty(),
+  //  check('empresa_id').custom( existeExternoActivoPorId ),
    check('categoria_id','El categproaproducto_id es obligatorio').not().isEmpty(),
+   check('categoria_id').custom( existeCatCategoriaProductoPorId ),
    check('categoria_id').custom( existeCatCategoriaProductoActivoPorId ),
    check('nombre','El nombre es obligatorio').not().isEmpty(),
    check('precio_original','El precio es obligatorio').not().isEmpty(),

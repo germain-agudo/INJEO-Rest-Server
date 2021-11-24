@@ -4,7 +4,7 @@ const ProductoSchema = Schema({
 
     empresa_id: {
         type: Schema.Types.ObjectId,
-        ref: 'Usuario',
+        ref: 'Externo',
         required:true,
         
     },
@@ -20,7 +20,10 @@ const ProductoSchema = Schema({
         required: [true, 'El nombre es obligatorio'],
        
     },
-
+    img: {
+        type: String,
+       
+    },
     precio_original: {
         // type: mongo.Decimal128,
         type: Number,
@@ -64,11 +67,11 @@ const ProductoSchema = Schema({
         type:  Date,
             
     },
-    usuario_id: {
-        type: Schema.Types.ObjectId,
-        ref: 'Usuario',
-        required:true,        
-    },
+    // usuario_id: {
+    //     type: Schema.Types.ObjectId,
+    //     ref: 'Usuario',
+    //     required:true,        
+    // },
 });
 
 

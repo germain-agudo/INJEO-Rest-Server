@@ -31,6 +31,7 @@ router.put('/:coleccion/:id',[ //los checks no se ejecutan hasta que se manda  a
                         'webinars',
                         'servicio-social',
                         'practicas-profesionales',
+                        'productos',
     ] ) ),
     validarCampos,
 ],actualizarImagenCloudinary);

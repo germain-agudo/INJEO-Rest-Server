@@ -11,8 +11,39 @@ const obtenerExternos = async(req, res = response ) => {
         Externo.countDocuments(query),
         Externo.find(query)
             // .populate('usuario_id', 'user_name')
-            .populate('usuario_id',{password:0, __v:0})
-
+            // .populate('usuario_id',{password:0, __v:0})
+            .populate(
+            [ 
+                {
+                    path :'usuario_id',
+                    select:{__v:false, password:false, }                       
+                }, 
+                {
+                    path :'titularempresa_id',
+                    select:{__v:false,}        
+                    , populate:{
+                        path :'usuario_id',
+                        select:{__v:false, password:false}                       
+                    }                 
+                }, 
+                {
+                    path :'tipoNegocio_id',
+                    select:{__v:false,} ,
+                    populate:{
+                        path :'usuario_id',
+                        select:{__v:false, password:false}                       
+                    }                        
+                }, 
+                {
+                    path :'giro_id',
+                    select:{__v:false, } ,
+                    populate:{
+                        path :'usuario_id',
+                        select:{__v:false, password:false}                       
+                    }                        
+                }, 
+            
+            ] )
             .skip( Number( desde ) )
             .limit(Number( limite ))
     ]);
@@ -28,8 +59,39 @@ const obtenerExterno = async(req, res = response ) => {
     const { id } = req.params;
     const externo = await Externo.findById( id )
                             // .populate('usuario_id', 'user_name');
-                        .populate('usuario_id',{password:0, __v:0})
-
+                        // .populate('usuario_id',{password:0, __v:0})
+                        .populate(
+                            [ 
+                                {
+                                    path :'usuario_id',
+                                    select:{__v:false, password:false, }                       
+                                }, 
+                                {
+                                    path :'titularempresa_id',
+                                    select:{__v:false,}        
+                                    , populate:{
+                                        path :'usuario_id',
+                                        select:{__v:false, password:false}                       
+                                    }                 
+                                }, 
+                                {
+                                    path :'tipoNegocio_id',
+                                    select:{__v:false,} ,
+                                    populate:{
+                                        path :'usuario_id',
+                                        select:{__v:false, password:false}                       
+                                    }                        
+                                }, 
+                                {
+                                    path :'giro_id',
+                                    select:{__v:false, } ,
+                                    populate:{
+                                        path :'usuario_id',
+                                        select:{__v:false, password:false}                       
+                                    }                        
+                                }, 
+                            
+                            ] )
 
     res.json( externo );
 
