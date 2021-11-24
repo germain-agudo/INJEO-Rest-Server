@@ -28,7 +28,7 @@ const obtenerUsuario = async(req, res = response ) => {
 }
  
 const usuariosGet = async(req = request, res = response) => {
-    const { limite = 5, desde = 0,rol= 'todos'  } = req.query;
+    const { limite = 100, desde = 0,rol= 'todos'  } = req.query;
 
 let query;
     switch (rol) {

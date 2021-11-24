@@ -15,7 +15,8 @@ const {   crearInscripcion,
         obtenerInscripciones,
         borrarInscripcion,
         obtenerInscripcion,
-        buscarRelacion
+        buscarRelacion,
+        cambiarEstatusInscrito
       
    } = require('../controllers/inscripciones');
 const { 
@@ -65,30 +66,42 @@ router.post('/', [
 ], crearInscripcion);
 
 // Actualizar - privado - cualquiera con token válido
-router.put('/:id',[
-    validarJWT,
+// router.put('/:id',[
+//     validarJWT,
 
-    // esAdminRole,
-    tieneRole('ADMIN_ROLE','USER_ROLE'),
-    datosCompletos,
-    // check('nombre','El nombre es obligatorio').not().isEmpty(), 
-    check('id', 'No es un id de Mongo válido').isMongoId(),   
-    check('id').custom( existeInscripcionPorId ), 
-
-    // check('id').custom( existeOfertaPorId),
-
-
-    check('participante_id', 'El campo participante_id es obligatorio').not().isEmpty(),     
-    check('taller_id', 'El campo taller_id es obligatorio').not().isEmpty(),     
+//     // esAdminRole,
+//     tieneRole('ADMIN_ROLE','USER_ROLE'),
+//     datosCompletos,
+//     // check('nombre','El nombre es obligatorio').not().isEmpty(), 
+//     check('id', 'No es un id de Mongo válido').isMongoId(),   
+//     check('id').custom( existeInscripcionPorId ), 
+//     // check('id').custom( existeOfertaPorId),
+//     check('participante_id', 'El campo participante_id es obligatorio').not().isEmpty(),     
+//     check('taller_id', 'El campo taller_id es obligatorio').not().isEmpty(),     
  
-    check('participante_id', 'No es un id de Mongo válido').isMongoId(),     
-    check('taller_id', 'No es un id de Mongo válido').isMongoId(),     
+//     check('participante_id', 'No es un id de Mongo válido').isMongoId(),     
+//     check('taller_id', 'No es un id de Mongo válido').isMongoId(),     
 
-    check('participante_id').custom( existeUsuarioPorId ),
-    check('taller_id').custom( existeTallerPorId ), 
+//     check('participante_id').custom( existeUsuarioPorId ),
+//     check('taller_id').custom( existeTallerPorId ), 
         
-    validarCampos
-],actualizarInscripcion); 
+//     validarCampos
+// ],actualizarInscripcion); 
+
+
+
+
+router.put('/:id',[
+    validarJWT
+    , esAdminRole
+    , check('id', 'No es un id de Mongo válido').isMongoId()  
+    , check('id').custom( existeInscripcionActivaPorId )
+    , validarCampos
+]
+, cambiarEstatusInscrito
+) 
+
+
 
 // Borrar una categoria - Admin
 router.delete('/:id',[

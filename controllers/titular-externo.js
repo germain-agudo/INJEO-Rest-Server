@@ -51,6 +51,7 @@ const crearTitularExterno = async(req, res= response)=>{
         direccion,
         correo_electronico,
         numero_telefonico,
+        curp_url
 
      }= req.body;   
 
@@ -64,7 +65,8 @@ const crearTitularExterno = async(req, res= response)=>{
         correo_electronico : correo_electronico.trim(),
         numero_telefonico : numero_telefonico.trim(),
         usuario_id: req.usuario._id,
-        fecha_registro
+        fecha_registro,
+        curp_url
     }
     
     const titular = new TitularExterno(data);
@@ -86,6 +88,7 @@ const {
     direccion,
     correo_electronico,
     numero_telefonico,
+    curp_url,
 }= req.body;
 
 const titularDB = await  TitularExterno.findById(id);
@@ -118,6 +121,7 @@ ine_url :ine_url.trim(),
 direccion :direccion.trim(),
 correo_electronico :correo_electronico.trim(),
 numero_telefonico :numero_telefonico.trim(),
+curp_url,
 }
 
 

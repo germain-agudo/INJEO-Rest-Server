@@ -76,6 +76,9 @@ router.put('/:id',[
     check('giro_id', 'El giro_id  es obligatorio').not().isEmpty(),
     check('giro_id').custom( existeCatGiroActivoPorId ),
 
+
+    check('comprobante_domicilio_pdf', 'El comprobante  es obligatorio').not().isEmpty(),
+
     
     // check('id').custom( existeUsuarioPorId ),
     // check('rol').custom( esRoleValido ), 
@@ -106,8 +109,9 @@ router.post('/',[
     
     check('giro_id', 'El giro_id  es obligatorio').not().isEmpty(),
     check('giro_id').custom( existeCatGiroActivoPorId ),
-
-
+    
+    
+    check('comprobante_domicilio_pdf', 'El comprobante  es obligatorio').not().isEmpty(),
     // check('correo', 'El correo no es válido').isEmail(),
     // check('password', 'El password debe de ser más de 6 letras').isLength({ min: 6 }),
     // check('rol', 'El rol es obligatorio').not().isEmpty(),

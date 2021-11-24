@@ -39,6 +39,7 @@ const crearExterno = async(req, res = response ) => {
  // console.log(req.body );
  const fecha_registro = Date.now();
  
+ let convenio=null;
  const {  
 
     nombre, 
@@ -52,10 +53,16 @@ const crearExterno = async(req, res = response ) => {
      pagina_web,
      latitud,
      longitud,
+     comprobante_domicilio_pdf
+     
 
      
 
 } = req.body;
+
+if (req.body.convenio) {
+    convenio= req.body.convenio
+}
 if(usuario_id==null){
     return res.status(400).json({
         msg:'Usuario Invalido'
@@ -74,7 +81,7 @@ const user_name = `${nombre}`.toUpperCase();
 const usuario = await Usuario.findByIdAndUpdate(
     usuario_id,{
         user_name
-        // , datos_completos:true
+        , datos_completos:true
     
     },{new:true})
 
@@ -93,6 +100,8 @@ const externo = new Externo({
     giro_id,
     fecha_registro,
     usuario_id,
+    comprobante_domicilio_pdf,
+    convenio
 
    });
 
@@ -124,6 +133,7 @@ const actualizarExterno = async( req, res = response ) => {
         titularempresa_id,
         tipoNegocio_id,
         giro_id,
+        comprobante_domicilio_pdf
     } = req.body;
 
     const [externoRegistrado , rfcDB] = await Promise.all([
@@ -151,6 +161,10 @@ const actualizarExterno = async( req, res = response ) => {
         }
     }    
 
+    let convenio = null;
+    if (req.body.convenio) {
+        convenio= req.body.convenio
+    }
     const externoDB = {    
         nombre : nombre.toUpperCase().trim(),
     rfc : rfc.toUpperCase().trim(), 
@@ -161,6 +175,8 @@ const actualizarExterno = async( req, res = response ) => {
     titularempresa_id,
     tipoNegocio_id,
     giro_id,
+    comprobante_domicilio_pdf,
+    convenio
     };   
 
     const externo = await Externo.findByIdAndUpdate( id, externoDB,{new:true});

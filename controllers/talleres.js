@@ -48,11 +48,19 @@ const crearTaller = async(req, res = response ) => {
     } */
 
     // Generar la data a guardar
+    let enlace_dos;
+    enlace_dos= enlace;
+
+    // console.log(req.body.enlace_dos);
+    if (req.body.enlace_dos) {
+        enlace_dos = req.body.enlace_dos
+    }
     const data = {
         "titulo":titulo.toUpperCase(),
         subtitulo,
         descripcion,
         enlace,
+        enlace_dos,
         cupo,
         usuario: req.usuario._id,
         fecha_registro,

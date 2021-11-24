@@ -64,11 +64,12 @@ router.get('/:id',[
    check('nombre','El nombre es obligatorio').not().isEmpty(),
    check('apellidos','El apellidos es obligatorio').not().isEmpty(),
    check('curp','La CURP es obligatorio').not().isEmpty(),
-  //  check('curp','La CURP no es válida').isLength({ min: 10, max:10 }),
-  check('curp','La CURP se integra por 18 caracteres, revise nuevamente').isLength({ min: 18, max:18 }),
-
-  check('curp').custom( curpTitularExternoExiste ),
-
+   //  check('curp','La CURP no es válida').isLength({ min: 10, max:10 }),
+   check('curp','La CURP se integra por 18 caracteres, revise nuevamente').isLength({ min: 18, max:18 }),
+   
+   check('curp').custom( curpTitularExternoExiste ),
+   
+   check('curp_url','La CURP en pdf es obligatorio').not().isEmpty(),
 
    check('ine_url','El INE es obligatorio').not().isEmpty(),
    check('direccion','La dirección del domicilio es obligatoria').not().isEmpty(),
@@ -92,6 +93,7 @@ router.get('/:id',[
     check('id').custom( existeTitularExternoPorId ),
     check('id').custom( existeTitularExternoActivoPorId ),
     // check('id').custom(id=>existeModeloPorId(id,'Beca')),
+    check('curp_url','La CURP en pdf es obligatorio').not().isEmpty(),
 
     check('nombre','El nombre es obligatorio').not().isEmpty(),
     check('apellidos','El apellidos es obligatorio').not().isEmpty(),

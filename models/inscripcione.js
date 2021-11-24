@@ -4,9 +4,9 @@ const { Schema, model } = require('mongoose');
 
 const InscripcioneSchema = Schema({
 
-    cursando: {
+    aprobado: {
         type: Boolean,
-        default: true,
+        default: false,
         
     },
 

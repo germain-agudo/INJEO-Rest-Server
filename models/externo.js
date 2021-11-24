@@ -62,6 +62,16 @@ const ExternoSchema= Schema({
         type: Boolean,
         default:false
     },
+    comprobante_domicilio_pdf: {
+        type: String,
+        required: [true, 'El comprobante de ubicación es obligatoria']
+
+    },
+    convenio: {
+        type: String
+        
+    },
+
 
     // tipo_persona: {
     //     type: String,

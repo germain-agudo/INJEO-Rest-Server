@@ -26,9 +26,11 @@ const aceptarUsuarioExterno = async (req, res = response) => {
         }, {
             new: true
         }),
-        Usuario.findByIdAndUpdate(empresaDb.usuario_id, {
+       await  Usuario.findByIdAndUpdate(empresaDb.usuario_id, {
             
-            datos_completos: true
+            // datos_completos: true
+            aceptacion_completa:true
+
         }, {
             new: true
         })

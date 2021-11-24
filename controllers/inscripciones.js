@@ -8,8 +8,27 @@ const { Taller, Usuario, Inscripccion, Oferta} = require('../models');
 
 const obtenerInscripciones = async(req, res = response ) => {   
 
-     const { limite = 5, desde = 0 } = req.query;
-    const query = { estado: true };
+     const { limite = 5, desde = 0 , estatus = 'todos'} = req.query;
+let query;
+switch (estatus) {
+    case 'esperando':
+     query = { estado: true,    aprobado: false };
+
+        break;
+    case 'aprobados':
+
+        query = { estado: true, aprobado: true };
+
+            break;
+
+    default:
+       query = { estado: true };
+       break;
+} 
+
+    
+    
+    //  const query = { estado: true };
 
     const [ total, inscripciones ] = await Promise.all([
         Inscripccion.countDocuments(query),
@@ -217,21 +236,40 @@ const taller = await Taller.findById(inscripcion_id.taller._id);
 
 
 
+const cambiarEstatusInscrito = async(req, res = response)=>{
+    const { id } = req.params;
+    const inscripcion = await Inscripccion.findById(id);
+
+    if (inscripcion.aprobado) {
+        inscripcion.aprobado= false;
+        inscripcion.save()
+    }else if(!inscripcion.aprobado){
+        inscripcion.aprobado= true;
+        await inscripcion.save()
+
+    }
+    return res.status(201).json(inscripcion)
+}
+
+
+
 
 
 const buscarRelacion = async(req, res =response ) => {
 
     const {id, coleccion}= req.params;
     
+    const { estatus = 'todos'} = req.query;
+   
 
     switch (coleccion) {
         case 'talleres':
-               buscarUsuariosPorTaller(id, res);
+               buscarUsuariosPorTaller(id, res, estatus);
              
             break;
     
         case 'usuarios':
-               buscarTalleresPorUsuario(id,res);
+               buscarTalleresPorUsuario(id,res, estatus);
             break;
     
         default:
@@ -243,13 +281,30 @@ const buscarRelacion = async(req, res =response ) => {
     // console.log(req.params);
     }
     
-    const buscarUsuariosPorTaller=async(id= '', res= response)=>{
-    
-    const query={estado:true, taller:id};
+    const buscarUsuariosPorTaller=async(id= '', res= response, estatus='')=>{
+        
+        let query;
+        switch (estatus) {
+            case 'esperando':
+             query = { estado: true, taller:id,    aprobado: false };
+        
+                break;
+            case 'aprobados':
+                query = { estado: true, taller:id, aprobado: true };
+        
+                    break;
+        
+            default:
+               query = { estado: true, taller:id };
+               break;
+        } 
+
+    // const query={estado:true, taller:id};
         const [taller,total,usuarios]= await Promise.all( [
                 Taller.findById(id),
                 Inscripccion.countDocuments(query),
-                Inscripccion.find({estado:true, taller:id}, {usuario:1,})     
+                Inscripccion.find(query, {usuario:1, aprobado:1})     
+                // Inscripccion.find({estado:true, taller:id}, {usuario:1, aprobado:1})     
                                     // .populate('usuario',['user_name'])                                
                                     .populate('usuario',{password:0, __v:0})
                                 
@@ -269,14 +324,34 @@ const buscarRelacion = async(req, res =response ) => {
         });    
     }
     
-    const buscarTalleresPorUsuario=async(id= '', res= response)=>{
+    const buscarTalleresPorUsuario=async(id= '', res= response, estatus='')=>{
     
-    const query={estado:true, usuario:id};
+        let query;
+        switch (estatus) {
+            case 'esperando':
+             query = { estado: true, usuario:id,    aprobado: false };
+        
+                break;
+            case 'aprobados':
+                query = { estado: true, usuario:id, aprobado: true };
+        
+                    break;
+        
+            default:
+               query = { estado: true, usuario:id };
+               break;
+        } 
+
+
+
+
+    // const query={estado:true, usuario:id};
     
         const [usuario, total, talleres]= await Promise.all( [
                 Usuario.findById(id),
                 Inscripccion.countDocuments(query),
-                Inscripccion.find({estado:true, usuario:id}, {taller:1,})     
+                Inscripccion.find(query, {taller:1, aprobado:1})     
+                // Inscripccion.find({estado:true, usuario:id}, {taller:1, aprobado:1})     
                                     // .populate('taller',['titulo'])
                                     // .populate('taller',{ __v:0})
                                     .populate({
@@ -319,4 +394,5 @@ module.exports = {
     actualizarInscripcion,
     borrarInscripcion,
     buscarRelacion,
+    cambiarEstatusInscrito
 }

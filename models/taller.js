@@ -34,6 +34,13 @@ const TallerSchema = Schema({
         required:[true, 'El enlace es obligatorio'],
 
     },
+    enlace_dos:{
+        type: String,
+
+    },
+
+
+
 /*     fecha:{
         type: String,
         default:new Date().toISOString(), 

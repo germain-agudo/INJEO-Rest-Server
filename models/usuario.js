@@ -88,6 +88,10 @@ const UsuarioSchema = Schema({
         type: Boolean,
         default:false,
     }
+    , aceptacion_completa:{
+        type: Boolean,
+        default:false,
+    }
     
 /*     google: {
         type: Boolean,

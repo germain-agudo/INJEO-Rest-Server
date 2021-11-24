@@ -21,9 +21,23 @@ let dependencia;
     if (!personaRegistrada && !externoRegistrado) {
        
         return res.status(401).json({
-            msg: `El usuario: '${ _id }' no ha completado su registro  - No puede hacer esto`
+            msg: `El usuario: '${ _id }' no existe en los usuarios  - No puede hacer esto`
         });
     }
+
+
+if (!req.usuario.datos_completos) {
+           
+    return res.status(401).json({
+        msg: `El usuario: '${ _id }' no ha completado su registro  - No puede hacer esto`
+    });
+}
+if (!req.usuario.aceptacion_completa) {
+           
+    return res.status(401).json({
+        msg: `El usuario: '${ _id }' ha completado su registro, pero aún no ha sido aceptado - por favor espere su verificación `
+    });
+}
 
     next();
 }

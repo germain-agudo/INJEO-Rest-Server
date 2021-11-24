@@ -29,6 +29,30 @@ const PersonaSchema= Schema({
         type: String,
         required: [true, 'La CURP es obligatoria']
     },
+
+
+    pdf_curp: {
+        type: String,
+        required: [true, 'La CURP en pdf es obligatoria']
+    },
+    pdf_acta_nacimiento: {
+        type: String,
+        required: [true, 'El acta de nacimiento en pdf es obligatoria']
+    },
+    pdf_comprobante_domicilio: {
+        type: String,
+        required: [true, 'El comprobante de domicilio en pdf es obligatorio']
+    },
+
+    pdf_ine: {
+        type: String,
+    },
+    escuela_procedencia: {
+        type: String,
+    },
+
+
+
     fecha_nacimiento: {
         type: String,
         required: [true, 'La fecha de nacimiento es obligatoria']

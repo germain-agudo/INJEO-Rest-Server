@@ -83,7 +83,14 @@ router.put('/:id',[
     check('curp', 'La CURP  es obligatoria').not().isEmpty(),
     check('fecha_nacimiento', 'La fecha de nacimiento es obligatoria').not().isEmpty(),
     check('municipio', 'El municipio es obligatorio').not().isEmpty(),
-    check('region', 'La region es obligatoria').not().isEmpty(),   
+    check('region', 'La region es obligatoria').not().isEmpty(),
+    
+    
+    check('pdf_curp', 'El campo: pdf_curp, es obligatorio').not().isEmpty(),
+    check('pdf_acta_nacimiento', 'El campo: pdf_acta_nacimiento, es obligatorio').not().isEmpty(),
+    check('pdf_comprobante_domicilio', 'El campo: pdf_comprobante_domicilio, es obligatorio').not().isEmpty(),
+
+
     // check('rol', 'No es un rol válido').isIn(['ADMIN_ROLE','USER_ROLE']),
     check('sexo', 'Sexo no válildo').isIn(['Masculino','Femenino']),
     check('region', 'Región no válida').isIn(['Cañada',
@@ -128,6 +135,15 @@ router.post('/',[
     check('region', 'La region es obligatoria').not().isEmpty(),   
     check('usuario_id', 'El id_usuario es obligatoria').not().isEmpty(),
     
+    check('pdf_curp', 'El campo: pdf_curp, es obligatorio').not().isEmpty(),
+    check('pdf_acta_nacimiento', 'El campo: pdf_acta_nacimiento, es obligatorio').not().isEmpty(),
+    check('pdf_comprobante_domicilio', 'El campo: pdf_comprobante_domicilio, es obligatorio').not().isEmpty(),
+
+
+
+
+
+
     check('usuario_id', 'No es un ID válido').isMongoId(),
     check('usuario_id').custom( existeUsuarioPorId ),       
     check('usuario_id').custom( existeUsuarioActivoPorId ),    

@@ -54,7 +54,7 @@ const router = new Router();
     validarJWT,
     esAdminRole,
     // tieneRole('ADMIN_ROLE','EXTERNO_ROLE'),
-    datosCompletos,    
+   //  datosCompletos,    
     check('id','No es un ID válido').isMongoId(),
     validarCampos,
 ], aceptarUsuarioExterno);

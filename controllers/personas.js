@@ -132,6 +132,9 @@ nombre
 ,municipio
 ,region
 ,usuario_id
+,pdf_curp
+,pdf_acta_nacimiento
+,pdf_comprobante_domicilio
 } = req.body;
 
 const user_name = `${nombre}`.toUpperCase();
@@ -143,7 +146,7 @@ const usuarioDB = await usuario.findById(usuario_id);
 if (!usuarioDB.estado) {
     
 } */
-
+let pdf_ine= '';
 // console.log(fecha_nacimiento);
 const edad = getEdad(fecha_nacimiento); 
 // console.log(edad.toString());
@@ -154,9 +157,25 @@ if (edad < 10 || Number.isNaN(edad)) {
         // usuario
        
     });
+}else{
+
+if (edad>=18) {
+    
+    if (!req.body.pdf_ine ) {
+        return  res.status(400).json({
+            msg:'Es necesario su INE en pdf',
+             // usuario
+         });
+    }
+    pdf_ine= req.body.pdf_ine
+}
+}
+let escuela_procedencia='';
+if (req.body.escuela_procedencia) {
+    escuela_procedencia= req.body.escuela_procedencia;
 }
 
-const usuario = await Usuario.findByIdAndUpdate(usuario_id,{user_name, datos_completos:true},{new:true})
+await Usuario.findByIdAndUpdate(usuario_id,{user_name, datos_completos:true, aceptacion_completa : true},{new:true})
 
 const persona = new Persona({            
  nombre       
@@ -170,6 +189,11 @@ const persona = new Persona({
 ,region
 ,usuario_id
 ,fecha_registro
+,pdf_curp
+,pdf_acta_nacimiento
+,pdf_comprobante_domicilio
+, pdf_ine
+, escuela_procedencia
     
     });
 
@@ -196,14 +220,15 @@ const personaPut = async(req, res = response) => {
     const {
         nombre
         , apellido_paterno
-        ,apellido_materno
-       
+        ,apellido_materno       
         ,sexo
         ,curp
         ,fecha_nacimiento
         ,municipio
         ,region 
-
+        ,pdf_curp
+        ,pdf_acta_nacimiento
+        ,pdf_comprobante_domicilio
       
         } = req.body;
         
@@ -234,13 +259,32 @@ if (!permiso ) {
  }
 
  const edad = getEdad(fecha_nacimiento); 
+let pdf_ine= '';
  if (edad<10) {
     return  res.status(400).json({
          msg:'Fecha de Nacimiento no válida',
          // usuario
         
      });
+ }else{
+    if (edad>=18) {
+    
+        if (!req.body.pdf_ine ) {
+            return  res.status(400).json({
+                msg:'Es necesario su INE en pdf',
+                 // usuario
+             });
+        }
+        pdf_ine= req.body.pdf_ine
+    }
  }
+
+
+ let escuela_procedencia='';
+ if (req.body.escuela_procedencia) {
+     escuela_procedencia= req.body.escuela_procedencia;
+ }
+
     const personaDB = {    
         nombre
         , apellido_paterno
@@ -251,7 +295,11 @@ if (!permiso ) {
         ,fecha_nacimiento
         ,municipio
         ,region 
-  
+        ,pdf_curp
+,pdf_acta_nacimiento
+,pdf_comprobante_domicilio
+        , pdf_ine
+       , escuela_procedencia
            
     };   
 

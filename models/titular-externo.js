@@ -18,6 +18,10 @@ const titularExternoSchema= Schema({
         type: String,
         // required: [true, 'El INE es obligatorio']
     },
+    curp_url: {
+        type: String,
+        required: [true, 'La curp es obligatorio']
+    },
     direccion: {
         type: String,
         required: [true, 'La direccion es obligatoria']
