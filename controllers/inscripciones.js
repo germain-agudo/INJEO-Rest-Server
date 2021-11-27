@@ -1,6 +1,7 @@
 const { response } = require('express');
 const { Taller, Usuario, Inscripccion, Oferta} = require('../models');
 
+const {ObjectId}= require('mongoose').Types;
 
 
 
@@ -259,7 +260,7 @@ const buscarRelacion = async(req, res =response ) => {
 
     const {id, coleccion}= req.params;
     
-    const { estatus = 'todos'} = req.query;
+    const { estatus = 'todos', taller = ''} = req.query;
    
 
     switch (coleccion) {
@@ -270,6 +271,10 @@ const buscarRelacion = async(req, res =response ) => {
     
         case 'usuarios':
                buscarTalleresPorUsuario(id,res, estatus);
+            break;
+
+        case 'incripcion-usuario':
+               buscarExistenciaInscripcion(id,res, taller);
             break;
     
         default:
@@ -375,6 +380,68 @@ const buscarRelacion = async(req, res =response ) => {
             'usuario': usuario.user_name,
             total,
             results:talleres,
+        });    
+    }
+    
+    
+    
+    
+    const buscarExistenciaInscripcion=async(id= '', res= response, taller='')=>{
+        
+
+        
+        if (taller==null ||taller=='') {
+            return  res.status(401).json({
+                msg: `El taller es necesario`
+            }); 
+            
+        }else{
+        const esMongoID = ObjectId.isValid( taller );
+     if (!esMongoID) {
+        return  res.status(401).json({
+            msg: `El taller: ${taller} no es válido`
+    }); 
+     }
+
+
+       const tallerDb = await Taller.findById(taller);
+
+        if (!tallerDb || !tallerDb.estado) {
+            return  res.status(401).json({
+                msg: `El taller taller no existe`
+        }); 
+        }
+
+    }
+   const  query={estado:true, usuario:id,  taller:taller};
+    
+        const [usuario, inscripcion]= await Promise.all( [
+                Usuario.findById(id),
+                Inscripccion.findOne(query) 
+                 
+                // .populate({
+                //     path: 'taller',
+                //     select:{__v:false, },
+                //     populate:{
+                //         path :'usuario',
+                //         select:{__v:false, password:false, }  
+                //              }           }),       
+        ]);
+    
+            if (!usuario || !usuario.estado) {
+                return res.status(401).json({
+                msg: `El usuario ${id}, no existe`
+                });        
+            }
+
+
+
+let  inscripcion_id ='null';
+if(inscripcion){
+    inscripcion_id= inscripcion._id
+}
+        return res.json({
+            inscripcion_id
         });    
     }
     

@@ -22,7 +22,9 @@ const  {
         existeCatCategoriaBolsaActivoPorId,
         existeCatEstadoActivoPorId,
         existeCatMunicipioActivoPorId,
+        existeUsuarioPorId,
         existeUsuarioActivoPorId,
+        comprobarDatosCompletos,
 }= require('../helpers/db-validators');
 
 /**
@@ -69,7 +71,9 @@ router.get('/:id',[
       
       
         check('usuario_empresa_id','El usuario_empresa_id es obligatoria').not().isEmpty(),
+        check('usuario_empresa_id').custom( existeUsuarioPorId), 
         check('usuario_empresa_id').custom( existeUsuarioActivoPorId ), 
+        check('usuario_empresa_id').custom( comprobarDatosCompletos ), 
 
         check('fecha_inicio','La fecha de inicio es obligatoria').not().isEmpty(),
         check('salario','El salario es obligatorio').not().isEmpty(),       

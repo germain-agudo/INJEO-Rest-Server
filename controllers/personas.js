@@ -9,7 +9,9 @@ const obtenerPersona = async(req, res = response ) => {
 
     const { id } = req.params;
     const persona = await Persona.findById( id )
-                         .populate('usuario_id',['user_name'])
+    .populate('usuario', {password:0, __v:0})
+
+                        //  .populate('usuario_id',['user_name'])
     ;
                             
 
@@ -26,7 +28,9 @@ const personasGet = async(req = request, res = response) => {
     const [ total, personas ] = await Promise.all([
         Persona.countDocuments(query),
         Persona.find(query)
-            .populate('usuario_id',['user_name'])
+            // .populate('usuario_id',['user_name'])
+            .populate('usuario', {password:0, __v:0})
+
             .skip( Number( desde ) )
             .limit(Number( limite ))
             

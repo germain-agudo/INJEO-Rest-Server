@@ -1108,6 +1108,24 @@ const existeRedExternoActivoPorId = async( id='' ) => {
 
 
 
+// Comprobar que se encuentra activo
+const comprobarDatosCompletos = async( id='' ) => {
+    // Verificar si el correo existe
+    const existeId = await Usuario.findById(id);
+
+    if ( !existeId || !existeId.estado  ) {
+        throw new Error(`El id:'${ id }', no existe`);
+    }
+
+    if ( !existeId.datos_completos  ) {
+        throw new Error(`El usuario: '${ id }' no ha completado su registro  - No puede hacer esto`);
+    }
+    if ( !existeId.aceptacion_completa ) {
+        throw new Error(`El usuario: '${ id }' ha completado su registro, pero aún no ha sido aceptado - por favor espere su verificación`);
+    }
+
+   
+}
 
 
 
@@ -1248,7 +1266,10 @@ curpTitularExternoExiste,
 razonSocialExiste,
 existeCatCategoriaBolsaPorId,
 existeCatCategoriaBolsaActivoPorId,
-existeInscripcionActivaPorId
+existeInscripcionActivaPorId,
 
+
+
+comprobarDatosCompletos
 }
 

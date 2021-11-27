@@ -32,6 +32,7 @@ if (!req.usuario.datos_completos) {
         msg: `El usuario: '${ _id }' no ha completado su registro  - No puede hacer esto`
     });
 }
+
 if (!req.usuario.aceptacion_completa) {
            
     return res.status(401).json({

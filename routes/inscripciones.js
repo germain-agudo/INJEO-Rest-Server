@@ -107,7 +107,7 @@ router.put('/:id',[
 router.delete('/:id',[
     validarJWT,
     // esAdminRole,
-    tieneRole('ADMIN_ROLE','USER_ROLE'),
+    // tieneRole('ADMIN_ROLE','USER_ROLE'),
     datosCompletos,
     check('id', 'No es un id de Mongo válido').isMongoId(),
     check('id').custom( existeInscripcionActivaPorId ), 
@@ -124,11 +124,14 @@ router.get('/:coleccion/:id',[
     // check('id','El id debe de ser de mongo ').isMongoId(),
   
     // check('id').custom( existeOfertaPorId ),
-    check('id', 'No es un id de Mongo válido').isMongoId(),
+
     check('coleccion').custom(c=> coleccionesPermitidas( c, [    
         'talleres',
-        'usuarios',    
+        'usuarios',
+        'incripcion-usuario'    
   ] ) ),
+  check('id', 'No es un id de Mongo válido').isMongoId(),
+  check('id', 'id es obligatorio').not().isEmpty(),
      validarCampos,
   ], buscarRelacion); 
 
