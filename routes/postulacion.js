@@ -108,6 +108,7 @@ router.get('/:coleccion/:id',[
     check('coleccion').custom(c=> coleccionesPermitidas( c, [    
         'bolsas',
         'postulados',    
+        'postulacion-usuario',    
   ] ) ),
      validarCampos,
   ], buscarRelacion); 

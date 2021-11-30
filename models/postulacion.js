@@ -6,6 +6,18 @@ const PostulacionSchema = Schema({
         type: String,
         required: [true, 'El Curriculum vitae es obligatorio']
     },
+    estatus: {
+        type: Number,
+        required: [true, 'El estatus de la solicitud es oblogatoria'],
+        default:1
+
+
+    },
+    msg: {
+        type: String,
+        required: [true, 'El mensaje de solicitud es obligatorio'],
+        default: 'Su solicitud está siendo analizada y valorada, espere, por favor'
+    },
     usuariojoven_id: {
         type: Schema.Types.ObjectId,
         ref: 'Usuario',

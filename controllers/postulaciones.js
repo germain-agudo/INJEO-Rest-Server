@@ -1,6 +1,7 @@
 const {response, request} = require('express');
 
 const {Postulacion, BolsaTrabajo, Usuario}= require('../models/index');
+const {ObjectId}= require('mongoose').Types;
 
 /**
  *  Obtener Todas
@@ -280,7 +281,9 @@ res.json(postulacion);
 
 
 const buscarRelacion = async(req, res =response ) => {
-    const {id, coleccion}= req.params;
+    const {id, coleccion }= req.params;
+
+    const {  bolsa = '' }= req.query;
 
     switch (coleccion) {
         case 'bolsas':
@@ -291,7 +294,9 @@ const buscarRelacion = async(req, res =response ) => {
         case 'postulados':
                buscarBolsasPorPostulados(id,res);
             break;
-    
+        case 'postulacion-usuario':
+               buscarExistenciaPostulacion(id,res, bolsa);
+            break;
         default:
            return res.status(500).json({ msg: 'Coloección en desarollo'});
     
@@ -441,6 +446,70 @@ const buscarRelacion = async(req, res =response ) => {
             'postulado': postulado.user_name,
             total,
             results:bolsas_trabajo,
+        });    
+    }
+    
+    
+    
+
+
+    
+    const buscarExistenciaPostulacion=async(id= '', res= response, bolsa='')=>{
+        
+
+        
+        if (bolsa==null ||bolsa=='') {
+            return  res.status(401).json({
+                msg: `La bolsa de trabajo es necesaria`
+            }); 
+            
+        }else{
+        const esMongoID = ObjectId.isValid( bolsa );
+     if (!esMongoID) {
+        return  res.status(401).json({
+            msg: `la bolsa de trabajo: ${bolsa} no es válida`
+    }); 
+     }
+
+
+       const bolsaDb = await BolsaTrabajo.findById(bolsa);
+
+        if (!bolsaDb || !bolsaDb.estado) {
+            return  res.status(401).json({
+                msg: `El La bolsa ${bolsa } no existe`
+        }); 
+        }
+
+    }
+   const  query={estado:true, usuariojoven_id:id,  bolsa_id:bolsa};
+    
+        const [usuario, postulacion]= await Promise.all( [
+                Usuario.findById(id),
+                Postulacion.findOne(query) 
+                 
+                // .populate({
+                //     path: 'taller',
+                //     select:{__v:false, },
+                //     populate:{
+                //         path :'usuario',
+                //         select:{__v:false, password:false, }  
+                //              }           }),       
+        ]);
+    
+            if (!usuario || !usuario.estado) {
+                return res.status(401).json({
+                msg: `El usuario ${id}, no existe`
+                });        
+            }
+
+
+
+let  postulacion_id ='null';
+if(postulacion){
+    postulacion_id= postulacion._id
+}
+        return res.json({
+            postulacion_id
         });    
     }
     
