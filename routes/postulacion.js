@@ -69,16 +69,21 @@ router.post('/', [
 
 // Actualizar - privado - cualquiera con token válido
 
-router.put('/:id',[
+router.put('/:coleccion/:id',[
     validarJWT,
     // esAdminRole,
-    tieneRole('ADMIN_ROLE','USER_ROLE'),
+    tieneRole('ADMIN_ROLE','EXTERNO_ROLE'),
     datosCompletos,
     check('id', 'No es un id de Mongo válido').isMongoId(),
     check('id').custom( existePostulacionPorId ),
     check('id').custom( existePostulacionActivoPorId ),
-    check('curriculum_url', 'El curriculum_url es obligatorio').not().isEmpty(),     
+    check('msg', 'El mensaje es obligatorio').not().isEmpty(),
 
+    check('coleccion').custom(c=> coleccionesPermitidas( c, [    
+        'aceptar',
+        'rechazar',    
+        
+  ] ) ),
     validarCampos,
 ], actualizarPostulacion ); 
 

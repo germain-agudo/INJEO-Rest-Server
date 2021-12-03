@@ -237,22 +237,45 @@ if (postulacionDB) {
  */
 
  const actualizarPostulacion = async (req, res = response) => {
-    const {   id  } = req.params;
-    const {   curriculum_url } = req.body;
-    const postulacionDB = await  Postulacion.findById(id);
-    let permiso = true;
-    (postulacionDB.usuariojoven_id.equals(req.usuario._id) || req.usuario.rol==='ADMIN_ROLE' ) ? permiso = true :permiso=false; 
+    const {   id , coleccion } = req.params;
+    const {   msg } = req.body;
+   
+    // const postulacionDB = await  Postulacion.findById(id);
+
+    // let permiso = true;
+    // (postulacionDB.usuariojoven_id.equals(req.usuario._id) || req.usuario.rol==='ADMIN_ROLE' ) ? permiso = true :permiso=false; 
     
-    if (!permiso ) {    
-        return res.status(401).json({
-            msg: `EL id ${req.usuario.id} No cuenta con los permisos necesarios - No puede hacer esto`
-        }); 
-    }
+    // if (!permiso ) {    
+    //     return res.status(401).json({
+    //         msg: `EL id ${req.usuario.id} No cuenta con los permisos necesarios - No puede hacer esto`
+    //     }); 
+    // }
 // console.log(curriculum_url);
-  
-    const postulacion_db = await Postulacion.findByIdAndUpdate(id, {curriculum_url}, {
+
+let estausPostulacion;
+switch (coleccion) {
+    case 'aceptar':
+         estausPostulacion = 2
+        break;
+
+    case 'rechazar':
+        estausPostulacion = 3
+
+        break;
+
+    default:
+       return res.status(500).json({ msg: 'Coloección en desarollo'});
+
+        
+} 
+
+
+    const postulacion_db = await Postulacion.findByIdAndUpdate(id, {estatus: estausPostulacion, msg:msg.trim()}, {
         new: true
     });
+
+
+
     res.json(postulacion_db);
 
 }
@@ -283,16 +306,16 @@ res.json(postulacion);
 const buscarRelacion = async(req, res =response ) => {
     const {id, coleccion }= req.params;
 
-    const {  bolsa = '' }= req.query;
+    const {  bolsa = '', estatus='' }= req.query;
 
     switch (coleccion) {
         case 'bolsas':
-               buscarPostuladosPorBolsa(id, res);
+               buscarPostuladosPorBolsa(id, res, estatus);
              
             break;
     
         case 'postulados':
-               buscarBolsasPorPostulados(id,res);
+               buscarBolsasPorPostulados(id,res, estatus);
             break;
         case 'postulacion-usuario':
                buscarExistenciaPostulacion(id,res, bolsa);
@@ -309,13 +332,39 @@ const buscarRelacion = async(req, res =response ) => {
 
 
 
-    const buscarPostuladosPorBolsa=async(id= '', res= response)=>{
+    const buscarPostuladosPorBolsa=async(id= '', res= response, estatus ='todos')=>{
     
-    const query={estado:true, bolsa_id :id};
+    let query;
+
+
+switch (estatus) {
+    case 'pendientes':
+        query={estado:true, bolsa_id :id, estatus:1};
+        
+        break;
+    case 'aceptadas':
+        query={estado:true, bolsa_id :id, estatus:2};
+        
+        break;
+    case 'rechazadas':
+        query={estado:true, bolsa_id :id, estatus:3};
+        
+        break;
+
+    default:
+        query={estado:true, bolsa_id :id};
+
+        break;
+}
+
+
+
+
+
         const [bolsa_trabajo,total, postulados]= await Promise.all( [
                 BolsaTrabajo.findById(id),
                 Postulacion.countDocuments(query),
-                Postulacion.find({estado:true, bolsa_id:id},
+                Postulacion.find(query,
                      {usuario:1,}
                     )     
                                     // .populate('usuario',['user_name'])
@@ -338,14 +387,45 @@ const buscarRelacion = async(req, res =response ) => {
         });    
     }
     
-    const buscarBolsasPorPostulados=async(id= '', res= response)=>{
+    const buscarBolsasPorPostulados=async(id= '', res= response, estatus='todos')=>{
     
-    const query={estado:true, usuariojoven_id:id};
+    // const query={estado:true, usuariojoven_id:id};
     
+
+
+
+
+    let query;
+
+
+switch (estatus) {
+    case 'pendientes':
+        query={estado:true, usuariojoven_id:id, estatus:1};
+        
+        break;
+    case 'aceptadas':
+        query={estado:true, usuariojoven_id:id, estatus:2};
+        
+        break;
+    case 'rechazadas':
+        query={estado:true, usuariojoven_id:id, estatus:3};
+        
+        break;
+
+    default:
+        query={estado:true, usuariojoven_id:id};
+
+        break;
+}
+
+
+
+
+
         const [postulado, total, bolsas_trabajo]= await Promise.all( [
                 Usuario.findById(id),
                 Postulacion.countDocuments(query),
-                Postulacion.find({estado:true, usuariojoven_id:id},
+                Postulacion.find(query,
                      {usuariojoven_id:0,}
                      ) 
 
