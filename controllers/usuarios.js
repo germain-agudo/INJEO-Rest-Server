@@ -343,6 +343,15 @@ const buscarRelacion = async(req, res =response ) => {
              
             break;
    
+        case 'personas':
+            obtenerPersonaPorId(id, res);
+             
+            break;
+        case 'externos':
+            obtenerExternoPorId(id, res);
+             
+            break;
+   
   
     
         default:
@@ -389,6 +398,81 @@ const buscarRelacion = async(req, res =response ) => {
 
         
     
+
+
+const obtenerPersonaPorId =async(id= '', res= response)=>{    
+const usuario = await Usuario.findById(id);
+if (!usuario) {
+   return  res.status(400).json({
+        msg :`El usuario ${id} no existe`
+    });
+}
+if (!usuario.estado) {
+    return res.status(400).json({
+        msg :`El usuario ${id} no existe`
+    });
+}
+const rol = usuario.rol;
+if ( rol =='ADMIN_ROLE'   || rol =='USER_ROLE'     ) {
+    const persona = await Persona.findOne({usuario_id:usuario._id, estado: true});
+    if ( !persona ) {
+        return res.status(404).json({
+            msg:`No existe persona con el usuario ${usuario._id}`
+        })   
+    }
+res.json(persona);    
+} else{
+    return res.status(404).json({
+        msg:`El rol no es válido`
+    })
+}
+}
+
+const obtenerExternoPorId =async(id= '', res= response)=>{    
+const usuario = await Usuario.findById(id);
+if (!usuario) {
+   return  res.status(400).json({
+        msg :`El usuario ${id} no existe`
+    });
+}
+if (!usuario.estado) {
+    return res.status(400).json({
+        msg :`El usuario ${id} no existe`
+    });
+}
+const rol = usuario.rol;
+if ( rol =='EXTERNO_ROLE' ) {
+    const externo = await Externo.findOne({usuario_id:usuario._id, estado: true});
+    if ( !externo ) {
+        return res.status(404).json({
+            msg:`No existe externo con el usuario ${usuario._id}`
+        })   
+    }
+res.json(externo);    
+} else{
+    return res.status(404).json({
+        msg:`El rol no es válido`
+    })
+}
+}
+
+
+
+
+
+
+
+
+/**
+ * 
+ * 
+ * 
+ * 
+ */
+
+
+
+
         const cambiarPassword = async(req, res =response ) => {
 
             const {id, coleccion}= req.params;

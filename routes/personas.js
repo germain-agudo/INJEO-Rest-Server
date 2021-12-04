@@ -89,6 +89,7 @@ router.put('/:id',[
     check('pdf_curp', 'El campo: pdf_curp, es obligatorio').not().isEmpty(),
     check('pdf_acta_nacimiento', 'El campo: pdf_acta_nacimiento, es obligatorio').not().isEmpty(),
     check('pdf_comprobante_domicilio', 'El campo: pdf_comprobante_domicilio, es obligatorio').not().isEmpty(),
+    check('curriculum_url', 'El campo: curriculum_url, es obligatorio').not().isEmpty(),
 
 
     // check('rol', 'No es un rol válido').isIn(['ADMIN_ROLE','USER_ROLE']),

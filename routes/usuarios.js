@@ -126,6 +126,8 @@ router.get('/:coleccion/:id',[
     check('id', 'No es un id de Mongo válido').isMongoId(),
     check('coleccion').custom(c=> coleccionesPermitidas( c, [    
         'buscar',
+        'personas',
+        'externos'
         // 'externo'
         
   ] ) ),

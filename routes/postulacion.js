@@ -58,8 +58,8 @@ router.post('/', [
     // esAdminRole,
     tieneRole('ADMIN_ROLE','USER_ROLE'),
     datosCompletos,
-    
-    check('curriculum_url', 'El curriculum_url es obligatorio').not().isEmpty(),     
+     
+    // check('curriculum_url', 'El curriculum_url es obligatorio').not().isEmpty(),     
     check('bolsa_id', 'El campo bolsa_id es obligatorio').not().isEmpty(),     
     check('bolsa_id').custom( existeBolsaActivaPorId),     
  

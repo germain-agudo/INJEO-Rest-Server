@@ -1,6 +1,6 @@
 const {response, request} = require('express');
 
-const {Postulacion, BolsaTrabajo, Usuario}= require('../models/index');
+const {Postulacion, BolsaTrabajo, Usuario, Persona}= require('../models/index');
 const {ObjectId}= require('mongoose').Types;
 
 /**
@@ -211,13 +211,39 @@ res.json(postulacion);
 const crearPostulacion = async(req, res= response)=>{
 
     const fecha_registro = Date.now();  
-    const { bolsa_id, curriculum_url }= req.body;   
+    const { bolsa_id }= req.body;   
 
-const postulacionDB = await Postulacion.findOne({ bolsa_id, usuariojoven_id: req.usuario._id, estado:true})
+// const postulacionDB = await Postulacion.findOne({ bolsa_id, usuariojoven_id: req.usuario._id, estado:true})
+// .populate('usuariojoven_id',{password:0, __v:0});
+
+
+const [ postulacionDB, persona ] = await Promise.all([
+    Postulacion.findOne({ bolsa_id, usuariojoven_id: req.usuario._id, estado:true}),
+    Persona.findOne({usuario_id: req.usuario._id, estado: true})
+        // .populate('usuario_id',['user_name'])
+]);
+
+
+
+
+if (!persona) {
+    return res.status(401).json({
+        msg: `Actualmente no existe un joven con el usuario ${req.usuario._id}`
+    }); 
+}
+
+if (!persona.curriculum_url) {
+    return res.status(401).json({
+        msg: `Actualmente el usuario ${req.usuario._id}, no cuenta con un Curriculum vita, revise sus datos`
+    }); 
+}
+
+const curriculum_url = persona.curriculum_url;
+
 
 if (postulacionDB) {
     return res.status(401).json({
-        msg: `Actualmente eL usuario ${req.usuario._id}, ya está postulado en la oferta:${bolsa_id} `
+        msg: `Actualmente el usuario ${req.usuario._id}, ya está postulado en la oferta:${bolsa_id} `
     }); 
 }
     const data = {

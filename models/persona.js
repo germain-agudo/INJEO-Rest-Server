@@ -51,7 +51,11 @@ const PersonaSchema= Schema({
         type: String,
     },
 
-
+   
+    curriculum_url: {
+        type: String,
+        required: [true, 'El Curriculum vitae es obligatorio']
+    },
 
     fecha_nacimiento: {
         type: String,
