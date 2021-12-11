@@ -391,7 +391,7 @@ switch (estatus) {
                 BolsaTrabajo.findById(id),
                 Postulacion.countDocuments(query),
                 Postulacion.find(query,
-                     {usuario:1,}
+                     {usuario:1, msg:1}
                     )     
                                     // .populate('usuario',['user_name'])
                     .populate('usuariojoven_id',{password:0, __v:0})
@@ -452,7 +452,7 @@ switch (estatus) {
                 Usuario.findById(id),
                 Postulacion.countDocuments(query),
                 Postulacion.find(query,
-                     {usuariojoven_id:0,}
+                     {usuariojoven_id:0}
                      ) 
 
                                     // .populate('taller',['titulo']) 

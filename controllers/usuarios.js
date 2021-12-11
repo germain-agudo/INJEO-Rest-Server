@@ -414,7 +414,10 @@ if (!usuario.estado) {
 }
 const rol = usuario.rol;
 if ( rol =='ADMIN_ROLE'   || rol =='USER_ROLE'     ) {
-    const persona = await Persona.findOne({usuario_id:usuario._id, estado: true});
+    const persona = await 
+    Persona.findOne({usuario_id:usuario._id, estado: true})
+    // .populate('usuario_id', {password:0, __v:0});
+
     if ( !persona ) {
         return res.status(404).json({
             msg:`No existe persona con el usuario ${usuario._id}`

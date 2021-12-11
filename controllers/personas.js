@@ -139,7 +139,7 @@ nombre
 ,pdf_curp
 ,pdf_acta_nacimiento
 ,pdf_comprobante_domicilio
-,curriculum_url
+
 } = req.body;
 
 const user_name = `${nombre}`.toUpperCase();
@@ -199,7 +199,7 @@ const persona = new Persona({
 ,pdf_comprobante_domicilio
 , pdf_ine
 , escuela_procedencia
-,curriculum_url
+
     });
 
 

@@ -136,7 +136,7 @@ router.post('/',[
     check('region', 'La region es obligatoria').not().isEmpty(),   
     check('usuario_id', 'El id_usuario es obligatoria').not().isEmpty(),
     
-    check('pdf_curp', 'El campo: pdf_curp, es obligatorio').not().isEmpty(),
+    // check('pdf_curp', 'El campo: pdf_curp, es obligatorio').not().isEmpty(),
     check('pdf_acta_nacimiento', 'El campo: pdf_acta_nacimiento, es obligatorio').not().isEmpty(),
     check('pdf_comprobante_domicilio', 'El campo: pdf_comprobante_domicilio, es obligatorio').not().isEmpty(),
 
