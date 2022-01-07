@@ -93,7 +93,9 @@ router.put('/:id',[
 
 
     // check('rol', 'No es un rol válido').isIn(['ADMIN_ROLE','USER_ROLE']),
-    check('sexo', 'Sexo no válildo').isIn(['Masculino','Femenino']),
+    // check('sexo', 'Sexo no válildo').isIn(['Masculino','Femenino']),
+    check('sexo', 'Sexo no válildo').isIn(['Mujer','Hombre','Prefiero no decirlo','Otro']),
+
     check('region', 'Región no válida').isIn(['Cañada',
     'Costa',
     'Istmo',
@@ -151,7 +153,7 @@ router.post('/',[
     check('usuario_id').custom( existeRelacionConUsuario ),    
 
     check('usuario_id').custom(relacion=>existeRelacion ( relacion, ['ADMIN_ROLE','USER_ROLE'] ) ),
-    check('sexo', 'Sexo no válildo').isIn(['Masculino','Femenino']),
+    check('sexo', 'Sexo no válildo').isIn(['Mujer','Hombre','Prefiero no decirlo','Otro']),
     check('region', 'Región no válida').isIn(['Cañada',
     'Costa',
     'Istmo',
